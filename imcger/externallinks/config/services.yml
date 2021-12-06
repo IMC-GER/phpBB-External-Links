@@ -1,0 +1,10 @@
+services:
+    imcger.externallinks.listener:
+        class: imcger\externallinks\event\main_listener
+        arguments:
+            - '@config'
+            - '@template'
+            - '@user'
+            - '@language'
+        tags:
+            - { name: event.listener }

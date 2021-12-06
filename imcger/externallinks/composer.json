@@ -1,0 +1,25 @@
+{
+		"name": "imcger/externallinks",
+		"type": "phpbb-extension",
+		"description": "Kennzeichnet externe Links und Bilder. Bilder können als Textlink oder Bild angezeigt werden",
+		"homepage": "https://github.com/IMC-GER",
+		"version": "1.0.0",
+		"time": "2021-12-06",
+		"license": "GPL-2.0-only",
+		"authors": [
+					{
+					"name": "Thorsten Ahlers",
+					"homepage": "",
+					"role": "Developer"
+					}
+					],
+		"require": {
+					"php": ">=7.3"
+				},
+		"extra": {
+					"display-name": "External Links",
+					"soft-require": {
+					"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
+					}
+				}
+}

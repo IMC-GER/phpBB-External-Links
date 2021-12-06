@@ -1,0 +1,59 @@
+<!-- INCLUDE overall_header.html -->
+
+<h1>{{ lang('EXT_LINK_TITLE') }}</h1>
+
+<p>{{ lang('EXT_LINK_TITLE_EXPLAIN') }}</p>
+
+<form id="acp_board" method="post" action="{U_ACTION}">
+
+	<fieldset>
+		<legend>{{ lang('EXT_LINK_BILD') }}</legend>
+		<dl>
+			<dt><label for="imcger_ext_link_bild">{{ lang('EXT_LINK_BILD') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_BILD_DESC') }}</span></dt>
+			<dd>
+					<label><input type="radio" class="radio" id="imcger_ext_link_bild" name="imcger_ext_link_bild" value='0' {% if IMCGER_EXT_LINK_BILD == 0 %} checked="checked"{% endif %} />
+					{{ lang('EXT_LINK_BILD_NO_CHANGE') }}</label>
+
+					<label><input type="radio" class="radio" name="imcger_ext_link_bild" value="1" {% if IMCGER_EXT_LINK_BILD == 1 %} checked="checked"{% endif %} />
+					{{ lang('EXT_LINK_BILD_TEXT') }}</label>
+
+					<label><input type="radio" class="radio" name="imcger_ext_link_bild" value="2" {% if IMCGER_EXT_LINK_BILD == 2 %} checked="checked"{% endif %} />
+					{{ lang('EXT_LINK_BILD_IMAGE') }}</label>
+
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('EXT_LINK_LINKS') }}</legend>
+		<dl>
+			<dt><label for="imcger_ext_link_links_text">{{ lang('EXT_LINK_LINKS_TEXT') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_TEXT_DESC') }}</span></dt>
+			<dd>
+				<label><input type="radio" class="radio" id="imcger_ext_link_links_text" name="imcger_ext_link_links_text" value='1'{% if IMCGER_EXT_LINK_LINKS_TEXT %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="imcger_ext_link_links_text" value='0'{% if not IMCGER_EXT_LINK_LINKS_TEXT %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="imcger_ext_link_links_newwin">{{ lang('EXT_LINK_LINKS_NEWWIN') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_NEWWIN_DESC') }}</span></dt>
+			<dd>
+				<label><input type="radio" class="radio" id="imcger_ext_link_links_newwin" name="imcger_ext_link_links_newwin" value='1'{% if IMCGER_EXT_LINK_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="imcger_ext_link_links_newwin" value='0'{% if not IMCGER_EXT_LINK_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="imcger_ext_link_links_img">{{ lang('EXT_LINK_LINKS_IMG') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_IMG_DESC') }}</span></dt>
+			<dd>
+				<label><input type="radio" class="radio" id="imcger_ext_link_links_img" name="imcger_ext_link_links_img" value='1'{% if IMCGER_EXT_LINK_LINKS_IMG %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="imcger_ext_link_links_img" value='0'{% if not IMCGER_EXT_LINK_LINKS_IMG %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+	</fieldset>
+	
+	<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
+		{S_FORM_TOKEN}
+	</fieldset>
+</form>
+<!-- INCLUDE overall_footer.html -->

@@ -1,0 +1,11 @@
+.imcger-ext-link:after {	
+	 font-family: FontAwesome;
+	 content: '\f08e';
+	 padding-left: 5px;
+	 font-size: 13px;
+}
+
+.imcger-ext-image {
+	display: block; 
+	font-size: 0.8em;
+}
