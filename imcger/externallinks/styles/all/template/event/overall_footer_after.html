@@ -73,7 +73,7 @@
 	for (i = 0; i < x.length; i++) {
 		if(!ImageSelfDomain(x[i].getAttribute("href"))) {
 			x[i].className += " imcger-ext-link";
-			x[i].setAttribute("title", "Externer Link");
+			x[i].setAttribute("title", "{{ lang('EXT_LINK_EXT_LINK') }}");
 			
 			{% if IMCGER_EXT_LINK_LINKS_NEWWIN %}
 			/* Externe Links nicht in selben Tab öffnen */
