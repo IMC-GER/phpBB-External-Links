@@ -24,6 +24,10 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.0.1 (08-12-2021)
+
+- Minor code change
+
 ### v1.0.0 (06-12-2021)
 
 ## Uninstallation
