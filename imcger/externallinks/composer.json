@@ -3,8 +3,8 @@
 		"type": "phpbb-extension",
 		"description": "Kennzeichnet externe Links und Bilder. Bilder können als Textlink oder Bild angezeigt werden",
 		"homepage": "https://github.com/IMC-GER",
-		"version": "1.0.0",
-		"time": "2021-12-06",
+		"version": "1.0.1",
+		"time": "2021-12-08",
 		"license": "GPL-2.0-only",
 		"authors": [
 					{
