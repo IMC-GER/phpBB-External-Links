@@ -24,8 +24,10 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
-### v1.0.1 (08-12-2021)
+### v1.0.2 (09-12-2021)
+- Bug: Support UCP setting `Display images within posts´
 
+### v1.0.1 (08-12-2021)
 - Minor code change
 
 ### v1.0.0 (06-12-2021)
