@@ -53,11 +53,11 @@ class main_listener implements EventSubscriberInterface
 		// Add External Links language file
 		$this->language->add_lang('externallinks_lang','imcger/externallinks');
 
-		$imcger_ext_link_bild			= $this->config['imcger_ext_link_bild'];
+		$imcger_ext_link_bild			= (bool)$this->user->optionget('viewimg') ? $this->config['imcger_ext_link_bild'] : 0;
 		$imcger_ext_link_links_text		= $this->config['imcger_ext_link_links_text'];
 		$imcger_ext_link_links_img		= $this->config['imcger_ext_link_links_img'];
 		$imcger_ext_link_links_newwin	= $this->config['imcger_ext_link_links_newwin'];
-		
+
 
 		$this->template->assign_vars([
 			'IMCGER_EXT_LINK_BILD'			=> $imcger_ext_link_bild,
