@@ -12,6 +12,10 @@
 
 		if(domainSelf.split('.').length > 2)
 			domainSelf = domainSelf.replace(domainSelf.split('.')[0] + '.','');
+		
+		/* interner Link ohne Angabe der Domain */
+		if(domainImg == ".")
+			return(true)
 
 		return(domainImg == domainSelf);
 	}
@@ -116,4 +120,3 @@
 	}
 {% endif %}
 </script>
-
