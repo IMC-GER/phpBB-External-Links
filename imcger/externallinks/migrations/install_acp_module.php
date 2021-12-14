@@ -1,6 +1,7 @@
 <?php
 /**
  *
+ * External Links
  * An extension for the phpBB Forum Software package.
  *
  * @copyright (c) 2021, Thorsten Ahlers
@@ -14,7 +15,7 @@ class install_acp_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
-		return isset($this->config['imcger_ext_link_bild']);
+		return isset($this->config['imcger_ext_link_img_show']);
 	}
 
 	static public function depends_on()
@@ -25,9 +26,9 @@ class install_acp_module extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('imcger_ext_link_bild', 0)),
-			array('config.add', array('imcger_ext_link_links_text', 0)),
-			array('config.add', array('imcger_ext_link_links_img', 0)),
+			array('config.add', array('imcger_ext_link_img_show', 0)),
+			array('config.add', array('imcger_ext_link_links_text', 1)),
+			array('config.add', array('imcger_ext_link_links_img', 1)),
 			array('config.add', array('imcger_ext_link_links_newwin', 0)),
 
 			array('module.add', array(

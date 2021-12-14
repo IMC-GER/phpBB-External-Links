@@ -3,11 +3,11 @@
 ## Description
 
 With this phpBB extension you can set some parameter at externals links.
-- Convert plain text links to images to images.
-- Convert external images to plain text links.
-- Mark external links.
-- Open external links in a new tab/window.
-- Add the link as caption to a external image.
+- Convert plain text links to images to images. (UCP)
+- Convert external images to plain text links. (UCP)
+- Mark external links. (ACP)
+- Open external links in a new tab/window. (UCP)
+- Add the link as caption to a external image. (ACP)
 
 ## Requirements
 - php 7.3 or higher
@@ -23,6 +23,9 @@ Go to "ACP" > "Customise" > "Extensions Manager" and enable the "External Links"
 Go to "ACP" > "Extensions" > "External Links settings" and customize "External Links".
 
 ## Changelog
+
+### v1.1.0 (10-12-2021)
+- Move some Settings from ACP in the UCP
 
 ### v1.0.2 (09-12-2021)
 - Bug: Support UCP setting `Display images within posts´

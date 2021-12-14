@@ -1,8 +1,8 @@
 {% INCLUDECSS '@imcger_externallinks/css/external-links.css' %}
 <script>
-/**
- *	Funktion prüft ob Domainen gleich sind
- */
+	/**
+	 *	Funktion prüft ob Domainen der URL und aktuellen location gleich sind
+	 */
 	function ImageSelfDomain(url) {
 		var domainImg = url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
 		var domainSelf = window.location.hostname;
@@ -13,16 +13,16 @@
 		if(domainSelf.split('.').length > 2)
 			domainSelf = domainSelf.replace(domainSelf.split('.')[0] + '.','');
 		
-		/* interner Link ohne Angabe der Domain */
+		/* Interner Link ohne Angabe der Domain in der URL */
 		if(domainImg == ".")
 			return(true)
 
 		return(domainImg == domainSelf);
 	}
 
-/**
- *	Url zum Anzeigen einkürzen
- */
+	/**
+	 *	URL zur Anzeigen als Text einkürzen
+	 */
 	function urlShorten(url) {
 		if(url.length < 60)
 			return(url);
@@ -32,10 +32,10 @@
 	
 	var x, i;
 	
-{% if IMCGER_EXT_LINK_BILD == 1 %}
-/**
- *	Externe Bilder als Link in Textform darstellen
- */
+{% if S_IMCGER_EXT_LINK_IMG_SHOW == 1 %}
+	/**
+	 *	URL externer Bilder als Link in Textform darstellen
+	 */
 	x  = document.querySelectorAll(".content > .postimage");
 	for (i = 0; i < x.length; i++) {
 		var srcAttr = x[i].getAttribute("src");
@@ -49,10 +49,10 @@
 	}
 {% endif %}
 
-{% if IMCGER_EXT_LINK_BILD == 2 %}
-/**
- *	Als Textlink verlinkte Bilder als eingebettetes Bild darstellen
- */
+{% if S_IMCGER_EXT_LINK_IMG_SHOW == 2 %}
+	/**
+	 *	Als Textlink verlinkte Bilder als eingebettetes Bild darstellen
+	 */
 	x  = document.querySelectorAll(".postlink");
 	for (i = 0; i < x.length; i++) {
 		var ext = ["jpg", "jpeg", "gif", "png", "webp", "bmp", "svg"];
@@ -61,7 +61,7 @@
 		
 		/* Wenn auf ein erlaubtes Bild verlinkt wird Attribute setzen */
 		if(ext.includes(usa[usa.length-1].toLocaleLowerCase())) {
-			var newEle = '<img src="' + url + '" class="postimage" alt="' + url + '">';
+			var newEle = '<img src="' + url + '" class="postimage" alt="" title="">';
 
 			x[i].insertAdjacentHTML("afterend",newEle);
 			x[i].remove();
@@ -69,17 +69,33 @@
 	}
 {% endif %}
 
-{% if IMCGER_EXT_LINK_LINKS_TEXT %}
-/**
- *	Externe Links markieren
- */
+{% if S_IMCGER_EXT_LINK_IMG_SHOW %}
+	/**
+	 *	Externe Bilder durch setzen von Attributten kenntlich machen
+	 */
+	x  = document.querySelectorAll(".content > .postimage");
+	for (i = 0; i < x.length; i++) {
+		var srcAttr = x[i].getAttribute("src");
+		
+		if(!ImageSelfDomain(srcAttr)) {
+			x[i].setAttribute("alt", "{{ lang('LA_EXT_LINK_EXT_IMG') }}");
+			x[i].setAttribute("title", "{{ lang('LA_EXT_LINK_EXT_IMG') }}");
+		}
+	}
+{% endif %}
+
+{% if S_IMCGER_EXT_LINK_LINKS_TEXT %}
+	/**
+	 *	Externen Links das Symbol "external-links" hinzufügen
+	 *	Das Symbol ist im CSS definiert
+	 */
 	x = document.getElementsByClassName("postlink");
 	for (i = 0; i < x.length; i++) {
 		if(!ImageSelfDomain(x[i].getAttribute("href"))) {
 			x[i].className += " imcger-ext-link";
-			x[i].setAttribute("title", "{{ lang('EXT_LINK_EXT_LINK') }}");
+			x[i].setAttribute("title", "{{ lang('LA_EXT_LINK_EXT_LINK') }}");
 			
-			{% if IMCGER_EXT_LINK_LINKS_NEWWIN %}
+			{% if S_IMCGER_EXT_LINK_LINKS_NEWWIN %}
 			/* Externe Links nicht in selben Tab öffnen */
 			x[i].setAttribute("target", "_blank");
 			x[i].setAttribute("rel", "noopener noreferrer");
@@ -88,10 +104,10 @@
 	}
 {% endif %}
 
-{% if !IMCGER_EXT_LINK_LINKS_TEXT && IMCGER_EXT_LINK_LINKS_NEWWIN %}
-/**
- *	Externe Links nicht in selben Tab öffnen 
- */
+{% if !S_IMCGER_EXT_LINK_LINKS_TEXT && S_IMCGER_EXT_LINK_LINKS_NEWWIN %}
+	/**
+	 *	Externe Links nicht in selben Tab öffnen 
+	 */
 	x = document.getElementsByClassName("postlink");
 	for (i = 0; i < x.length; i++) {
 		if(!ImageSelfDomain(x[i].getAttribute("href"))) {
@@ -101,17 +117,17 @@
 	}
 {% endif %}
 
-{% if IMCGER_EXT_LINK_LINKS_IMG %}
-/**
- *	Externe Bildern den Link in Textform hinzufügen
- */
+{% if S_IMCGER_EXT_LINK_LINKS_IMG %}
+	/**
+	 *	Externen Bildern die URL in Textform als Bildunterschrift hinzufügen
+	 */
 	x  = document.querySelectorAll(".content > .postimage");
 	for (i = 0; i < x.length; i++) {
 		var srcAttr = x[i].getAttribute("src");
 		
 		/* Wenn das Bild nicht von der eignen Domain stammt Quelle hinzufügen */
 		if(!ImageSelfDomain(srcAttr)) {
-			subtext = '<span class="imcger-ext-image">{{ lang('EXT_LINK_BILD_SOURCE') }}: ' + urlShorten(srcAttr) + '</span>';
+			subtext = '<span class="imcger-ext-image">{{ lang('LA_EXT_LINK_BILD_SOURCE') }}: ' + urlShorten(srcAttr) + '</span>';
 			newEle = '<div class="imcger-img-wrap">' + x[i].outerHTML + subtext + '</div>';
 
 			x[i].insertAdjacentHTML("afterend",newEle);

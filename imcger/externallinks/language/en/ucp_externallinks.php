@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * External Links
  * An extension for the phpBB Forum Software package.
  *
@@ -20,7 +20,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'ACP_EXT_LINK_TITLE' => 'External links',
-	'ACP_EXT_LINK_SETTINGS' => 'Settings',
-	'ACP_EXT_LINK_SETTING_SAVED' => 'Settings successfully saved .'
+	'UCP_EXT_LINK_LINKS_NEWWIN' => 'Open external link in new tab',
+	'UCP_EXT_LINK_LINK2_TEXT'	=> 'Show all external images as text link',
+	'UCP_EXT_LINK_LINK2_IMAGE'	=> 'Show all external image links as image',
 ));

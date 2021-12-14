@@ -1,0 +1,21 @@
+		<dl>
+			<dt><label for="imcger_newwin1">{{ lang('UCP_EXT_LINK_LINKS_NEWWIN') }}{{ lang('COLON') }}</label></dt>
+			<dd>
+				<label for="imcger_newwin1"><input type="radio" id="imcger_newwin1" name="imcger_ucp_ext_link_links_newwin" value="1"{% if S_UCP_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label for="imcger_newwin0"><input type="radio" id="imcger_newwin0" name="imcger_ucp_ext_link_links_newwin" value="0"{% if not S_UCP_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="imcger_ext_text1">{{ lang('UCP_EXT_LINK_LINK2_TEXT') }}{{ lang('COLON') }}</label></dt>
+			<dd>
+				<label for="imcger_ext_text1"><input type="radio" id="imcger_ext_text1" name="imcger_ucp_ext_link_link2_text" value="1"{% if S_UCP_LINKS_2TEXT %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label for="imcger_ext_text0"><input type="radio" id="imcger_ext_text0" name="imcger_ucp_ext_link_link2_text" value="0"{% if not S_UCP_LINKS_2TEXT %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="imcger_newwin1">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') }}{{ lang('COLON') }}</label></dt>
+			<dd>
+				<label for="imcger_ext_image2"><input type="radio" id="imcger_ext_image2" name="imcger_ucp_ext_link_link2_image" value="2"{% if S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label for="imcger_ext_image0"><input type="radio" id="imcger_ext_image0" name="imcger_ucp_ext_link_link2_image" value="0"{% if not S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
