@@ -1,11 +1,11 @@
 # phpBB-External-Links
 
 ## Description
-With this phpBB extension you can set some parameter at external links and images.
+With this phpBB extension you can set some parameter at external links and images.<br>
 **Settings in User Control Panel > Board preferences > Edit display options**
 - Convert plain text links from images to images.
 - Convert external images to plain text links.
-- Open external links in a new tab/window.
+- Open external links in a new tab/window.<br>
 **Settings in Administration Control Panel**
 - Set the level of the internal domain
 - Mark external links.
