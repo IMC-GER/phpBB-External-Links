@@ -7,6 +7,19 @@
 <form id="acp_board" method="post" action="{U_ACTION}">
 
 	<fieldset>
+		<legend>{{ lang('EXT_LINK_DOMAIN') }}</legend>
+		<dl>
+			<dt><label for="imcger_ext_link_domain2">{{ lang('EXT_LINK_DOMAIN_TEXT') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_DOMAIN_DESC') }}</span></dt>
+			<dd>
+				<label><input type="radio" class="radio" id="imcger_ext_link_domain2" name="imcger_ext_link_domain_level" value="2" {% if S_IMCGER_EXT_LINK_DOMAIN == 2 %} checked="checked"{% endif %} /> <span class="imcger-domain"></span></label><br>
+				<label><input type="radio" class="radio" id="imcger_ext_link_domain3" name="imcger_ext_link_domain_level" value="3" {% if S_IMCGER_EXT_LINK_DOMAIN == 3 %} checked="checked"{% endif %} /> <span class="imcger-domain"></span></label><br>
+				<label><input type="radio" class="radio" id="imcger_ext_link_domain4" name="imcger_ext_link_domain_level" value="4" {% if S_IMCGER_EXT_LINK_DOMAIN == 4 %} checked="checked"{% endif %} /> <span class="imcger-domain"></span></label><br>
+				<label><input type="radio" class="radio" id="imcger_ext_link_domain5" name="imcger_ext_link_domain_level" value="5" {% if S_IMCGER_EXT_LINK_DOMAIN == 5 %} checked="checked"{% endif %} /> <span class="imcger-domain"></span></label>
+			</dd>
+		</dl>
+	</fieldset>
+	
+	<fieldset>
 		<legend>{{ lang('EXT_LINK_LINKS') }}</legend>
 		<dl>
 			<dt><label for="imcger_ext_link_links_text">{{ lang('EXT_LINK_LINKS_TEXT') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_TEXT_DESC') }}</span></dt>

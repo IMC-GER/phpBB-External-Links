@@ -36,6 +36,7 @@ class main_module
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
 			
+			$config->set('imcger_ext_link_domain_level', $request->variable('imcger_ext_link_domain_level', 0));
 			$config->set('imcger_ext_link_links_text', $request->variable('imcger_ext_link_links_text', 0));
 			$config->set('imcger_ext_link_links_img', $request->variable('imcger_ext_link_links_img', 0));
 			
@@ -43,9 +44,10 @@ class main_module
 		}
 		
 		$template->assign_vars(array(
-			'U_ACTION'				=> $this->u_action,
-			'S_IMCGER_LINKS_TEXT'	=> $config['imcger_ext_link_links_text'],
-			'S_IMCGER_LINKS_IMG'	=> $config['imcger_ext_link_links_img'],
+			'U_ACTION'					=> $this->u_action,
+			'S_IMCGER_EXT_LINK_DOMAIN'	=> $config['imcger_ext_link_domain_level'],
+			'S_IMCGER_LINKS_TEXT'		=> $config['imcger_ext_link_links_text'],
+			'S_IMCGER_LINKS_IMG'		=> $config['imcger_ext_link_links_img'],
 		));
 	}
 }

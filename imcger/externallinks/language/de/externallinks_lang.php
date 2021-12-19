@@ -22,5 +22,5 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'LA_EXT_LINK_BILD_SOURCE' => 'Quelle',
 	'LA_EXT_LINK_EXT_LINK' => 'Externer Link',
-	'LA_EXT_LINK_EXT_IMG' => 'Externes Bild',
+	'LA_EXT_LINK_EXT_IMG'  => 'Externes Bild',
 ));

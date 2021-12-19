@@ -22,5 +22,6 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'UCP_EXT_LINK_LINKS_NEWWIN' => 'Externen Link in neuen Tab öffnen',
 	'UCP_EXT_LINK_LINK2_TEXT'	=> 'Alle externe Bilder als Textlink anzeigen',
-	'UCP_EXT_LINK_LINK2_IMAGE'	=> 'Alle externe Bildlinks als Bild anzeigen',
+	'UCP_EXT_LINK_LINK2_IMAGE'	=> 'Alle Links zu Bildern als Bild anzeigen',
+	'UCP_EXT_LINK_LINK2_IMAGE_DEC'	=> 'Nur "jpg, jpeg, png, gif, webp, svg"',
 ));

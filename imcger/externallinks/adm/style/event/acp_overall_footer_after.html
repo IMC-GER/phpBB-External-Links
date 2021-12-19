@@ -1,0 +1,17 @@
+<script>
+	var domain = window.location.hostname;
+	var domainLevel = domain.split('.').length;
+	var domainParts = domain.split('.');
+	var domainName 	= domainParts[domainLevel-1];
+	var buttonText  = document.querySelectorAll(".imcger-domain");
+	
+	for (i = 2; i <= buttonText.length; i++) {	
+		if(i <= domainLevel) {
+			domainName = domainParts[domainLevel-i]  + '.' + domainName;
+			buttonText[i-2].innerHTML = domainName;
+		}
+		if(i >= domainLevel) {
+			buttonText[i-1].parentElement.style.display = "none";
+		}		
+	}	
+</script>

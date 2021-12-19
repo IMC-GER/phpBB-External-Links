@@ -38,7 +38,7 @@ class add_ucp_settings extends \phpbb\db\migration\migration
 				$this->table_prefix . 'users' => array(
 					'user_extlink_newwin'	=> array('BOOL', 1),
 					'user_extlink_text'		=> array('UINT:2', 0),
-					'user_extlink_image'	=> array('UINT:2', 2),
+					'user_extlink_image'	=> array('UINT:2', 0),
 				),
 			),
 		);
