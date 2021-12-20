@@ -20,6 +20,10 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
+	'EXT_LINK_DOMAIN' => 'Domain',
+	'EXT_LINK_DOMAIN_TEXT' => 'Select domain',
+	'EXT_LINK_DOMAIN_DESC' => 'Select domain to be recognized as own domain. Subdomains below the selected one are included.',
+	
 	'EXT_LINK_TITLE' => 'External links',
 	'EXT_LINK_TITLE_EXPLAIN' => 'Mark images and links from other websites.',
 
