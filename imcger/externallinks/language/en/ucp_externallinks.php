@@ -23,4 +23,5 @@ $lang = array_merge($lang, array(
 	'UCP_EXT_LINK_LINKS_NEWWIN' => 'Open external link in new tab',
 	'UCP_EXT_LINK_LINK2_TEXT'	=> 'Show all external images as text link',
 	'UCP_EXT_LINK_LINK2_IMAGE'	=> 'Show all external image links as image',
-));
+	'UCP_EXT_LINK_LINK2_IMAGE_DEC'	=> 'Only "jpg, jpeg, png, gif, webp, svg"',
+)));
