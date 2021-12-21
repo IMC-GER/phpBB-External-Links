@@ -24,6 +24,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.1.2 (20-12-2021)
+- Bug: lost english variable
+
 ### v1.1.1 (19-12-2021)
 - Code change
 - Can change the level of the internal domain
