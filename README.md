@@ -25,7 +25,7 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 ## Changelog
 
 ### v1.1.2 (20-12-2021)
-- Bug: lost english variable
+- Incorrect view in ACP/UCP with English language selection
 
 ### v1.1.1 (19-12-2021)
 - Code change
