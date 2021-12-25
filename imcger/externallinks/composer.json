@@ -3,8 +3,8 @@
 		"type": "phpbb-extension",
 		"description": "Indicates external links and images. Images can be displayed as text link or image. Open external links in a new tab/window.",
 		"homepage": "https://github.com/IMC-GER/phpBB-External-Links",
-		"version": "1.1.2",
-		"time": "2021-12-20",
+		"version": "1.2.0",
+		"time": "2021-12-25",
 		"license": "GPL-2.0-only",
 		"authors": [
 					{

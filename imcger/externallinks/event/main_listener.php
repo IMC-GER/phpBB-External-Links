@@ -60,8 +60,8 @@ class main_listener implements EventSubscriberInterface
 			'core.user_setup_after'				=> 'user_setup_after',
 			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_view_update_data'	=> 'ucp_prefs_set_data',
-			'core.text_formatter_s9e_configure_after'	=> 'configure_textformatter',
-			'core.text_formatter_s9e_renderer_setup'	=> 'set_textformatter_parameters',
+			'core.text_formatter_s9e_configure_after' => 'configure_textformatter',
+			'core.text_formatter_s9e_renderer_setup'  => 'set_textformatter_parameters',
 		);
 	}
 
@@ -93,6 +93,7 @@ class main_listener implements EventSubscriberInterface
 			}
 		}
 
+		/* Set template variable for js script */
 		$this->template->assign_vars([
 			'IMCGER_EXT_LINK_INTERNAL_DOMAIN'	=> $internal_domain,
 		]);
@@ -101,17 +102,19 @@ class main_listener implements EventSubscriberInterface
 	public function ucp_prefs_get_data($event)
 	{
 		$event['data'] = array_merge($event['data'], [
-			'user_extlink_newwin'	=> $this->request->variable('imcger_ucp_ext_link_links_newwin', $this->user->data['user_extlink_newwin']),
-			'user_extlink_text'		=> $this->request->variable('imcger_ucp_ext_link_link2_text', $this->user->data['user_extlink_text']),
-			'user_extlink_image'	=> $this->request->variable('imcger_ucp_ext_link_link1_image', $this->user->data['user_extlink_image']),
+			'user_extlink_newwin'		=> $this->request->variable('imcger_ucp_ext_link_links_newwin', $this->user->data['user_extlink_newwin']),
+			'user_extlink_text'			=> $this->request->variable('imcger_ucp_ext_link_link2_text', $this->user->data['user_extlink_text']),
+			'user_extlink_image'		=> $this->request->variable('imcger_ucp_ext_link_link2_image', $this->user->data['user_extlink_image']),
+			'user_extlink_none_secure'	=> $this->request->variable('imcger_ucp_ext_link_none_secure', $this->user->data['user_extlink_none_secure']),
 		]);
 
 		if (!$event['submit'])
 		{
 			$this->template->assign_vars([
-				'S_UCP_LINKS_NEWWIN'	=> $event['data']['user_extlink_newwin'],
-				'S_UCP_LINKS_2TEXT'		=> $event['data']['user_extlink_text'],
-				'S_UCP_LINKS_2IMAGE'	=> $event['data']['user_extlink_image'],
+				'S_UCP_LINKS_NEWWIN'	  => $event['data']['user_extlink_newwin'],
+				'S_UCP_LINKS_2TEXT'		  => $event['data']['user_extlink_text'],
+				'S_UCP_LINKS_2IMAGE'	  => $event['data']['user_extlink_image'],
+				'S_UCP_LINKS_NONE_SECURE' => $event['data']['user_extlink_none_secure'],
 			]);
 		}
 	}
@@ -119,9 +122,10 @@ class main_listener implements EventSubscriberInterface
 	public function ucp_prefs_set_data($event)
 	{
 		$event['sql_ary'] = array_merge($event['sql_ary'], [
-			'user_extlink_newwin'	=> $event['data']['user_extlink_newwin'],
-			'user_extlink_text'		=> $event['data']['user_extlink_text'],
-			'user_extlink_image'	=> $event['data']['user_extlink_image'],
+			'user_extlink_newwin'		=> $event['data']['user_extlink_newwin'],
+			'user_extlink_text'			=> $event['data']['user_extlink_text'],
+			'user_extlink_image'		=> $event['data']['user_extlink_image'],
+			'user_extlink_none_secure'	=> $event['data']['user_extlink_none_secure'],
 		]);
 	}
 
@@ -201,45 +205,33 @@ class main_listener implements EventSubscriberInterface
 		$configurator->tags['IMG']->template =
 			'<xsl:choose>' .
 				/* Check if the image comes from external and the display should be changed */
-				'<xsl:when test="($S_IMCGER_LINKS_IMG_TO_TEXT or $S_IMCGER_LINKS_IMG_CAPTION)  and not(' . $query_domain_src . ')">' .
-					'<xsl:choose>' .
-						/* Add the link to the image as a subline */
-						'<xsl:when test="$S_IMCGER_LINKS_IMG_CAPTION and not($S_IMCGER_LINKS_IMG_TO_TEXT)">' .
-							'<div class="imcger-img-wrap">' . $default_img_template . 
-							'<span class="imcger-ext-image"><span>Source</span>: ' .
-							$img_caption_src .
-							'</span></div>' .
-						'</xsl:when>' .
-					'</xsl:choose>' .
-					'<xsl:choose>' .
-						/* Show the image as link */
-						'<xsl:when test="$S_IMCGER_LINKS_IMG_TO_TEXT">' .
-							'<xsl:choose>' .
-								/* Simple link */
-								'<xsl:when test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)"><a href="{@src}" class="postlink">' .
-									$img_caption_src .
-								'</a></xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Mark link */
-								'<xsl:when test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)"><a href="{@src}" class="postlink imcger-ext-link">' .
-									$img_caption_src .
-								'</a></xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Open link in new tab/window */
-								'<xsl:when test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN"><a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer">' .
-									$img_caption_src .
-								'</a></xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Open link in new tab/window and mark it */
-								'<xsl:when test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN"><a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer">' .
-									$img_caption_src .
-								'</a></xsl:when>' .
-							'</xsl:choose>' .
-						'</xsl:when>' .
-					'</xsl:choose>' .
+				'<xsl:when test="($S_IMCGER_LINKS_IMG_TO_TEXT or $S_IMCGER_LINKS_IMG_CAPTION or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))  and not(' . $query_domain_src . ')">' .
+					/* Add the link to the image as a subline */
+					'<xsl:if test="$S_IMCGER_LINKS_IMG_CAPTION and not($S_IMCGER_LINKS_IMG_TO_TEXT) and not(starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
+						'<div class="imcger-img-wrap">' . 
+							$default_img_template . 
+							'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_src . '</span>' .
+						'</div>' .
+					'</xsl:if>' .
+					/* Show the image as link */
+					'<xsl:if test="$S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
+						/* Simple link */
+						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="postlink">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Mark link */
+						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="postlink imcger-ext-link">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Open link in new tab/window */
+						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Open link in new tab/window and mark it */
+						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+					'</xsl:if>' .
 				'</xsl:when>' .
 				/* For internal image standard display */
 				'<xsl:otherwise>' . $default_img_template . '</xsl:otherwise>' .
@@ -249,14 +241,14 @@ class main_listener implements EventSubscriberInterface
  		$configurator->tags['URL']->template =
 			'<xsl:choose>' .
 				/* Show links to  images as embedded image */
-				'<xsl:when test="$S_IMCGER_LINKS_TEXT_TO_IMG and (contains(@url, \'.jpg\') or contains(@url, \'.jpeg\') or contains(@url, \'.gif\') or contains(@url, \'.png\') or contains(@url, \'.webp\') or contains(@url, \'.svg\'))">' .
+				'<xsl:when test="$S_IMCGER_LINKS_TEXT_TO_IMG and not(starts-with(@url, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE) and (contains(@url, \'.jpg\') or contains(@url, \'.jpeg\') or contains(@url, \'.gif\') or contains(@url, \'.png\') or contains(@url, \'.webp\') or contains(@url, \'.svg\'))">' .
 					'<xsl:choose>' .
 						/* Add the link to the image as a subline */
 						'<xsl:when test="$S_IMCGER_LINKS_IMG_CAPTION">' .
-							'<div class="imcger-img-wrap">' . $url_img_template . 
-							'<span class="imcger-ext-image"><span>Source</span>: ' .
-							$img_caption_url .
-							'</span></div>' .
+							'<div class="imcger-img-wrap">' .
+								$url_img_template . 
+								'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_url . '</span>' .
+							'</div>' .
 						'</xsl:when>' .
 						/* Image standard display */
 						'<xsl:otherwise>' . $url_img_template . '</xsl:otherwise>' .
@@ -266,30 +258,18 @@ class main_listener implements EventSubscriberInterface
 					'<xsl:choose>' .
 						/* Check if URL domain from external */
 						'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
-							'<xsl:choose>' .
-								/* Open the link in new tab/window */
-								'<xsl:when test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-									$url_template_new_window .	
-								'</xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Mark the link with icon */
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
-									$url_template_mark .
-								'</xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Open the link in new tab/window and mark it with icon */
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-									$url_template_new_window_mark .
-								'</xsl:when>' .
-							'</xsl:choose>' .
-							'<xsl:choose>' .
-								/* Do not change the link */
-								'<xsl:when test="(not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-									$default_url_template .
-								'</xsl:when>' .
-							'</xsl:choose>' .
+							/* Open the link in new tab/window */
+							'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+								$url_template_new_window .	
+							'</xsl:if>' .
+							/* Mark the link with icon */
+							'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
+								$url_template_mark .
+							'</xsl:if>' .
+							/* Open the link in new tab/window and mark it with icon */
+							'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+								$url_template_new_window_mark .
+							'</xsl:if>' .
 						'</xsl:when>' .
 						/* For internal link standard display */
 						'<xsl:otherwise>' . $default_url_template . '</xsl:otherwise>' .
@@ -318,6 +298,9 @@ class main_listener implements EventSubscriberInterface
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_3', (bool)$domain_level[3]);
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_4', (bool)$domain_level[4]);
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_5', (bool)$domain_level[5]);
+
+		/* Don`t display insecurely transferred images (http://) */
+		$renderer->setParameter('S_IMCGER_LINKS_NONE_SECURE', (bool)$this->user->data['user_extlink_none_secure']);
 
 		/* Convert an external image into a link */
 		$renderer->setParameter('S_IMCGER_LINKS_IMG_TO_TEXT', (bool)$this->user->data['user_extlink_text']);

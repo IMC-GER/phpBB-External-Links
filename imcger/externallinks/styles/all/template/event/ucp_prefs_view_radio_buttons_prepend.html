@@ -5,6 +5,7 @@
 				<label for="imcger_newwin0"><input type="radio" id="imcger_newwin0" name="imcger_ucp_ext_link_links_newwin" value="0"{% if not S_UCP_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
 			</dd>
 		</dl>
+		<hr>
 		<dl>
 			<dt><label for="imcger_ext_text1">{{ lang('UCP_EXT_LINK_LINK2_TEXT') }}{{ lang('COLON') }}</label></dt>
 			<dd>
@@ -13,9 +14,17 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="imcger_newwin1">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
+			<dt><label for="imcger_ext_image1">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
 			<dd>
-				<label for="imcger_ext_image1"><input type="radio" id="imcger_ext_image1" name="imcger_ucp_ext_link_link1_image" value="1"{% if S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label for="imcger_ext_image0"><input type="radio" id="imcger_ext_image0" name="imcger_ucp_ext_link_link1_image" value="0"{% if not S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+				<label for="imcger_ext_image1"><input type="radio" id="imcger_ext_image1" name="imcger_ucp_ext_link_link2_image" value="1"{% if S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label for="imcger_ext_image0"><input type="radio" id="imcger_ext_image0" name="imcger_ucp_ext_link_link2_image" value="0"{% if not S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
 			</dd>
 		</dl>
+		<dl>
+			<dt><label for="imcger_none_secure1">{{ lang('UCP_EXT_LINK_NONE_SECURE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_NONE_SECURE_DEC') }}</span></dt>
+			<dd>
+				<label for="imcger_none_secure1"><input type="radio" id="imcger_none_secure1" name="imcger_ucp_ext_link_none_secure" value="1"{% if S_UCP_LINKS_NONE_SECURE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label for="imcger_none_secure0"><input type="radio" id="imcger_none_secure0" name="imcger_ucp_ext_link_none_secure" value="0"{% if not S_UCP_LINKS_NONE_SECURE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+		<hr>
