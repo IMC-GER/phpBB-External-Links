@@ -5,7 +5,8 @@ With this phpBB extension you can set some parameter at external links and image
 #### Settings in User Control Panel > Board preferences > Edit display options
 - Convert plain text links from images to images.
 - Convert external images to plain text links.
-- Open external links in a new tab/window.- 
+- Open external links in a new tab/window.
+- Show insecurely transferred images as link. 
 #### Settings in Administration Control Panel
 - Set the level of the internal domain
 - Mark external links.
@@ -17,12 +18,23 @@ With this phpBB extension you can set some parameter at external links and image
 
 ## Installation
 Copy the extension to `phpBB3/ext/imcger/externallinks`.
-Go to "ACP" > "Customise" > "Extensions Manager" and enable the "External Links" extension.
+Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
 ## Settings
 Go to "ACP" > "Extensions" > "External Links settings" and customize "External Links".
 
+## Update instructions:
+- Go to "ACP" > "Customise" > "Manage extensions" and disable the "External Links" extension.
+- Delete all files of the extension from `phpBB3/ext/imcger/externallinks`.
+- Upload all new files to the same locations
+- Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
+- Purge the board cache
+
 ## Changelog
+
+### v1.2.0 (25-12-2021)
+- Code change
+- Show insecurely transferred images (http://) as link.
 
 ### v1.1.2 (20-12-2021)
 - Incorrect view in ACP/UCP with English language selection
