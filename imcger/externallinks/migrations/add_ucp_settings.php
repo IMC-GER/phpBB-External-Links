@@ -13,7 +13,7 @@ namespace imcger\externallinks\migrations;
 
 class add_ucp_settings extends \phpbb\db\migration\migration
 {
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return array('\imcger\externallinks\migrations\install_acp_module');
 	}

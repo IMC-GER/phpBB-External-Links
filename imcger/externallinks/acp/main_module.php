@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * External Links
  * An extension for the phpBB Forum Software package.
  *
@@ -8,7 +8,7 @@
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
- 
+
 namespace imcger\externallinks\acp;
 
 /**
@@ -35,14 +35,14 @@ class main_module
 			{
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
-			
+
 			$config->set('imcger_ext_link_domain_level', $request->variable('imcger_ext_link_domain_level', 0));
 			$config->set('imcger_ext_link_links_text', $request->variable('imcger_ext_link_links_text', 0));
 			$config->set('imcger_ext_link_links_img', $request->variable('imcger_ext_link_links_img', 0));
-			
+
 			trigger_error($user->lang('ACP_EXT_LINK_SETTING_SAVED') . adm_back_link($this->u_action));
 		}
-		
+
 		$template->assign_vars(array(
 			'U_ACTION'					=> $this->u_action,
 			'S_IMCGER_EXT_LINK_DOMAIN'	=> $config['imcger_ext_link_domain_level'],

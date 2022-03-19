@@ -1,19 +1,19 @@
 <?php
 /**
-*
-* Implements the image viewer Fancybox in phpBB. 
-* An extension for the phpBB Forum Software package.
-*
-* @copyright (c) 2021, Thorsten Ahlers
-* @license GNU General Public License, version 2 (GPL-2.0)
-*
-*/
+ *
+ * External Links
+ * An extension for the phpBB Forum Software package.
+ *
+ * @copyright (c) 2021, Thorsten Ahlers
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace imcger\externallinks\migrations;
 
 class up02_ucp_settings extends \phpbb\db\migration\migration
 {
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return array('\imcger\externallinks\migrations\up01_acp_module');
 	}

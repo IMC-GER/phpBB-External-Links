@@ -1,25 +1,25 @@
 {
-		"name": "imcger/externallinks",
-		"type": "phpbb-extension",
-		"description": "Indicates external links and images. Images can be displayed as text link or image. Open external links in a new tab/window.",
-		"homepage": "https://github.com/IMC-GER/phpBB-External-Links",
-		"version": "1.2.0",
-		"time": "2021-12-25",
-		"license": "GPL-2.0-only",
-		"authors": [
-					{
-					"name": "Thorsten Ahlers",
-					"homepage": "",
-					"role": "Developer"
-					}
-					],
-		"require": {
-					"php": ">=7.3,<8.1"
-				},
-		"extra": {
-					"display-name": "External Links",
-					"soft-require": {
-					"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
-					}
+	"name": "imcger/externallinks",
+	"type": "phpbb-extension",
+	"description": "Indicates external links and images. Images can be displayed as text link or image. Open external links in a new tab/window.",
+	"homepage": "https://github.com/IMC-GER/phpBB-External-Links",
+	"version": "1.2.1",
+	"time": "2022-03-19",
+	"license": "GPL-2.0-only",
+	"authors": [
+				{
+				"name": "Thorsten Ahlers",
+				"homepage": "",
+				"role": "Developer"
 				}
+				],
+	"require": {
+				"php": ">=5.4.7,<8.1"
+			},
+	"extra": {
+				"display-name": "External Links",
+				"soft-require": {
+				"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
+				}
+			}
 }

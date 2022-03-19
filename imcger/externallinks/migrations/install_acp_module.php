@@ -18,7 +18,7 @@ class install_acp_module extends \phpbb\db\migration\migration
 		return isset($this->config['imcger_ext_link_img_show']);
 	}
 
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return array('\phpbb\db\migration\data\v31x\v314');
 	}

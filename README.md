@@ -13,7 +13,7 @@ With this phpBB extension you can set some parameter at external links and image
 - Add an external image the URL as caption.
 
 ## Requirements
-- php 7.3 or higher
+- php 5.4.7 or higher
 - phpBB 3.2.0 or higher
 
 ## Installation
@@ -31,6 +31,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Purge the board cache
 
 ## Changelog
+
+### v1.2.1 (19-03-2022)
+- Cleanup Code
 
 ### v1.2.0 (25-12-2021)
 - Code change
