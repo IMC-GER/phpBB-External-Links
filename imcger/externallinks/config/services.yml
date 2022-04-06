@@ -2,10 +2,12 @@ services:
     imcger.externallinks.listener:
         class: imcger\externallinks\event\main_listener
         arguments:
+            - '%core.table_prefix%'
             - '@config'
             - '@template'
             - '@user'
             - '@language'
             - '@request'
+            - '@dbal.conn'
         tags:
             - { name: event.listener }

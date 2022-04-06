@@ -21,6 +21,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	/* @var string table_prefix */
+	protected $table_prefix;
+
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -36,21 +39,27 @@ class main_listener implements EventSubscriberInterface
 	/** @var \phpbb\request\request */
 	protected $request;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
 
 	public function __construct
 	(
+		$table_prefix,
 		\phpbb\config\config $config,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		\phpbb\request\request $request
+		\phpbb\request\request $request,
+		\phpbb\db\driver\driver_interface $db
 	)
 	{
+		$this->table_prefix	= $table_prefix;
 		$this->config   = $config;
 		$this->template = $template;
 		$this->user 	= $user;
 		$this->language = $language;
 		$this->request	= $request;
+		$this->db		= $db;
 	}
 
 	public static function getSubscribedEvents()
@@ -164,7 +173,7 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		/* Query whether own domain */
-		$query_domain_src = '(contains(@src, \'' . $internal_domain[2] . '\') and $S_IMCGER_DOMAIN_LEVEL_2) or ' .
+		$query_domain_src =	'(contains(@src, \'' . $internal_domain[2] . '\') and $S_IMCGER_DOMAIN_LEVEL_2) or ' .
 							'(contains(@src, \'' . $internal_domain[3] . '\') and $S_IMCGER_DOMAIN_LEVEL_3) or ' .
 							'(contains(@src, \'' . $internal_domain[4] . '\') and $S_IMCGER_DOMAIN_LEVEL_4) or ' .
 							'(contains(@src, \'' . $internal_domain[5] . '\') and $S_IMCGER_DOMAIN_LEVEL_5) or ' .
@@ -173,7 +182,7 @@ class main_listener implements EventSubscriberInterface
 		$query_domain_url = str_replace('@src', '@url', $query_domain_src);
 
 		/* Shorten URL for caption */
-		$img_caption_src = 	'<xsl:choose>' .
+		$img_caption_src =	'<xsl:choose>' .
 								'<xsl:when test="string-length(@src) &gt; 55"><xsl:value-of select="concat(substring(@src, 0, 40),\' ... \',substring(@src, string-length(@src)-9))"/></xsl:when>' .
 								'<xsl:otherwise><xsl:value-of select="string(@src)"/></xsl:otherwise>' .
 							'</xsl:choose>';
@@ -201,6 +210,32 @@ class main_listener implements EventSubscriberInterface
 			$default_url_template
 		);
 
+		$fancy_default_url_template = str_replace(
+			'href="{@url}"',
+			'href="{@url}" data-fancybox="image" data-caption="{@url}"',
+			$default_url_template
+		);
+		$fancy_url_template_new_window = str_replace(
+			'href="{@url}"',
+			'href="{@url}" target="_blank" rel="noopener noreferrer"',
+			$fancy_default_url_template
+		);
+		$fancy_url_template_new_window_mark = str_replace(
+			'postlink',
+			'postlink  imcger-ext-link',
+			$fancy_url_template_new_window
+		);
+		$fancy_url_template_mark = str_replace(
+			'postlink',
+			'postlink  imcger-ext-link',
+			$fancy_default_url_template
+		);
+
+		/* "imcger/fancybox aktive set attribute in template */
+		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@src}"';
+		$fancybox_start_link = '<a href="{@src}"' . $fancybox_attribute . '>';
+		$fancybox_end_link	 = '</a>';
+
 		/* Select the appropriate template based on the parameters and the URL */
 		$configurator->tags['IMG']->template =
 			'<xsl:choose>' .
@@ -209,33 +244,54 @@ class main_listener implements EventSubscriberInterface
 					/* Add the link to the image as a subline */
 					'<xsl:if test="$S_IMCGER_LINKS_IMG_CAPTION and not($S_IMCGER_LINKS_IMG_TO_TEXT) and not(starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
 						'<div class="imcger-img-wrap">' .
+						/* Check if fancybox is aktive */
+						'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
+							$fancybox_start_link . $default_img_template . $fancybox_end_link .
+						'</xsl:if>' .
+						/* Check if fancybox is not aktive */
+						'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
 							$default_img_template .
-							'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_src . '</span>' .
+						'</xsl:if>' .
+						'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
 					/* Show the image as link */
 					'<xsl:if test="$S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
 						/* Simple link */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Mark link */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink imcger-ext-link">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window and mark it */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .
 				/* For internal image standard display */
-				'<xsl:otherwise>' . $default_img_template . '</xsl:otherwise>' .
+				'<xsl:otherwise>' .
+					'<xsl:choose>' .
+						/* Check if fancybox is aktive */
+						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE">' .
+							$fancybox_start_link . $default_img_template . $fancybox_end_link .
+						'</xsl:when>' .
+						'<xsl:otherwise>' .
+							$url_img_template .
+						'</xsl:otherwise>' .
+					'</xsl:choose>' .
+				'</xsl:otherwise>' .
 			'</xsl:choose>';
+
+		/* "imcger/fancybox aktive set attribute in template */
+		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@url}"';
+		$fancybox_start_link = '<a href="{@url}"' . $fancybox_attribute . '>';
 
 		/* Select the appropriate template based on the parameters and the URL */
 		$configurator->tags['URL']->template =
@@ -246,33 +302,77 @@ class main_listener implements EventSubscriberInterface
 						/* Add the link to the image as a subline */
 						'<xsl:when test="$S_IMCGER_LINKS_IMG_CAPTION">' .
 							'<div class="imcger-img-wrap">' .
+							/* Check if fancybox is aktive */
+							'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
+								$fancybox_start_link . $url_img_template . $fancybox_end_link .
+							'</xsl:if>' .
+							/* Check if fancybox is not aktive */
+							'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
 								$url_img_template .
-								'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_url . '</span>' .
+							'</xsl:if>' .
+							'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_url . '</span>' .
 							'</div>' .
 						'</xsl:when>' .
 						/* Image standard display */
-						'<xsl:otherwise>' . $url_img_template . '</xsl:otherwise>' .
+						'<xsl:otherwise>' .
+							'<xsl:choose>' .
+								/* Check if fancybox is aktive */
+								'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE">' .
+									$fancybox_start_link . $url_img_template . $fancybox_end_link .
+								'</xsl:when>' .
+								'<xsl:otherwise>' .
+									$url_img_template .
+								'</xsl:otherwise>' .
+							'</xsl:choose>' .
+						'</xsl:otherwise>' .
 					'</xsl:choose>' .
 				'</xsl:when>' .
 				'<xsl:otherwise>' .
 					'<xsl:choose>' .
-						/* Check if URL domain from external */
-						'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
-							/* Open the link in new tab/window */
-							'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-								$url_template_new_window .
-							'</xsl:if>' .
-							/* Mark the link with icon */
-							'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
-								$url_template_mark .
-							'</xsl:if>' .
-							/* Open the link in new tab/window and mark it with icon */
-							'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-								$url_template_new_window_mark .
-							'</xsl:if>' .
+						/* Check if it an image */
+						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and (contains(@url, \'.jpg\') or contains(@url, \'.jpeg\') or contains(@url, \'.gif\') or contains(@url, \'.png\') or contains(@url, \'.webp\') or contains(@url, \'.svg\'))">' .
+							'<xsl:choose>' .
+								/* Check if URL domain from external */
+								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
+									/* Open the link in new tab/window */
+									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+										$fancy_url_template_new_window .
+									'</xsl:if>' .
+									/* Mark the link with icon */
+									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
+										$fancy_url_template_mark .
+									'</xsl:if>' .
+									/* Open the link in new tab/window and mark it with icon */
+									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+										$fancy_url_template_new_window_mark .
+									'</xsl:if>' .
+								'</xsl:when>' .
+								/* For internal link standard display */
+								'<xsl:otherwise>' . $fancy_default_url_template . '</xsl:otherwise>' .
+							'</xsl:choose>' .
 						'</xsl:when>' .
-						/* For internal link standard display */
-						'<xsl:otherwise>' . $default_url_template . '</xsl:otherwise>' .
+						/* Link standard display */
+						'<xsl:otherwise>' .
+							'<xsl:choose>' .
+								/* Check if URL domain from external */
+								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
+									/* Open the link in new tab/window */
+									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+										$url_template_new_window .
+									'</xsl:if>' .
+									/* Mark the link with icon */
+									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
+										$url_template_mark .
+									'</xsl:if>' .
+									/* Open the link in new tab/window and mark it with icon */
+									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+										$url_template_new_window_mark .
+									'</xsl:if>' .
+								'</xsl:when>' .
+								/* For internal link standard display */
+								'<xsl:otherwise>' . $default_url_template . '</xsl:otherwise>' .
+							'</xsl:choose>' .
+						'</xsl:otherwise>' .
 					'</xsl:choose>' .
 				'</xsl:otherwise>' .
 			'</xsl:choose>';
@@ -290,6 +390,12 @@ class main_listener implements EventSubscriberInterface
 	{
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
+
+		/* Check if extension "imcger/externallinks" aktive */
+		$sql = 'SELECT ext_active FROM ' . $this->table_prefix . 'ext WHERE ext_name = "imcger/fancybox"';
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$is_fancybox = empty($row['ext_active']) ? false : $row['ext_active'];
 
 		/* Set Domain Level for template */
 		$domain_level = array(0, 0, 0, 0, 0, 0);
@@ -316,5 +422,8 @@ class main_listener implements EventSubscriberInterface
 
 		/* Mark external link */
 		$renderer->setParameter('S_IMCGER_LINKS_TEXT_MARK', (bool) $this->config['imcger_ext_link_links_text']);
+
+		/* Fancybox aktive */
+		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $is_fancybox);
 	}
 }

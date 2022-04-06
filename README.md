@@ -32,6 +32,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.2.2 (06-04-2022)
+- Support for phpBB-Fancybox
+
 ### v1.2.1 (19-03-2022)
 - Cleanup Code
 
