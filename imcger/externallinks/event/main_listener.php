@@ -173,7 +173,7 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		/* Query whether own domain */
-		$query_domain_src =	'(contains(@src, \'' . $internal_domain[2] . '\') and $S_IMCGER_DOMAIN_LEVEL_2) or ' .
+		$query_domain_src = '(contains(@src, \'' . $internal_domain[2] . '\') and $S_IMCGER_DOMAIN_LEVEL_2) or ' .
 							'(contains(@src, \'' . $internal_domain[3] . '\') and $S_IMCGER_DOMAIN_LEVEL_3) or ' .
 							'(contains(@src, \'' . $internal_domain[4] . '\') and $S_IMCGER_DOMAIN_LEVEL_4) or ' .
 							'(contains(@src, \'' . $internal_domain[5] . '\') and $S_IMCGER_DOMAIN_LEVEL_5) or ' .
@@ -182,7 +182,7 @@ class main_listener implements EventSubscriberInterface
 		$query_domain_url = str_replace('@src', '@url', $query_domain_src);
 
 		/* Shorten URL for caption */
-		$img_caption_src =	'<xsl:choose>' .
+		$img_caption_src = 	'<xsl:choose>' .
 								'<xsl:when test="string-length(@src) &gt; 55"><xsl:value-of select="concat(substring(@src, 0, 40),\' ... \',substring(@src, string-length(@src)-9))"/></xsl:when>' .
 								'<xsl:otherwise><xsl:value-of select="string(@src)"/></xsl:otherwise>' .
 							'</xsl:choose>';
@@ -256,7 +256,7 @@ class main_listener implements EventSubscriberInterface
 						'</div>' .
 					'</xsl:if>' .
 					/* Show the image as link */
-					'<xsl:if test="$S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
+					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						/* Simple link */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
@@ -272,6 +272,24 @@ class main_listener implements EventSubscriberInterface
 						/* Open link in new tab/window and mark it */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
 							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+					'</xsl:if>' .
+					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
+						/* Simple link */
+						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="postlink">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Mark link */
+						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="postlink imcger-ext-link">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Open link in new tab/window */
+						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+						'</xsl:if>' .
+						/* Open link in new tab/window and mark it */
+						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .
