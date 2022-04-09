@@ -65,6 +65,7 @@ class main_listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
+			'core.user_setup'					=> 'load_language_on_setup',
 			'core.page_header'					=> 'show_ext_links_var',
 			'core.user_setup_after'				=> 'user_setup_after',
 			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
@@ -72,6 +73,12 @@ class main_listener implements EventSubscriberInterface
 			'core.text_formatter_s9e_configure_after' => 'configure_textformatter',
 			'core.text_formatter_s9e_renderer_setup'  => 'set_textformatter_parameters',
 		);
+	}
+
+	/** Add External Links language file in UCP */
+	public function load_language_on_setup()
+	{
+		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
 	}
 
 	/** Add External Links language file in UCP */
@@ -194,10 +201,28 @@ class main_listener implements EventSubscriberInterface
 			'src="{@url}"',
 			$default_img_template
 		);
+		/* Add title tag for external image */
+		$default_img_template_ext = str_replace(
+			'alt="{$L_IMAGE}"',
+			'alt="{$L_IMCGER_EXT_LINK_EXT_IMG}" title="{$L_IMCGER_EXT_LINK_EXT_IMG}"',
+			$default_img_template
+		);
+		$url_img_template_ext = str_replace(
+			'alt="{$L_IMAGE}"',
+			'alt="{$L_IMCGER_EXT_LINK_EXT_IMG}" title="{$L_IMCGER_EXT_LINK_EXT_IMG}"',
+			$url_img_template
+		);
+
+		/* Add attribute for external links */
+		$default_url_template_ext = str_replace(
+			'href="{@url}"',
+			'href="{@url}" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"',
+			$default_url_template
+		);
 		$url_template_new_window = str_replace(
 			'href="{@url}"',
 			'href="{@url}" target="_blank" rel="noopener noreferrer"',
-			$default_url_template
+			$default_url_template_ext
 		);
 		$url_template_new_window_mark = str_replace(
 			'postlink',
@@ -207,13 +232,13 @@ class main_listener implements EventSubscriberInterface
 		$url_template_mark = str_replace(
 			'postlink',
 			'postlink  imcger-ext-link',
-			$default_url_template
+			$default_url_template_ext
 		);
 
 		$fancy_default_url_template = str_replace(
 			'href="{@url}"',
 			'href="{@url}" data-fancybox="image" data-caption="{@url}"',
-			$default_url_template
+			$default_url_template_ext
 		);
 		$fancy_url_template_new_window = str_replace(
 			'href="{@url}"',
@@ -246,50 +271,50 @@ class main_listener implements EventSubscriberInterface
 						'<div class="imcger-img-wrap">' .
 						/* Check if fancybox is aktive */
 						'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
-							$fancybox_start_link . $default_img_template . $fancybox_end_link .
+							$fancybox_start_link . $default_img_template_ext . $fancybox_end_link .
 						'</xsl:if>' .
 						/* Check if fancybox is not aktive */
 						'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
-							$default_img_template .
+							$default_img_template_ext .
 						'</xsl:if>' .
-						'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_src . '</span>' .
+						'<span class="imcger-ext-image"><span>{{ lang("IMCGER_EXT_LINK_BILD_SOURCE") }}</span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
 					/* Show the image as link */
 					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						/* Simple link */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Mark link */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink imcger-ext-link"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window and mark it */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						/* Simple link */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Mark link */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink imcger-ext-link">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window */
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						/* Open link in new tab/window and mark it */
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .
@@ -322,13 +347,13 @@ class main_listener implements EventSubscriberInterface
 							'<div class="imcger-img-wrap">' .
 							/* Check if fancybox is aktive */
 							'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
-								$fancybox_start_link . $url_img_template . $fancybox_end_link .
+								$fancybox_start_link . $url_img_template_ext . $fancybox_end_link .
 							'</xsl:if>' .
 							/* Check if fancybox is not aktive */
 							'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
-								$url_img_template .
+								$url_img_template_ext .
 							'</xsl:if>' .
-							'<span class="imcger-ext-image"><span>Source</span>: ' . $img_caption_url . '</span>' .
+							'<span class="imcger-ext-image"><span>{{ lang("IMCGER_EXT_LINK_BILD_SOURCE") }}</span>: ' . $img_caption_url . '</span>' .
 							'</div>' .
 						'</xsl:when>' .
 						/* Image standard display */
@@ -336,10 +361,10 @@ class main_listener implements EventSubscriberInterface
 							'<xsl:choose>' .
 								/* Check if fancybox is aktive */
 								'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE">' .
-									$fancybox_start_link . $url_img_template . $fancybox_end_link .
+									$fancybox_start_link . $url_img_template_ext . $fancybox_end_link .
 								'</xsl:when>' .
 								'<xsl:otherwise>' .
-									$url_img_template .
+									$url_img_template_ext .
 								'</xsl:otherwise>' .
 							'</xsl:choose>' .
 						'</xsl:otherwise>' .
