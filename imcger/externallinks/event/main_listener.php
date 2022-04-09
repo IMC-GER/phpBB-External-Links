@@ -66,7 +66,6 @@ class main_listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.user_setup'					=> 'load_language_on_setup',
-			'core.page_header'					=> 'show_ext_links_var',
 			'core.user_setup_after'				=> 'user_setup_after',
 			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_view_update_data'	=> 'ucp_prefs_set_data',
@@ -75,7 +74,7 @@ class main_listener implements EventSubscriberInterface
 		);
 	}
 
-	/** Add External Links language file in UCP */
+	/** Add External Links language file in textformatter */
 	public function load_language_on_setup()
 	{
 		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
@@ -85,34 +84,6 @@ class main_listener implements EventSubscriberInterface
 	public function user_setup_after()
 	{
 		$this->language->add_lang('ucp_externallinks', 'imcger/externallinks');
-	}
-
-	public function show_ext_links_var()
-	{
-		/* Add External Links language file for JS */
-		$this->language->add_lang('externallinks_lang','imcger/externallinks');
-
-		/* Get intern domain name */
-		$hostname = parse_url(generate_board_url(true));
-
-		/* Set domain array with increase domain level */
-		$host = explode('.', $hostname['host']);
-		$internal_domain = $host[count($host)-1];
-
-		for ($i = 2; $i <= count($host); $i++)
-		{
-			$internal_domain = $host[count($host) - $i] . '.' . $internal_domain;
-
-			if ($i >= $this->config['imcger_ext_link_domain_level'])
-			{
-				break;
-			}
-		}
-
-		/* Set template variable for js script */
-		$this->template->assign_vars([
-			'IMCGER_EXT_LINK_INTERNAL_DOMAIN'	=> $internal_domain,
-		]);
 	}
 
 	public function ucp_prefs_get_data($event)
@@ -277,7 +248,7 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
 							$default_img_template_ext .
 						'</xsl:if>' .
-						'<span class="imcger-ext-image"><span>{{ lang("IMCGER_EXT_LINK_BILD_SOURCE") }}</span>: ' . $img_caption_src . '</span>' .
+						'<span class="imcger-ext-image"><span><xsl:value-of select="string($S_TEXT_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
 					/* Show the image as link */
@@ -353,7 +324,7 @@ class main_listener implements EventSubscriberInterface
 							'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
 								$url_img_template_ext .
 							'</xsl:if>' .
-							'<span class="imcger-ext-image"><span>{{ lang("IMCGER_EXT_LINK_BILD_SOURCE") }}</span>: ' . $img_caption_url . '</span>' .
+							'<span class="imcger-ext-image"><span><xsl:value-of select="string($S_TEXT_SOURCE)"/></span>: ' . $img_caption_url . '</span>' .
 							'</div>' .
 						'</xsl:when>' .
 						/* Image standard display */
@@ -431,6 +402,9 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function set_textformatter_parameters($event)
 	{
+		/* Add External Links language file */
+		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
+
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
 
@@ -468,5 +442,8 @@ class main_listener implements EventSubscriberInterface
 
 		/* Fancybox aktive */
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $is_fancybox);
+
+		/* Text for Image caption */
+		$renderer->setParameter('S_TEXT_SOURCE', $this->language->lang('IMCGER_EXT_LINK_BILD_SOURCE'));
 	}
 }

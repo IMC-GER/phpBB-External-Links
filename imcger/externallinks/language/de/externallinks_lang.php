@@ -4,7 +4,7 @@
  * External Links
  * An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2021, Thorsten Ahlers
+ * @copyright (c) 2022, Thorsten Ahlers
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -20,11 +20,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'LA_EXT_LINK_BILD_SOURCE' => 'Quelle',
-	'LA_EXT_LINK_EXT_LINK' => 'Externer Link',
-	'LA_EXT_LINK_EXT_IMG'  => 'Externes Bild',
-
 	'IMCGER_EXT_LINK_BILD_SOURCE' => 'Quelle',
-	'IMCGER_EXT_LINK_EXT_LINK' => 'Externer Link',
-	'IMCGER_EXT_LINK_EXT_IMG'  => 'Externes Bild',
+	'IMCGER_EXT_LINK_EXT_LINK'	=> 'Externer Link',
+	'IMCGER_EXT_LINK_EXT_IMG'	=> 'Externes Bild',
 ));
