@@ -23,4 +23,8 @@ $lang = array_merge($lang, array(
 	'LA_EXT_LINK_BILD_SOURCE' => 'Quelle',
 	'LA_EXT_LINK_EXT_LINK' => 'Externer Link',
 	'LA_EXT_LINK_EXT_IMG'  => 'Externes Bild',
+
+	'IMCGER_EXT_LINK_BILD_SOURCE' => 'Quelle',
+	'IMCGER_EXT_LINK_EXT_LINK' => 'Externer Link',
+	'IMCGER_EXT_LINK_EXT_IMG'  => 'Externes Bild',
 ));

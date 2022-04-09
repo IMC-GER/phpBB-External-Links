@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * 
  * External Links
  * An extension for the phpBB Forum Software package.
  *

@@ -11,26 +11,15 @@
 	}
 
 	/**
-	 *	Externe Bilder durch setzen von Attributten kenntlich machen
-	 */
-	x  = document.querySelectorAll(".postimage");
-	for (i = 0; i < x.length; i++) {
-		if(!ImageSelfDomain(x[i].getAttribute("src"))) {
-			x[i].setAttribute("alt", "{{ lang('LA_EXT_LINK_EXT_IMG')|e('js') }}");
-			x[i].setAttribute("title", "{{ lang('LA_EXT_LINK_EXT_IMG')|e('js') }}");
-		}
-	}
-
-	/**
 	 *	Externe Links durch setzen von Attributten kenntlich machen
-	 */
+
 	x  = document.querySelectorAll(".postlink");
 	for (i = 0; i < x.length; i++) {
 		if(!ImageSelfDomain(x[i].getAttribute("href"))) {
 			x[i].setAttribute("title", "{{ lang('LA_EXT_LINK_EXT_LINK')|e('js') }}");
 		}
 	}
-
+	 */
 	/**
 	 *	Externe Bilder: Sprachvariable der Bildunterschrift setzen
 	 */
