@@ -4,7 +4,7 @@
  * External Links
  * An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2021, Thorsten Ahlers
+ * @copyright (c) 2022, Thorsten Ahlers
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -32,4 +32,8 @@ $lang = array_merge($lang, array(
 	'EXT_LINK_LINKS_TEXT_DESC' => 'Dem Text von Links, die auf externe Websites führen, wird das Symbol <i class="fa fa-external-link" aria-hidden="true"></i> im Anschluss hinzugefügt.',
 	'EXT_LINK_LINKS_IMG' => 'Externes Bild',
 	'EXT_LINK_LINKS_IMG_DESC' => 'Bildern von anderen Websites, werden die Quelle das Bildes als Bildunterschrift hinzugefügt.',
+
+	'EXT_LINK_SHOW' => 'Links verdecken',
+	'EXT_LINK_SHOW_LINK' => 'Externe Links',
+	'EXT_LINK_SHOW_LINK_DESC' => 'Mit den Forenrechten können Links verdeckt werden. Mit der Auswahl von "Ja" werden nur externe Links verdeckt. Mit "Nein" werden alle Links verdeckt.',
 ));

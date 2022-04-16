@@ -22,11 +22,11 @@ class main_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $user;
+		global $config, $request, $template, $language;
 
-		$user->add_lang_ext('imcger/externallinks', 'common');
+		$language->add_lang('common', 'imcger/externallinks');
 		$this->tpl_name = 'acp_ext_link_body';
-		$this->page_title = $user->lang('ACP_EXT_LINK_TITLE');
+		$this->page_title = $language->lang('ACP_EXT_LINK_TITLE');
 		add_form_key('imcger/externallinks');
 
 		if ($request->is_set_post('submit'))
@@ -39,8 +39,9 @@ class main_module
 			$config->set('imcger_ext_link_domain_level', $request->variable('imcger_ext_link_domain_level', 0));
 			$config->set('imcger_ext_link_links_text', $request->variable('imcger_ext_link_links_text', 0));
 			$config->set('imcger_ext_link_links_img', $request->variable('imcger_ext_link_links_img', 0));
+			$config->set('imcger_ext_link_show_link', $request->variable('imcger_ext_link_show_link', 0));
 
-			trigger_error($user->lang('ACP_EXT_LINK_SETTING_SAVED') . adm_back_link($this->u_action));
+			trigger_error($language->lang('ACP_EXT_LINK_SETTING_SAVED') . adm_back_link($this->u_action));
 		}
 
 		$template->assign_vars(array(
@@ -48,6 +49,7 @@ class main_module
 			'S_IMCGER_EXT_LINK_DOMAIN'	=> $config['imcger_ext_link_domain_level'],
 			'S_IMCGER_LINKS_TEXT'		=> $config['imcger_ext_link_links_text'],
 			'S_IMCGER_LINKS_IMG'		=> $config['imcger_ext_link_links_img'],
+			'S_IMCGER_SHOW_LINK'		=> $config['imcger_ext_link_show_link'],
 		));
 	}
 }

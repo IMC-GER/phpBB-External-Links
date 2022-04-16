@@ -11,6 +11,8 @@ With this phpBB extension you can set some parameter at external links and image
 - Set the level of the internal domain
 - Mark external links.
 - Add an external image the URL as caption.
+#### Permission
+- Add forum permission: "Can see links in posts."
 
 ## Requirements
 - php 5.4.7 or higher
@@ -31,6 +33,12 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Purge the board cache
 
 ## Changelog
+
+### v1.3.0 (16-04-2022)
+- Bug: Don't show external image whith subline
+- Bug: Don't show internal image
+- Deprecated function removed
+- Add forum permission
 
 ### v1.2.3 (09-04-2022)
 - remove JavaScript

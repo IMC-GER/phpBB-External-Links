@@ -4,7 +4,7 @@
  * External Links
  * An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2021, Thorsten Ahlers
+ * @copyright (c) 2022, Thorsten Ahlers
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -21,6 +21,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	/* @var int forum_id */
+	protected $forum_id;
+
 	/* @var string table_prefix */
 	protected $table_prefix;
 
@@ -42,6 +45,9 @@ class main_listener implements EventSubscriberInterface
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/** @var \phpbb\auth\auth */
+	protected $auth;
+
 	public function __construct
 	(
 		$table_prefix,
@@ -50,28 +56,138 @@ class main_listener implements EventSubscriberInterface
 		\phpbb\user $user,
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
-		\phpbb\db\driver\driver_interface $db
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\auth\auth $auth
 	)
 	{
 		$this->table_prefix	= $table_prefix;
-		$this->config   = $config;
+		$this->config	= $config;
 		$this->template = $template;
 		$this->user 	= $user;
 		$this->language = $language;
 		$this->request	= $request;
 		$this->db		= $db;
+		$this->auth		= $auth;
 	}
 
 	public static function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'					=> 'load_language_on_setup',
-			'core.user_setup_after'				=> 'user_setup_after',
-			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
-			'core.ucp_prefs_view_update_data'	=> 'ucp_prefs_set_data',
-			'core.text_formatter_s9e_configure_after' => 'configure_textformatter',
-			'core.text_formatter_s9e_renderer_setup'  => 'set_textformatter_parameters',
+			'core.phpbb_content_visibility_get_visibility_sql_before'	=> 'module_auth',
+			'core.modify_text_for_display_after'						=> 'modify_text_for_display_after',
+			'core.permissions'							=> 'permissions',
+			'core.user_setup'							=> 'load_language_on_setup',
+			'core.user_setup_after'						=> 'user_setup_after',
+			'core.ucp_prefs_view_data'					=> 'ucp_prefs_get_data',
+			'core.ucp_prefs_view_update_data'			=> 'ucp_prefs_set_data',
+			'core.text_formatter_s9e_configure_after'	=> 'configure_textformatter',
+			'core.text_formatter_s9e_renderer_setup'	=> 'set_textformatter_parameters',
 		);
+	}
+
+	/** Add permissions */
+	public function permissions($event)
+	{
+		$permissions = $event['permissions'];
+		$permissions += ['f_imcger_show_link' => ['lang' => 'ACL_F_IMCGER_LINK', 'cat' => 'actions']];
+		$event['permissions'] = $permissions;
+	}
+
+	/** Get forum id */
+	public function module_auth($event)
+	{
+		$this->forum_id = $event['forum_id'];
+	}
+
+	private function is_external_link($link)
+	{
+		/* Get intern domain name */
+		$hostname = parse_url(generate_board_url(true));
+		$host = explode('.', $hostname['host']);
+
+		/* Get domain level */
+		$domain_level = $this->config['imcger_ext_link_domain_level'];
+
+		/* Set domain with increase domain level */
+		$internal_domain = $host[count($host)-1];
+
+		/* Domainname for compare */
+		for ($i = 2; $i <= $domain_level; $i++)
+		{
+			$internal_domain = $host[count($host) - $i] . '.' . $internal_domain;
+		}
+
+		/* URL select */
+		$start_pos	= stripos($link, 'href="') === false ? (stripos($link, 'scr="') + 5) : (stripos($link, 'href="') + 6);
+		$end_pos	= stripos($link, '"', $start_pos);
+		$link_url	= substr($link, $start_pos, $end_pos - $start_pos);
+
+		/* Check if url internal */
+		if ($this->str_starts_with($link_url, './') || $this->str_starts_with($link_url, '/') || $this->str_contains($link_url, $internal_domain))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	/** Check permissions and hide or show links */
+	public function modify_text_for_display_after($event)
+	{
+		if (!empty($this->forum_id))
+		{
+			$acl_get = $this->auth->acl_get('f_imcger_show_link', $this->forum_id);
+
+			if (!$acl_get)
+			{
+				/* Set Variable */
+				$text = $event['text'];
+				$offset = 0;
+				$find_regex = ['#(<div class="imcger-img-wrap">)(.*?)(</div>)#i',
+							   '#(<a\s[^>]+?>)(.*?)(</a>)#i',];
+
+				$new_text = $this->language->lang('IMCGER_EXT_LINK_NO_LINK');
+				$new_link = '<div class="rules">' . $new_text . '</div>';
+
+				$only_external = $this->config['imcger_ext_link_show_link'];
+
+				/* Check if link in text */
+				if ($this->str_contains($text, '<a'))
+				{
+					if ($only_external)
+					{
+						foreach ($find_regex as $regex)
+						{
+							$offset = 0;
+
+							/* Find links in post */
+							while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $offset))
+							{
+								/* Check if external */
+								if ($this->is_external_link($match[0][0]))
+								{
+									/* replace link with alternate text */
+									$text = str_replace($match[0][0], $new_link, $text);
+									$offset = $match[0][1];
+								}
+								else
+								{
+									$offset = $match[0][1] + strlen($match[0][0]);
+								}
+							}
+						}
+
+						$event['text'] = $text;
+					}
+					else
+					{
+						$event['text'] = preg_replace($find_regex, $new_link, $text);
+					}
+				}
+			}
+		}
 	}
 
 	/** Add External Links language file in textformatter */
@@ -245,7 +361,7 @@ class main_listener implements EventSubscriberInterface
 							$fancybox_start_link . $default_img_template_ext . $fancybox_end_link .
 						'</xsl:if>' .
 						/* Check if fancybox is not aktive */
-						'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
+						'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 							$default_img_template_ext .
 						'</xsl:if>' .
 						'<span class="imcger-ext-image"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
@@ -297,7 +413,7 @@ class main_listener implements EventSubscriberInterface
 							$fancybox_start_link . $default_img_template . $fancybox_end_link .
 						'</xsl:when>' .
 						'<xsl:otherwise>' .
-							$url_img_template .
+							$default_img_template .
 						'</xsl:otherwise>' .
 					'</xsl:choose>' .
 				'</xsl:otherwise>' .
@@ -321,7 +437,7 @@ class main_listener implements EventSubscriberInterface
 								$fancybox_start_link . $url_img_template_ext . $fancybox_end_link .
 							'</xsl:if>' .
 							/* Check if fancybox is not aktive */
-							'<xsl:if test="not $S_IMCGER_FANCYBOX_AKTIVE">' .
+							'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 								$url_img_template_ext .
 							'</xsl:if>' .
 							'<span class="imcger-ext-image"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_url . '</span>' .
@@ -406,6 +522,7 @@ class main_listener implements EventSubscriberInterface
 		$renderer = $event['renderer']->get_renderer();
 
 		/* Check if extension "imcger/externallinks" aktive */
+		// $this->container->getExtensions();
 		$sql = 'SELECT ext_active FROM ' . $this->table_prefix . 'ext WHERE ext_name = "imcger/fancybox"';
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
@@ -439,5 +556,31 @@ class main_listener implements EventSubscriberInterface
 
 		/* Fancybox aktive */
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $is_fancybox);
+	}
+
+	/* Function is available from php 8 */
+	private function str_starts_with($haystack, $needle)
+	{
+		if (function_exists('str_starts_with'))
+		{
+			return str_starts_with($haystack, $needle);
+		}
+		else
+		{
+			return ($needle == substr($haystack, 0, strlen($needle))) ? true : false;
+		}
+	}
+
+	/* Function is available from php 8 */
+	private function str_contains($haystack, $needle)
+	{
+		if (function_exists('str_contains'))
+		{
+			return str_contains($haystack, $needle);
+		}
+		else
+		{
+			return strpos($haystack, $needle) ? true : false;
+		}
 	}
 }

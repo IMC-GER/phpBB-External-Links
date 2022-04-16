@@ -9,5 +9,6 @@ services:
             - '@language'
             - '@request'
             - '@dbal.conn'
+            - '@auth'
         tags:
             - { name: event.listener }
