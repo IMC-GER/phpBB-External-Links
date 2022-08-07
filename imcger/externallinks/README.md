@@ -3,7 +3,7 @@
 ## Description
 With this extension it is possible to influence the display of links and pictures. Some settings are available in the "User Control Panel". This allows the user to decide for himself what is more important to him. Secure data transfer, comfortable display or fast loading times of the forum page.
 
-In the administration area, the administrator chooses which domain is to be recognised as his own domain. The subdomains underneath are included in each case.
+In the Administration Control Panel, the administrator chooses which domain is to be recognised as his own domain. The subdomains underneath are included in each case.
 External links and images can be identified by adding the source as a caption to the images and by adding a symbol to links.
 He can specify the maximum size of images in pixels that may be embedded in a post. Larger images are automatically changed to a text link.
 The administrator can use the forum authorisation system to make external links and images in posts inaccessible to users. The user will instead be shown the message "You do not have sufficient permission to view this link".
