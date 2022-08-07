@@ -597,7 +597,7 @@ class main_listener implements EventSubscriberInterface
 				}
 
 				/* Get image dimension */
-				$image_data = $this->imagesize->getImageSize($match[2][0]);
+				$image_data = $this->imagesize->getImageSize(trim($match[2][0]));
 
 				/* If no image data tranform to link */
 				if (empty($image_data) || $image_data['width'] <= 0 || $image_data['height'] <= 0)
