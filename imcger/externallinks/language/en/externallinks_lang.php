@@ -24,4 +24,7 @@ $lang = array_merge($lang, array(
 	'IMCGER_EXT_LINK_EXT_LINK'	=> 'External link',
 	'IMCGER_EXT_LINK_EXT_IMG'	=> 'External image',
 	'IMCGER_EXT_LINK_NO_LINK'	=> 'You do not have sufficient permission to view this link.',
+
+	'IMCGER_EXT_LINK_NO_IMAGEDATA'	=> 'The image dimension could not be determined. The following image is inserted as a link.',
+	'IMCGER_EXT_LINK_IMAGE_TOLARGE'	=> 'The following image is larger than %upx x %upx and has therefore been inserted as a link.',
 ));

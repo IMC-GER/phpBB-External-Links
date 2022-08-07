@@ -49,6 +49,16 @@
 		</dl>
 	</fieldset>
 	
+	<fieldset>
+		<legend>{{ lang('EXT_LINK_IMAGE') }}</legend>
+		<dl>
+			<dt><label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') }}</label><br /><span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span></dt>
+			<dd>
+				<input id="imcger_ext_img_show_link" type="number" min="0" max="9999" name="imcger_ext_img_show_link_width" value="{{ IMCGER_IMG_LINK_WIDTH }}" /> x <input type="number" min="0" max="9999" name="imcger_ext_img_show_link_height" value="{{ IMCGER_IMG_LINK_HEIGHT }}" /> px
+			</dd>
+		</dl>
+	</fieldset>
+	
 	<fieldset class="submit-buttons">
 		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
 		{S_FORM_TOKEN}

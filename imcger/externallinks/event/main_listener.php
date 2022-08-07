@@ -48,6 +48,9 @@ class main_listener implements EventSubscriberInterface
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
+	/** @var \FastImageSize\FastImageSize */
+	protected $imagesize;
+
 	public function __construct
 	(
 		$table_prefix,
@@ -57,7 +60,8 @@ class main_listener implements EventSubscriberInterface
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
 		\phpbb\db\driver\driver_interface $db,
-		\phpbb\auth\auth $auth
+		\phpbb\auth\auth $auth,
+		\FastImageSize\FastImageSize $imagesize
 	)
 	{
 		$this->table_prefix	= $table_prefix;
@@ -68,20 +72,21 @@ class main_listener implements EventSubscriberInterface
 		$this->request	= $request;
 		$this->db		= $db;
 		$this->auth		= $auth;
+		$this->imagesize = $imagesize;
 	}
 
 	public static function getSubscribedEvents()
 	{
 		return array(
-			'core.phpbb_content_visibility_get_visibility_sql_before'	=> 'module_auth',
-			'core.modify_text_for_display_after'						=> 'modify_text_for_display_after',
+			'core.phpbb_content_visibility_get_visibility_sql_before' => 'module_auth',
+			'core.modify_text_for_display_after'		=> 'modify_text_for_display_after',
 			'core.permissions'							=> 'permissions',
-			'core.user_setup'							=> 'load_language_on_setup',
 			'core.user_setup_after'						=> 'user_setup_after',
 			'core.ucp_prefs_view_data'					=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_view_update_data'			=> 'ucp_prefs_set_data',
 			'core.text_formatter_s9e_configure_after'	=> 'configure_textformatter',
 			'core.text_formatter_s9e_renderer_setup'	=> 'set_textformatter_parameters',
+			'core.posting_modify_message_text'			=> 'posting_modify_message_text',
 		);
 	}
 
@@ -145,8 +150,9 @@ class main_listener implements EventSubscriberInterface
 				/* Set Variable */
 				$text = $event['text'];
 				$offset = 0;
-				$find_regex = ['#(<div class="imcger-img-wrap">)(.*?)(</div>)#i',
-							   '#(<a\s[^>]+?>)(.*?)(</a>)#i',];
+				$find_regex = ['#(<img\s)(.*?)(>)#i', // Image
+							   '#(<div class="imcger-img-wrap">)(.*?)(</div>)#i', // Image with caption
+							   '#(<a\s[^>]+?>)(.*?)(</a>)#i', ]; // Link
 
 				$new_text = $this->language->lang('IMCGER_EXT_LINK_NO_LINK');
 				$new_link = '<div class="rules">' . $new_text . '</div>';
@@ -156,6 +162,7 @@ class main_listener implements EventSubscriberInterface
 				/* Check if link in text */
 				if ($this->str_contains($text, '<a'))
 				{
+					/* Change only external links */
 					if ($only_external)
 					{
 						foreach ($find_regex as $regex)
@@ -183,6 +190,7 @@ class main_listener implements EventSubscriberInterface
 					}
 					else
 					{
+						/* Change internal und external links */
 						$event['text'] = preg_replace($find_regex, $new_link, $text);
 					}
 				}
@@ -190,15 +198,13 @@ class main_listener implements EventSubscriberInterface
 		}
 	}
 
-	/** Add External Links language file in textformatter */
-	public function load_language_on_setup()
-	{
-		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
-	}
-
-	/** Add External Links language file in UCP */
+	/** Add External Links language file */
 	public function user_setup_after()
 	{
+		/* Add language file in textformatter */
+		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
+
+		/* Add language file in UCP */
 		$this->language->add_lang('ucp_externallinks', 'imcger/externallinks');
 	}
 
@@ -556,6 +562,67 @@ class main_listener implements EventSubscriberInterface
 
 		/* Fancybox aktive */
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $is_fancybox);
+	}
+
+	/**
+	 *
+	 */
+	public function posting_modify_message_text($event)
+	{
+		/* Initialize variable */
+		$match = [];
+		$error = [];
+		$offset = 0;
+		$i = 0;
+
+		/* Regular expression to search for image */
+		$regex = '#(\[img\])(.*?)(\[\/img\])#i';
+
+		/* Get max image dimension */
+		$max_width = $this->config['imcger_ext_img_show_link_width'];
+		$max_heigth = $this->config['imcger_ext_img_show_link_height'];
+
+		/* Get message text */
+		$message_parser = $event['message_parser'];
+		$message = $message_parser->message;
+
+		if ($max_width || $max_heigth)
+		{
+			/* Find image in post message */
+			while (preg_match($regex, $message, $match, PREG_OFFSET_CAPTURE, $offset))
+			{
+				if ($i > 0)
+				{
+					$error += [$i++ => "\n", ];
+				}
+
+				/* Get image dimension */
+				$image_data = $this->imagesize->getImageSize($match[2][0]);
+
+				/* If no image data tranform to link */
+				if (empty($image_data) || $image_data['width'] <= 0 || $image_data['height'] <= 0)
+				{
+					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_NO_IMAGEDATA'),
+							   $i++ => $match[2][0], ];
+
+					$message = str_replace($match[0][0], '[url]' . $match[2][0] . '[/url]', $message);
+				}
+
+				/* If image to large tranform to link */
+				if (!empty($image_data) && ($image_data['width'] > $max_width || $image_data['height'] > $max_heigth))
+				{
+					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_IMAGE_TOLARGE', $max_width, $max_heigth),
+							   $i++ => $match[2][0], ];
+
+					$message = str_replace($match[0][0], '[url]' . $match[2][0] . '[/url]', $message);
+				}
+
+				$offset = $match[3][1];
+			}
+
+			$event['error'] = $error;
+			$message_parser->message = $message;
+		}
 	}
 
 	/* Function is available from php 8 */

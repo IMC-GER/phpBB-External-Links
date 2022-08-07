@@ -22,34 +22,29 @@ class main_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $language;
+		global $phpbb_container;
 
-		$language->add_lang('common', 'imcger/externallinks');
-		$this->tpl_name = 'acp_ext_link_body';
-		$this->page_title = $language->lang('ACP_EXT_LINK_TITLE');
-		add_form_key('imcger/externallinks');
+		/* Add ACP lang file */
+		$language = $phpbb_container->get('language');
 
-		if ($request->is_set_post('submit'))
+		/* Get an instance of the admin controller */
+		$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller');
+
+		/* Make the $u_action url available in the admin controller */
+		$admin_controller->set_page_url($this->u_action);
+
+		switch ($mode)
 		{
-			if (!check_form_key('imcger/externallinks'))
-			{
-				trigger_error('FORM_INVALID', E_USER_WARNING);
-			}
+			case 'settings':
+				/* Load a template from adm/style for our ACP page */
+				$this->tpl_name = 'acp_ext_link_body';
 
-			$config->set('imcger_ext_link_domain_level', $request->variable('imcger_ext_link_domain_level', 0));
-			$config->set('imcger_ext_link_links_text', $request->variable('imcger_ext_link_links_text', 0));
-			$config->set('imcger_ext_link_links_img', $request->variable('imcger_ext_link_links_img', 0));
-			$config->set('imcger_ext_link_show_link', $request->variable('imcger_ext_link_show_link', 0));
+				/* Set the page title for our ACP page */
+				$this->page_title = $language->lang('ACP_EXT_LINK_TITLE');
 
-			trigger_error($language->lang('ACP_EXT_LINK_SETTING_SAVED') . adm_back_link($this->u_action));
+				/* Load the display options handle in the admin controller */
+				$admin_controller->display_options();
+			break;
 		}
-
-		$template->assign_vars(array(
-			'U_ACTION'					=> $this->u_action,
-			'S_IMCGER_EXT_LINK_DOMAIN'	=> $config['imcger_ext_link_domain_level'],
-			'S_IMCGER_LINKS_TEXT'		=> $config['imcger_ext_link_links_text'],
-			'S_IMCGER_LINKS_IMG'		=> $config['imcger_ext_link_links_img'],
-			'S_IMCGER_SHOW_LINK'		=> $config['imcger_ext_link_show_link'],
-		));
 	}
 }

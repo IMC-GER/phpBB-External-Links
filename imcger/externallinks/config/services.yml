@@ -1,4 +1,11 @@
 services:
+    imcger.externallinks.admin.controller:
+        class: 'imcger\externallinks\controller\admin_controller'
+        arguments:
+            - '@config'
+            - '@template'
+            - '@language'
+            - '@request'
     imcger.externallinks.listener:
         class: imcger\externallinks\event\main_listener
         arguments:
@@ -10,5 +17,6 @@ services:
             - '@request'
             - '@dbal.conn'
             - '@auth'
+            - '@upload_imagesize'
         tags:
             - { name: event.listener }

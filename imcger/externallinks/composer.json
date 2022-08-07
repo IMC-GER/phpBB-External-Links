@@ -1,25 +1,30 @@
 {
 	"name": "imcger/externallinks",
 	"type": "phpbb-extension",
-	"description": "Indicates external links and images. Images can be displayed as text link or image. Open external links in a new tab/window.",
+	"description": "With this extension it is possible to influence the display of links and pictures. Some settings are available in the User Control Panel. This allows the user to decide for himself what is more important to him. Secure data transfer, comfortable display or fast loading times of the forum page. Open external links in a new tab/window.",
 	"homepage": "https://github.com/IMC-GER/phpBB-External-Links",
-	"version": "1.3.0",
-	"time": "2022-04-16",
+	"version": "1.4.0",
+	"time": "2022-08-07",
 	"license": "GPL-2.0-only",
-	"authors": [
-				{
-				"name": "Thorsten Ahlers",
-				"homepage": "",
-				"role": "Developer"
-				}
-				],
+	"authors": [{
+			"name": "Thorsten Ahlers",
+			"homepage": "",
+			"role": "Developer"
+		}
+	],
 	"require": {
-				"php": ">=5.4.7,<8.1"
-			},
+		"php": ">=5.4.7,<8.2"
+	},
 	"extra": {
-				"display-name": "External Links",
-				"soft-require": {
-				"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
-				}
-			}
+		"display-name": "External Links",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
+		},
+		"version-check": {
+			"host": "raw.githubusercontent.com",
+			"directory": "/IMC-GER/phpBB-External-Links/master",
+			"filename": "externallinks_version.json",
+			"ssl": true
+		}
+	}
 }
