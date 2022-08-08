@@ -21,10 +21,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
-	/* @var int forum_id */
+	/** @var int forum_id */
 	protected $forum_id;
 
-	/* @var string table_prefix */
+	/** @var string table_prefix */
 	protected $table_prefix;
 
 	/** @var \phpbb\config\config */
@@ -160,7 +160,7 @@ class main_listener implements EventSubscriberInterface
 				$only_external = $this->config['imcger_ext_link_show_link'];
 
 				/* Check if link in text */
-				if ($this->str_contains($text, '<a'))
+				if ($this->str_contains($text, '<a') || $this->str_contains($text, '<img'))
 				{
 					/* Change only external links */
 					if ($only_external)
@@ -181,7 +181,7 @@ class main_listener implements EventSubscriberInterface
 								}
 								else
 								{
-									$offset = $match[0][1] + strlen($match[0][0]);
+									$offset = $match[3][1];
 								}
 							}
 						}
@@ -528,7 +528,6 @@ class main_listener implements EventSubscriberInterface
 		$renderer = $event['renderer']->get_renderer();
 
 		/* Check if extension "imcger/externallinks" aktive */
-		// $this->container->getExtensions();
 		$sql = 'SELECT ext_active FROM ' . $this->table_prefix . 'ext WHERE ext_name = "imcger/fancybox"';
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);

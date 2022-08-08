@@ -47,8 +47,11 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.4.1 (08-08-2022)
+- Bug: Don't find the image to make it inaccessible in the message
+
 ### v1.4.0 (07-08-2022)
-- Bug: force default board language
+- Bug: Force default board language
 - Display image as an inline text link if image to large
 - Add version check
 - Add check system requirement
