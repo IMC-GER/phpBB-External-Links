@@ -123,7 +123,7 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		/* URL select */
-		$start_pos	= stripos($link, 'href="') === false ? (stripos($link, 'scr="') + 5) : (stripos($link, 'href="') + 6);
+		$start_pos	= stripos($link, 'href="') === false ? (stripos($link, 'src="') + 5) : (stripos($link, 'href="') + 6);
 		$end_pos	= stripos($link, '"', $start_pos);
 		$link_url	= substr($link, $start_pos, $end_pos - $start_pos);
 
