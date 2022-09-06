@@ -35,7 +35,9 @@ $lang = array_merge($lang, array(
 
 	'EXT_LINK_SHOW' => 'Hide links',
 	'EXT_LINK_SHOW_LINK' => 'External links:',
-	'EXT_LINK_SHOW_LINK_DESC' => 'With the forum permissions links can be hidden. By selecting "Yes" only external links will be hidden. With "No" all links will be hidden.',
+	'EXT_LINK_SHOW_LINK_DESC' => 'With the forum permissions links and images can be hidden. By selecting "external" only external links and images will be hidden. With "No" all will be hidden.',
+	'EXT_LINK_EXT' => 'external',
+	'EXT_LINK_ALL' => 'all',
 
 	'EXT_LINK_IMAGE' => 'Only external image',
 	'EXT_LINK_IMAGE_LINK' => 'Image link dimensions:',

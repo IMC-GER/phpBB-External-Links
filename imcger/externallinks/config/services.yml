@@ -6,17 +6,26 @@ services:
             - '@template'
             - '@language'
             - '@request'
+
     imcger.externallinks.listener:
-        class: imcger\externallinks\event\main_listener
+        class: 'imcger\externallinks\event\main_listener'
         arguments:
             - '%core.table_prefix%'
             - '@config'
+            - '@user'
+            - '@language'
+            - '@dbal.conn'
+            - '@auth'
+            - '@upload_imagesize'
+        tags:
+            - { name: event.listener }
+
+    imcger.externallinks.ucp:
+        class: 'imcger\externallinks\event\ucp_listener'
+        arguments:
             - '@template'
             - '@user'
             - '@language'
             - '@request'
-            - '@dbal.conn'
-            - '@auth'
-            - '@upload_imagesize'
         tags:
             - { name: event.listener }

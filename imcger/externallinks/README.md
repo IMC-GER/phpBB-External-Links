@@ -22,11 +22,11 @@ For more data security, he can convert insecurely transmitted images (http: conn
 #### Settings in Administration Control Panel
 - Set the level of the internal domain
 - Mark external links.
-- Add an external image the URL as caption.
+- Added an external image the URL as caption.
 - Image dimensions for display image as an inline text link if image is larger
 
 #### Permission
-- Add forum permission: "Can see links in posts."
+- Added forum permission: "Can see links in posts."
 
 ## Requirements
 - php 5.4.7 or higher
@@ -47,21 +47,28 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.4.3 (06-09-2022)
+- Improved image recognition
+- Code changes
+
+### v1.4.2 (08-08-2022)
+- Fixed a typo
+
 ### v1.4.1 (08-08-2022)
 - Bug: Don't find the image to make it inaccessible in the message
 
 ### v1.4.0 (07-08-2022)
 - Bug: Force default board language
-- Display image as an inline text link if image to large
-- Add version check
-- Add check system requirement
-- Add Controller for ACP template
+- Display external image as an inline text link if image to large
+- Added version check
+- Added check system requirement
+- Added Controller for ACP template
 
 ### v1.3.0 (16-04-2022)
 - Bug: Don't show external image whith subline
 - Bug: Don't show internal image
 - Deprecated function removed
-- Add forum permission
+- Added forum permission
 
 ### v1.2.3 (09-04-2022)
 - remove JavaScript
@@ -73,14 +80,14 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Cleanup Code
 
 ### v1.2.0 (25-12-2021)
-- Code change
+- Code changes
 - Show insecurely transferred images (http://) as link.
 
 ### v1.1.2 (20-12-2021)
 - Incorrect view in ACP/UCP with English language selection
 
 ### v1.1.1 (19-12-2021)
-- Code change
+- Code changes
 - Can change the level of the internal domain
 
 ### v1.1.0 (10-12-2021)
@@ -90,7 +97,7 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Bug: Support UCP setting `Display images within posts`
 
 ### v1.0.1 (08-12-2021)
-- Minor code change
+- Minor code changes
 
 ### v1.0.0 (06-12-2021)
 

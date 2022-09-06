@@ -35,7 +35,9 @@ $lang = array_merge($lang, array(
 
 	'EXT_LINK_SHOW' => 'Links verdecken',
 	'EXT_LINK_SHOW_LINK' => 'Nur externe Links:',
-	'EXT_LINK_SHOW_LINK_DESC' => 'Mit den Forenrechten können Links verdeckt werden. Mit der Auswahl von "Ja" werden nur externe Links verdeckt. Mit "Nein" werden alle Links verdeckt.',
+	'EXT_LINK_SHOW_LINK_DESC' => 'Mit den Forenrechten können Links und Bilder verdeckt werden. Mit der Auswahl von "externe" werden nur externe Links und Bilder verdeckt. Mit "alle" werden alle verdeckt.',
+	'EXT_LINK_EXT' => 'externe',
+	'EXT_LINK_ALL' => 'alle',
 
 	'EXT_LINK_IMAGE' => 'Externes Bild',
 	'EXT_LINK_IMAGE_LINK' => 'Abmessungen, ab denen externe Bilder verlinkt werden:',
