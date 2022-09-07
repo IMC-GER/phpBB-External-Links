@@ -381,12 +381,12 @@ class main_listener implements EventSubscriberInterface
 		);
 		$url_template_new_window_mark = str_replace(
 			'postlink',
-			'postlink  imcger-ext-link',
+			'postlink imcger-ext-link',
 			$url_template_new_window
 		);
 		$url_template_mark = str_replace(
 			'postlink',
-			'postlink  imcger-ext-link',
+			'postlink imcger-ext-link',
 			$default_url_template_ext
 		);
 
@@ -402,12 +402,12 @@ class main_listener implements EventSubscriberInterface
 		);
 		$fancy_url_template_new_window_mark = str_replace(
 			'postlink',
-			'postlink  imcger-ext-link',
+			'postlink imcger-ext-link',
 			$fancy_url_template_new_window
 		);
 		$fancy_url_template_mark = str_replace(
 			'postlink',
-			'postlink  imcger-ext-link',
+			'postlink imcger-ext-link',
 			$fancy_default_url_template
 		);
 
@@ -418,9 +418,9 @@ class main_listener implements EventSubscriberInterface
 
 		/* Select the appropriate template based on the parameters and the URL */
 		$configurator->tags['IMG']->template =
-			'<xsl:choose>' .
+			'<span><xsl:choose>' .
 				/* Check if the image comes from external and the display should be changed */
-				'<xsl:when test="($S_IMCGER_LINKS_IMG_TO_TEXT or $S_IMCGER_LINKS_IMG_CAPTION or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))  and not(' . $query_domain_src . ')">' .
+				'<xsl:when test="($S_IMCGER_LINKS_IMG_TO_TEXT or $S_IMCGER_LINKS_IMG_CAPTION or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)) and not(' . $query_domain_src . ')">' .
 					/* Add the link to the image as a caption */
 					'<xsl:if test="$S_IMCGER_LINKS_IMG_CAPTION and not($S_IMCGER_LINKS_IMG_TO_TEXT) and not(starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
 						'<div class="imcger-img-wrap">' .
@@ -485,7 +485,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:otherwise>' .
 					'</xsl:choose>' .
 				'</xsl:otherwise>' .
-			'</xsl:choose>';
+			'</xsl:choose></span>';
 
 		/* "imcger/fancybox aktive set attribute in template */
 		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@url}"';
@@ -493,7 +493,7 @@ class main_listener implements EventSubscriberInterface
 
 		/* Select the appropriate template based on the parameters and the URL */
 		$configurator->tags['URL']->template =
-			'<xsl:choose>' .
+			'<span><xsl:choose>' .
 				/* Show links to images as embedded image */
 				'<xsl:when test="$S_IMCGER_LINKS_TEXT_TO_IMG and not(starts-with(@url, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE) and (' . $check_if_img . ')">' .
 					'<xsl:choose>' .
@@ -547,7 +547,7 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and (' . $check_if_img . ')">' .
 							'<xsl:choose>' .
 								/* Check if URL domain from external */
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
+								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
 									/* Open the link in new tab/window */
 									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$fancy_url_template_new_window .
@@ -569,7 +569,7 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:otherwise>' .
 							'<xsl:choose>' .
 								/* Check if URL domain from external */
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN)  and not(' . $query_domain_url . ')">' .
+								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
 									/* Open the link in new tab/window */
 									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$url_template_new_window .
@@ -589,7 +589,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:otherwise>' .
 					'</xsl:choose>' .
 				'</xsl:otherwise>' .
-			'</xsl:choose>';
+			'</xsl:choose></span>';
 	}
 
 	/**

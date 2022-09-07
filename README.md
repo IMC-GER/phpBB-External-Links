@@ -47,6 +47,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.4.4 (07-09-2022)
+- Bug: Parser remove line breaks
+
 ### v1.4.3 (06-09-2022)
 - Improved image recognition
 - Code changes

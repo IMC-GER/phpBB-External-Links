@@ -21,8 +21,8 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'IMCGER_EXT_LINK_BILD_SOURCE' => 'Source',
-	'IMCGER_EXT_LINK_EXT_LINK'	=> 'External link',
-	'IMCGER_EXT_LINK_EXT_IMG'	=> 'External image',
+	'IMCGER_EXT_LINK_EXT_LINK'	=> 'External link, the privacy policy and terms of use of the selected page apply.',
+	'IMCGER_EXT_LINK_EXT_IMG'	=> 'External image, the privacy policy and terms of use of the selected page apply.',
 	'IMCGER_EXT_LINK_NO_LINK'	=> 'You do not have sufficient permission to view this link.',
 
 	'IMCGER_EXT_LINK_NO_IMAGEDATA'	=> 'The image dimension could not be determined. The following image is inserted as a link.',
