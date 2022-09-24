@@ -81,7 +81,7 @@ class main_listener implements EventSubscriberInterface
 		$this->imagesize	= $imagesize;
 
 		/* Check if extension "imcger/fancybox" aktive */
-		$sql = 'SELECT ext_active FROM ' . $this->table_prefix . 'ext WHERE ext_name = "imcger/fancybox"';
+		$sql = 'SELECT ext_active FROM ' . EXT_TABLE . ' WHERE ext_name = "imcger/fancybox"';
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->is_fancybox = empty($row['ext_active']) ? false : $row['ext_active'];
