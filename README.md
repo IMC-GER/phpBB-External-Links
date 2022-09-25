@@ -29,12 +29,12 @@ For more data security, he can convert insecurely transmitted images (http: conn
 - Added forum permission: "Can see links in posts."
 
 ## Screenshots
-- [Administrations-Bereich](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/acp.jpg)
-- [Persönlicher Bereich - Anzeigeoptionen ändern](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/ucp.jpg)
-- [Forenbasierte Berechtigungen](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/permission.jpg)
-- [Gekennzeichnete Links](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_image.jpg)
-- [Post - Bild zu groß](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_error.jpg)
-- [Post - Keine Berechtigung](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_permission.jpg)
+- [ACP](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/acp.jpg)
+- [UCP - Edit display options](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/ucp.jpg)
+- [Forum Based Permissions](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/permission.jpg)
+- [Marked links](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_image.jpg)
+- [Post - Images to big](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_error.jpg)
+- [Post - No Permissions](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_permission.jpg)
 
 ## Requirements
 - php 5.4.7 or higher
