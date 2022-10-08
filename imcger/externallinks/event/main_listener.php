@@ -432,7 +432,7 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 							$default_img_template_ext .
 						'</xsl:if>' .
-						'<span class="imcger-ext-image"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
+						'<span class="imcger-ext-image" title="{@src}"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
 					/* Show the image as link */
@@ -511,7 +511,7 @@ class main_listener implements EventSubscriberInterface
 									'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 										$url_img_template_ext .
 									'</xsl:if>' .
-									'<span class="imcger-ext-image"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_url . '</span>' .
+									'<span class="imcger-ext-image" title="{@url}"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_url . '</span>' .
 								'</xsl:when>' .
 								/* URL is internal */
 								'<xsl:otherwise>' .
