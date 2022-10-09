@@ -55,6 +55,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.4.5 (09-10-2022)
+- Added title tag to caption
+
 ### v1.4.4 (07-09-2022)
 - Bug: Parser remove line breaks
 
