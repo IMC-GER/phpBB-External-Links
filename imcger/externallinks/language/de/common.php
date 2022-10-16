@@ -31,13 +31,17 @@ $lang = array_merge($lang, array(
 	'EXT_LINK_LINKS_TEXT' => 'Textform:',
 	'EXT_LINK_LINKS_TEXT_DESC' => 'Dem Text von Links, die auf externe Websites führen, wird das Symbol <i class="fa fa-external-link" aria-hidden="true"></i> im Anschluss hinzugefügt.',
 	'EXT_LINK_LINKS_IMG' => 'Externes Bild:',
-	'EXT_LINK_LINKS_IMG_DESC' => 'Bildern von anderen Websites, werden die Quelle das Bildes als Bildunterschrift hinzugefügt.',
+	'EXT_LINK_LINKS_IMG_DESC' => 'Bildern von anderen Websites, werden die Quelle des Bildes als Bildunterschrift hinzugefügt.',
 
 	'EXT_LINK_SHOW' => 'Links verdecken',
 	'EXT_LINK_SHOW_LINK' => 'Nur externe Links:',
 	'EXT_LINK_SHOW_LINK_DESC' => 'Mit den Forenrechten können Links und Bilder verdeckt werden. Mit der Auswahl von "externe" werden nur externe Links und Bilder verdeckt. Mit "alle" werden alle verdeckt.',
 	'EXT_LINK_EXT' => 'externe',
 	'EXT_LINK_ALL' => 'alle',
+
+	'EXT_LINK_FIND' => 'Bilder erkennen',
+	'EXT_LINK_FIND_IMG' => 'Verbessertes erkennen von Links zu Bilder:',
+	'EXT_LINK_FIND_IMG_DESC' => 'Es werden auch Links zu Bilder erkannt wenn diese keine Dateinamenserweiterung für Bilder beinhalten.<br><strong>Achtung:</strong> Wenn sich in Beiträgen Tote Links befinden verlängert sich die Ladezeit der Forenseite.',
 
 	'EXT_LINK_IMAGE' => 'Externes Bild',
 	'EXT_LINK_IMAGE_LINK' => 'Abmessungen, ab denen externe Bilder verlinkt werden:',

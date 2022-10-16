@@ -23,6 +23,7 @@ For more data security, he can convert insecurely transmitted images (http: conn
 - Set the level of the internal domain
 - Mark external links.
 - Added an external image the URL as caption.
+- Improved recognition of links to images
 - Image dimensions for display image as an inline text link if image is larger
 
 #### Permission
@@ -54,6 +55,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
 ## Changelog
+
+### v1.4.6 (16-10-2022)
+- Added ACP setting for improved image recognition
 
 ### v1.4.5 (09-10-2022)
 - Added title tag to caption

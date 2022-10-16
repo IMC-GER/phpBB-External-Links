@@ -209,7 +209,7 @@ class main_listener implements EventSubscriberInterface
 					}
 				}
 			}
-			else
+			else if ($this->config['imcger_ext_find_img'])
 			{
 				/* Convert a link to an image, into an image */
 				if (($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg')) || $this->is_fancybox)

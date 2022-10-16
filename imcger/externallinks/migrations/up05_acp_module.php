@@ -11,23 +11,22 @@
 
 namespace imcger\externallinks\migrations;
 
-class up04_acp_module extends \phpbb\db\migration\migration
+class up05_acp_module extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return ['\imcger\externallinks\migrations\up03_permission'];
+		return ['\imcger\externallinks\migrations\up04_acp_module'];
 	}
 
 	public function effectively_installed()
 	{
-		return isset($this->config['imcger_ext_img_show_link_width']);
+		return isset($this->config['imcger_ext_find_img']);
 	}
 
 	public function update_data()
 	{
 		return [
-			['config.add', ['imcger_ext_img_show_link_width', $this->config['img_link_width']]],
-			['config.add', ['imcger_ext_img_show_link_height', $this->config['img_link_height']]],
+			['config.add', ['imcger_ext_find_img', 0]],
 		];
 	}
 }

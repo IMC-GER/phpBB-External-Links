@@ -50,6 +50,17 @@
 	</fieldset>
 	
 	<fieldset>
+		<legend>{{ lang('EXT_LINK_FIND') }}</legend>
+		<dl>
+			<dt><label for="imcger_ext_find_img">{{ lang('EXT_LINK_FIND_IMG') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_FIND_IMG_DESC') }}</span></dt>
+			<dd>
+				<label><input type="radio" class="radio" id="imcger_ext_find_img" name="imcger_ext_find_img" value='1'{% if S_IMCGER_FIND_IMG %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="imcger_ext_find_img" value='0'{% if not S_IMCGER_FIND_IMG %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+			</dd>
+		</dl>
+	</fieldset>
+	
+	<fieldset>
 		<legend>{{ lang('EXT_LINK_IMAGE') }}</legend>
 		<dl>
 			<dt><label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') }}</label><br /><span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span></dt>

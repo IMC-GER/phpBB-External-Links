@@ -82,6 +82,7 @@ class admin_controller
 			'S_IMCGER_EXT_LINK_DOMAIN'	=> $this->config['imcger_ext_link_domain_level'],
 			'S_IMCGER_LINKS_TEXT'		=> $this->config['imcger_ext_link_links_text'],
 			'S_IMCGER_LINKS_IMG'		=> $this->config['imcger_ext_link_links_img'],
+			'S_IMCGER_FIND_IMG'			=> $this->config['imcger_ext_find_img'],
 			'S_IMCGER_SHOW_LINK'		=> $this->config['imcger_ext_link_show_link'],
 			'IMCGER_IMG_LINK_WIDTH'		=> $this->config['imcger_ext_img_show_link_width'],
 			'IMCGER_IMG_LINK_HEIGHT'	=> $this->config['imcger_ext_img_show_link_height'],
@@ -99,6 +100,7 @@ class admin_controller
 		$this->config->set('imcger_ext_link_domain_level', $this->request->variable('imcger_ext_link_domain_level', 0));
 		$this->config->set('imcger_ext_link_links_text', $this->request->variable('imcger_ext_link_links_text', 0));
 		$this->config->set('imcger_ext_link_links_img', $this->request->variable('imcger_ext_link_links_img', 0));
+		$this->config->set('imcger_ext_find_img', $this->request->variable('imcger_ext_find_img', 0));
 		$this->config->set('imcger_ext_link_show_link', $this->request->variable('imcger_ext_link_show_link', 0));
 		$this->config->set('imcger_ext_img_show_link_width', $this->request->variable('imcger_ext_img_show_link_width', 0));
 		$this->config->set('imcger_ext_img_show_link_height', $this->request->variable('imcger_ext_img_show_link_height', 0));

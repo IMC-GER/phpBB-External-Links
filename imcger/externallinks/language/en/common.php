@@ -39,6 +39,10 @@ $lang = array_merge($lang, array(
 	'EXT_LINK_EXT' => 'external',
 	'EXT_LINK_ALL' => 'all',
 
+	'EXT_LINK_FIND' => 'Recognize images',
+	'EXT_LINK_FIND_IMG' => 'Improved recognition of links to images:',
+	'EXT_LINK_FIND_IMG_DESC' => 'Links to images are also recognized if they do not contain a file name extension for images.<br><strong>Attention:</strong> If there are dead links in posts, the loading time of the forum page will increase.',
+
 	'EXT_LINK_IMAGE' => 'Only external image',
 	'EXT_LINK_IMAGE_LINK' => 'Image link dimensions:',
 	'EXT_LINK_IMAGE_LINK_DESC' => 'Display image as an inline text link if image is larger than this. To disable this behaviour, set the values to 0px by 0px.',
