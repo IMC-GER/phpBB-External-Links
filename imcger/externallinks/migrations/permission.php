@@ -15,7 +15,7 @@ class permission  extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return array('\imcger\externallinks\migrations\add_ucp_settings');
+		return ['\imcger\externallinks\migrations\add_ucp_settings'];
 	}
 
 	public function update_data()

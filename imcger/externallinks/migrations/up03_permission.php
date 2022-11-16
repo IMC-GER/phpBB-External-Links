@@ -15,7 +15,7 @@ class up03_permission extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return array('\imcger\externallinks\migrations\up02_ucp_settings');
+		return ['\imcger\externallinks\migrations\up02_ucp_settings'];
 	}
 
 	public function effectively_installed()

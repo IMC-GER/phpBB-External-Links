@@ -34,7 +34,7 @@ class ext extends \phpbb\extension\base
 		$error_message = [];
 
 		/* phpBB version greater equal 3.2.0 and less then 4.0 */
-		if (phpbb_version_compare(PHPBB_VERSION, '3.2.0', '<') || phpbb_version_compare(PHPBB_VERSION, '4.0.0', '>='))
+		if (phpbb_version_compare(PHPBB_VERSION, '3.2.4', '<') || phpbb_version_compare(PHPBB_VERSION, '4.0.0', '>='))
 		{
 			$error_message += ['error1' => $language->lang('IMCGER_REQUIRE_PHPBB'),];
 		}

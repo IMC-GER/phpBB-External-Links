@@ -7,6 +7,16 @@ services:
             - '@language'
             - '@request'
 
+    imcger.externallinks.admin.controller.userset:
+        class: 'imcger\externallinks\controller\admin_controller_userset'
+        arguments:
+            - '@config'
+            - '@template'
+            - '@language'
+            - '@request'
+            - '@user'
+            - '@dbal.conn'
+
     imcger.externallinks.listener:
         class: 'imcger\externallinks\event\main_listener'
         arguments:
@@ -23,9 +33,11 @@ services:
     imcger.externallinks.ucp:
         class: 'imcger\externallinks\event\ucp_listener'
         arguments:
+            - '@config'
             - '@template'
             - '@user'
             - '@language'
             - '@request'
+            - '@dbal.conn'
         tags:
             - { name: event.listener }

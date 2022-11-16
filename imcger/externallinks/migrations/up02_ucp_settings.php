@@ -15,7 +15,7 @@ class up02_ucp_settings extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return array('\imcger\externallinks\migrations\up01_acp_module');
+		return ['\imcger\externallinks\migrations\up01_acp_module'];
 	}
 
 	public function effectively_installed()
@@ -25,23 +25,23 @@ class up02_ucp_settings extends \phpbb\db\migration\migration
 
 	public function update_schema()
 	{
-		return array(
-			'add_columns' => array(
-				$this->table_prefix . 'users' => array(
-					'user_extlink_none_secure' => array('BOOL', 0),
-				),
-			),
-		);
+		return [
+			'add_columns' => [
+				$this->table_prefix . 'users' => [
+					'user_extlink_none_secure' => ['BOOL', 0],
+				],
+			],
+		];
 	}
 
 	public function revert_schema()
 	{
-		return array(
-			'drop_columns' => array(
-				$this->table_prefix . 'users' => array(
+		return [
+			'drop_columns' => [
+				$this->table_prefix . 'users' => [
 					'user_extlink_none_secure',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 }

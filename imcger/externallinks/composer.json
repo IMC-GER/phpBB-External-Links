@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "With this extension it is possible to influence the display of links and pictures. Some settings are available in the User Control Panel. This allows the user to decide for himself what is more important to him. Secure data transfer, comfortable display or fast loading times of the forum page. Open external links in a new tab/window.",
 	"homepage": "https://github.com/IMC-GER/phpBB-External-Links",
-	"version": "1.4.6",
-	"time": "2022-10-16",
+	"version": "1.5.0",
+	"time": "2022-11-16",
 	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Thorsten Ahlers",
@@ -18,7 +18,7 @@
 	"extra": {
 		"display-name": "External Links",
 		"soft-require": {
-			"phpbb/phpbb": ">=3.2.0,<4.0.0@dev"
+			"phpbb/phpbb": ">=3.2.4,<4.0.0@dev"
 		},
 		"version-check": {
 			"host": "raw.githubusercontent.com",

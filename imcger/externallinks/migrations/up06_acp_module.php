@@ -11,37 +11,33 @@
 
 namespace imcger\externallinks\migrations;
 
-class install_acp_module extends \phpbb\db\migration\migration
+class up06_acp_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
-		return isset($this->config['imcger_ext_link_img_show']);
+		return isset($this->config['imcger_extlink_user_setting_time']);
 	}
 
 	public static function depends_on()
 	{
-		return ['\phpbb\db\migration\data\v320\v320'];
+		return ['\imcger\externallinks\migrations\up05_acp_module'];
 	}
 
 	public function update_data()
 	{
 		return [
-			['config.add', ['imcger_ext_link_img_show', 0]],
-			['config.add', ['imcger_ext_link_links_text', 1]],
-			['config.add', ['imcger_ext_link_links_img', 1]],
-			['config.add', ['imcger_ext_link_links_newwin', 0]],
+			['config.add', ['imcger_extlink_user_newwin', 1]],
+			['config.add', ['imcger_extlink_user_text', 0]],
+			['config.add', ['imcger_extlink_user_image', 0]],
+			['config.add', ['imcger_extlink_user_none_secure', 0]],
+			['config.add', ['imcger_extlink_user_setting_time', 0]],
 
-			['module.add', [
-				'acp',
-				'ACP_CAT_DOT_MODS',
-				'ACP_EXT_LINK_TITLE'
-			]],
 			['module.add', [
 				'acp',
 				'ACP_EXT_LINK_TITLE',
 				[
 					'module_basename'	=> '\imcger\externallinks\acp\main_module',
-					'modes'				=> ['settings'],
+					'modes'				=> ['user_settings'],
 				],
 			]],
 		];

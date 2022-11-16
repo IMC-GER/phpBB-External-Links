@@ -46,4 +46,14 @@ $lang = array_merge($lang, array(
 	'EXT_LINK_IMAGE' => 'Only external image',
 	'EXT_LINK_IMAGE_LINK' => 'Image link dimensions:',
 	'EXT_LINK_IMAGE_LINK_DESC' => 'Display image as an inline text link if image is larger than this. To disable this behaviour, set the values to 0px by 0px.',
+
+	'EXT_LINK_LINKS_USERSET' => 'User settings',
+	'EXT_LINK_USERSET_TIME'	 => 'User settings were last overwritten on %s.',
+
+	'EXT_LINK_OVERWRITE_USERSET' => 'Overwrite user settings',
+	'EXT_LINK_OVERWRITE_USERSET_DEC' => 'With this selection, the settings of all users are overwritten. If you select "No", only default values for new users will be set.',
+
+	'EXT_LINK_SAVE' => 'Save',
+	'EXT_LINK_ERROR' => 'Are you sure you want to overwrite the user settings?',
+	'EXT_LINK_ERROR_DEC' => 'This will overwrite all user settings with your defaults. <strong>This process cannot be reversed!</strong>',
 ));
