@@ -18,16 +18,21 @@ class main_info
 {
 	public function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\imcger\externallinks\acp\main_module',
 			'title'		=> 'ACP_EXT_LINK_TITLE',
-			'modes'		=> array(
-				'settings'	=> array(
+			'modes'		=> [
+				'settings'	=> [
 					'title'	=> 'ACP_EXT_LINK_SETTINGS',
 					'auth'	=> 'ext_imcger/externallinks && acl_a_board',
-					'cat'	=> array('ACP_EXT_LINK_TITLE'),
-				),
-			),
-		);
+					'cat'	=> ['ACP_EXT_LINK_TITLE', ],
+				],
+				'user_settings'	=> [
+					'title'	=> 'ACP_EXT_LINK_USER_SETTINGS',
+					'auth'	=> 'ext_imcger/externallinks && acl_a_board',
+					'cat'	=> ['ACP_EXT_LINK_TITLE', ],
+				],
+			],
+		];
 	}
 }

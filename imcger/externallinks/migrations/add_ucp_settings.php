@@ -15,7 +15,7 @@ class add_ucp_settings extends \phpbb\db\migration\migration
 {
 	public static function depends_on()
 	{
-		return array('\imcger\externallinks\migrations\install_acp_module');
+		return ['\imcger\externallinks\migrations\install_acp_module'];
 	}
 
 	public function effectively_installed()
@@ -25,35 +25,35 @@ class add_ucp_settings extends \phpbb\db\migration\migration
 
 	public function update_data()
 	{
-		return array(
-			array('config.remove', array('imcger_ext_link_img_show')),
-			array('config.remove', array('imcger_ext_link_links_newwin')),
-		);
+		return [
+			['config.remove', ['imcger_ext_link_img_show']],
+			['config.remove', ['imcger_ext_link_links_newwin']],
+		];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'add_columns'	=> array(
-				$this->table_prefix . 'users' => array(
-					'user_extlink_newwin'	=> array('BOOL', 1),
-					'user_extlink_text'		=> array('UINT:2', 0),
-					'user_extlink_image'	=> array('UINT:2', 0),
-				),
-			),
-		);
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'users' => [
+					'user_extlink_newwin'	=> ['BOOL', 1],
+					'user_extlink_text'		=> ['UINT:2', 0],
+					'user_extlink_image'	=> ['UINT:2', 0],
+				],
+			],
+		];
 	}
 
 	public function revert_schema()
 	{
-		return array(
-			'drop_columns'	=> array(
-				$this->table_prefix . 'users' => array(
+		return [
+			'drop_columns'	=> [
+				$this->table_prefix . 'users' => [
 					'user_extlink_newwin',
 					'user_extlink_text',
 					'user_extlink_image',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 }

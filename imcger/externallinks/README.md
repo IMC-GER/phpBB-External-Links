@@ -25,6 +25,7 @@ For more data security, he can convert insecurely transmitted images (http: conn
 - Added an external image the URL as caption.
 - Improved recognition of links to images
 - Image dimensions for display image as an inline text link if image is larger
+- Set defauts for UCP or overwrite User settings
 
 #### Permission
 - Added forum permission: "Can see links in posts."
@@ -39,7 +40,7 @@ For more data security, he can convert insecurely transmitted images (http: conn
 
 ## Requirements
 - php 5.4.7 or higher
-- phpBB 3.2.0 or higher
+- phpBB 3.2.4 or higher
 
 ## Installation
 Copy the extension to `phpBB3/ext/imcger/externallinks`.
@@ -55,6 +56,10 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
 ## Changelog
+
+### v1.5.0 (16-11-2022)
+- Added ACP panel for affect user settings
+- Change requirements
 
 ### v1.4.6 (16-10-2022)
 - Added ACP setting for improved image recognition

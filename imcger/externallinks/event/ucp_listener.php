@@ -21,6 +21,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ucp_listener implements EventSubscriberInterface
 {
+	/** @var config */
+	protected $config;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -33,28 +36,37 @@ class ucp_listener implements EventSubscriberInterface
 	/** @var \phpbb\request\request */
 	protected $request;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
 	/**
 	 * Constructor
 	 *
+	 * @param \phpbb\config\config				$config
 	 * @param \phpbb\template\template			$template		Template object
 	 * @param \phpbb\user						$user			User object
 	 * @param \phpbb\language\language			$language		language object
 	 * @param \phpbb\request\request			$request		Request objectt
+	 * @param \phpbb\db\driver\driver_interface $db
 	 *
 	 * @return null
 	 */
 	public function __construct
 	(
+		\phpbb\config\config $config,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		\phpbb\request\request $request
+		\phpbb\request\request $request,
+		\phpbb\db\driver\driver_interface $db
 	)
 	{
+		$this->config	= $config;
 		$this->template = $template;
 		$this->user 	= $user;
 		$this->language = $language;
 		$this->request	= $request;
+		$this->db		= $db;
 	}
 
 	/**
@@ -70,6 +82,7 @@ class ucp_listener implements EventSubscriberInterface
 			'core.ucp_display_module_before'	=> 'ucp_display_module_before',
 			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_view_update_data'	=> 'ucp_prefs_set_data',
+			'core.ucp_register_welcome_email_before' => 'ucp_register_set_data',
 		];
 	}
 
@@ -82,7 +95,7 @@ class ucp_listener implements EventSubscriberInterface
 	 */
 	public function ucp_display_module_before()
 	{
-		/* Add language file in UCP */
+		// Add language file in UCP
 		$this->language->add_lang('ucp_externallinks', 'imcger/externallinks');
 	}
 
@@ -128,5 +141,29 @@ class ucp_listener implements EventSubscriberInterface
 			'user_extlink_image'		=> $event['data']['user_extlink_image'],
 			'user_extlink_none_secure'	=> $event['data']['user_extlink_none_secure'],
 		]);
+	}
+
+	/**
+	 * After new user registration, set user parameters to default;
+	 *
+	 * @param	$event
+	 * @return	null
+	 * @access	public
+	 */
+	public function ucp_register_set_data($event)
+	{
+		$sql_ary = [
+			'user_extlink_newwin'		=> (bool) $this->config['imcger_extlink_user_newwin'],
+			'user_extlink_text'			=> (bool) $this->config['imcger_extlink_user_text'],
+			'user_extlink_image'		=> (bool) $this->config['imcger_extlink_user_image'],
+			'user_extlink_none_secure'	=> (bool) $this->config['imcger_extlink_user_none_secure'],
+		];
+
+		// Set user data whith default
+		$sql =	'UPDATE ' . USERS_TABLE .
+				' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
+				' WHERE user_id = ' . (int) $event['user_id'];
+
+		$this->db->sql_query($sql);
 	}
 }

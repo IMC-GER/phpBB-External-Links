@@ -20,13 +20,13 @@ class up01_acp_module extends \phpbb\db\migration\migration
 
 	public static function depends_on()
 	{
-		return array('\imcger\externallinks\migrations\add_ucp_settings');
+		return ['\imcger\externallinks\migrations\add_ucp_settings'];
 	}
 
 	public function update_data()
 	{
-		return array(
-			array('config.add', array('imcger_ext_link_domain_level', 2)),
-		);
+		return [
+			['config.add', ['imcger_ext_link_domain_level', 2]],
+		];
 	}
 }

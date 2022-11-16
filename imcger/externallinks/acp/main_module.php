@@ -24,25 +24,42 @@ class main_module
 	{
 		global $phpbb_container;
 
-		/* Add ACP lang file */
+		// Add ACP lang file
 		$language = $phpbb_container->get('language');
-
-		/* Get an instance of the admin controller */
-		$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller');
-
-		/* Make the $u_action url available in the admin controller */
-		$admin_controller->set_page_url($this->u_action);
 
 		switch ($mode)
 		{
 			case 'settings':
-				/* Load a template from adm/style for our ACP page */
+				// Get an instance of the admin controller
+				$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller');
+
+				// Make the $u_action url available in the admin controller
+				$admin_controller->set_page_url($this->u_action);
+
+				// Load a template from adm/style for our ACP page
 				$this->tpl_name = 'acp_ext_link_body';
 
-				/* Set the page title for our ACP page */
+				// Set the page title for our ACP page
 				$this->page_title = $language->lang('ACP_EXT_LINK_TITLE');
 
-				/* Load the display options handle in the admin controller */
+				// Load the display options handle in the admin controller
+				$admin_controller->display_options();
+			break;
+
+			case 'user_settings':
+				// Get an instance of the admin controller
+				$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller.userset');
+
+				// Make the $u_action url available in the admin controller
+				$admin_controller->set_page_url($this->u_action);
+
+				// Load a template from adm/style for our ACP page
+				$this->tpl_name = 'acp_ext_link_user_body';
+
+				// Set the page title for our ACP page
+				$this->page_title = $language->lang('ACP_EXT_LINK_USER_TITLE');
+
+				// Load the display options handle in the admin controller
 				$admin_controller->display_options();
 			break;
 		}

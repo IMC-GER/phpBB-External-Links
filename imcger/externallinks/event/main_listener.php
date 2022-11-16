@@ -80,10 +80,11 @@ class main_listener implements EventSubscriberInterface
 		$this->auth			= $auth;
 		$this->imagesize	= $imagesize;
 
-		/* Check if extension "imcger/fancybox" aktive */
+		// Check if extension "imcger/fancybox" aktive
 		$sql = 'SELECT ext_active FROM ' . EXT_TABLE . ' WHERE ext_name = "imcger/fancybox"';
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
 		$this->is_fancybox = empty($row['ext_active']) ? false : $row['ext_active'];
 	}
 
@@ -116,7 +117,7 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function user_setup_after()
 	{
-		/* Add language file in textformatter */
+		// Add language file in textformatter
 		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
 	}
 
@@ -161,7 +162,7 @@ class main_listener implements EventSubscriberInterface
 
 			if (!$acl_get)
 			{
-				/* Set Variable */
+				// Set Variable
 				$text = $event['text'];
 				$offset = 0;
 				$find_regex = ['#(<div class="imcger-img-wrap">)(.*?)(</div>)#i', // Image with caption
@@ -173,23 +174,23 @@ class main_listener implements EventSubscriberInterface
 
 				$only_external = $this->config['imcger_ext_link_show_link'];
 
-				/* Check if link in text */
+				// Check if link in text
 				if ($this->str_contains($text, '<a') || $this->str_contains($text, '<img'))
 				{
-					/* Change only external links */
+					// Change only external links
 					if ($only_external)
 					{
 						foreach ($find_regex as $regex)
 						{
 							$offset = 0;
 
-							/* Find links in post */
+							// Find links in post
 							while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $offset))
 							{
-								/* Check if external */
+								// Check if external
 								if ($this->is_external_link($match[0][0]))
 								{
-									/* replace link with alternate text */
+									// replace link with alternate text
 									$text = str_replace($match[0][0], $new_link, $text);
 									$offset = $match[0][1];
 								}
@@ -204,21 +205,21 @@ class main_listener implements EventSubscriberInterface
 					}
 					else
 					{
-						/* Change internal und external links */
+						// Change internal und external links
 						$event['text'] = preg_replace($find_regex, $new_link, $text);
 					}
 				}
 			}
 			else if ($this->config['imcger_ext_find_img'])
 			{
-				/* Convert a link to an image, into an image */
+				// Convert a link to an image, into an image
 				if (($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg')) || $this->is_fancybox)
 				{
-					/* Set Variable */
+					// Set Variable
 					$text = $event['text'];
 					$offset = 0;
 
-					/* Titletext des Bildes */
+					// Titletext des Bildes
 					$ext_text = $this->language->lang('IMCGER_EXT_LINK_EXT_IMG');
 					$int_text = $this->language->lang('IMAGE');
 					$src_text = $this->language->lang('IMCGER_EXT_LINK_BILD_SOURCE');
@@ -226,34 +227,34 @@ class main_listener implements EventSubscriberInterface
 					$fancybox_start_link = '';
 					$fancybox_end_link	 = '';
 
-					/* Find links in post */
+					// Find links in post
 					while (preg_match('#(<a\s[^>]+?>)(.*?)(</a>)#i', $text, $link, PREG_OFFSET_CAPTURE, $offset))
 					{
-						/* Do nothing when fancybox attribute add in texformater */
+						// Do nothing when fancybox attribute add in texformater
 						if ($this->str_contains($link[1][0], "data-fancybox"))
 						{
 							$offset = $link[3][1];
 							continue;
 						}
 
-						/* Find url in link */
+						// Find url in link
 						preg_match('#(href\=\")(.*?)(\")#i', $link[1][0], $url);
 						$link_url	= $url[2];
 
-						/* Get image dimension */
+						// Get image dimension
 						$image_data = $this->imagesize->getImageSize(trim($link_url));
 
-						/* If no image data tranform to link */
+						// If no image data tranform to link
 						if ($image_data !== false && $image_data['width'] > 0 && $image_data['height'] > 0)
 						{
-							/* If "imcger/fancybox" aktive set attribute in template */
+							// If "imcger/fancybox" aktive set attribute in template
 							if ($this->is_fancybox)
 							{
 								$fancybox_start_link = '<a href="' . $link_url . '" class="postlink" data-fancybox="image" data-caption="' . $link_url . '">';
 								$fancybox_end_link	 = '</a>';
 							}
 
-							/* Set title and alt attribute */
+							// Set title and alt attribute
 							$is_external = $this->is_external_link($link_url);
 							$title = $is_external ? $ext_text : $int_text;
 
@@ -263,15 +264,15 @@ class main_listener implements EventSubscriberInterface
 							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '"/>' . $fancybox_end_link;
 							$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
 
-							/* Change URL to IMG template */
+							// Change URL to IMG template
 							if ($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg'))
 							{
-								/* When external und caption selected set caption_img_template */
+								// When external und caption selected set caption_img_template
 								$img_template = $this->config['imcger_ext_link_links_img'] && $is_external ? $caption_img_template :  $default_img_template;
 							}
 							else
 							{
-								/* Add Fancybox attribute to URL template */
+								// Add Fancybox attribute to URL template
 								$img_template = $this->config['imcger_ext_link_links_text'] && $is_external ? $fancybox_url_ext_template : $fancybox_url_template;
 							}
 
@@ -304,19 +305,19 @@ class main_listener implements EventSubscriberInterface
 		/** @var \s9e\TextFormatter\Configurator $configurator */
 		$configurator = $event['configurator'];
 
-		/* The default URL tag template is this:
-		   <a href="{@url}" class="postlink"><xsl:apply-templates/></a> */
+		// The default URL tag template is this:
+		// <a href="{@url}" class="postlink"><xsl:apply-templates/></a>
 		$default_url_template = $configurator->tags['URL']->template;
 
-		/* The default IMG tag template is this:
-		   <img src="{@src}" class="postimage" alt="{$L_IMAGE}"/> */
+		// The default IMG tag template is this:
+		// <img src="{@src}" class="postimage" alt="{$L_IMAGE}"/>
 		$default_img_template = $configurator->tags['IMG']->template;
 
-		/* Get intern domain name */
+		// Get intern domain name
 		$hostname = parse_url(generate_board_url(true));
 		$host = explode('.', $hostname['host']);
 
-		/* Set domain array with increase domain level */
+		// Set domain array with increase domain level
 		$internal_domain = ['', '*?*', '*?*', '*?*', '*?*', '*?*', ];
 		$internal_domain[1] = $host[count($host)-1];
 
@@ -325,20 +326,20 @@ class main_listener implements EventSubscriberInterface
 			$internal_domain[$i] = $host[count($host) - $i] . '.' . $internal_domain[$i - 1];
 		}
 
-		/* Query whether own domain */
+		// Query whether own domain
 		$query_domain_src = '(contains(@src, \'' . $internal_domain[2] . '\') and $S_IMCGER_DOMAIN_LEVEL_2) or ' .
 							'(contains(@src, \'' . $internal_domain[3] . '\') and $S_IMCGER_DOMAIN_LEVEL_3) or ' .
 							'(contains(@src, \'' . $internal_domain[4] . '\') and $S_IMCGER_DOMAIN_LEVEL_4) or ' .
 							'(contains(@src, \'' . $internal_domain[5] . '\') and $S_IMCGER_DOMAIN_LEVEL_5) or ' .
 							'starts-with(@src, \'/\') or starts-with(@src, \'./\')';
 
-		/* Check if url is an image */
+		// Check if url is an image
 		$check_if_img = 'contains(@url, \'.jpg\') or contains(@url, \'.jpeg\') or contains(@url, \'.gif\') or contains(@url, \'.png\') or contains(@url, \'.webp\') or contains(@url, \'.svg\') or ' .
 						'contains(@url, \'.JPG\') or contains(@url, \'.JPEG\') or contains(@url, \'.GIF\') or contains(@url, \'.PNG\') or contains(@url, \'.WEBP\') or contains(@url, \'.SVG\')';
 
 		$query_domain_url = str_replace('@src', '@url', $query_domain_src);
 
-		/* Shorten URL for caption */
+		// Shorten URL for caption
 		$img_caption_src = 	'<xsl:choose>' .
 								'<xsl:when test="string-length(@src) &gt; 55"><xsl:value-of select="concat(substring(@src, 0, 40),\' ... \',substring(@src, string-length(@src)-9))"/></xsl:when>' .
 								'<xsl:otherwise><xsl:value-of select="string(@src)"/></xsl:otherwise>' .
@@ -351,7 +352,7 @@ class main_listener implements EventSubscriberInterface
 			'src="{@url}"',
 			$default_img_template
 		);
-		/* Add title tag for external image */
+		// Add title tag for external image
 		$default_img_template_ext = str_replace(
 			'alt="{$L_IMAGE}"',
 			'alt="{$L_IMCGER_EXT_LINK_EXT_IMG}" title="{$L_IMCGER_EXT_LINK_EXT_IMG}"',
@@ -368,7 +369,7 @@ class main_listener implements EventSubscriberInterface
 			$url_img_template
 		);
 
-		/* Add attribute for external links */
+		// Add attribute for external links
 		$default_url_template_ext = str_replace(
 			'href="{@url}"',
 			'href="{@url}" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"',
@@ -411,72 +412,72 @@ class main_listener implements EventSubscriberInterface
 			$fancy_default_url_template
 		);
 
-		/* "imcger/fancybox aktive set attribute in template */
+		// imcger/fancybox aktive set attribute in template
 		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@src}"';
 		$fancybox_start_link = '<a href="{@src}"' . $fancybox_attribute . '>';
 		$fancybox_end_link	 = '</a>';
 
-		/* Select the appropriate template based on the parameters and the URL */
+		// Select the appropriate template based on the parameters and the URL
 		$configurator->tags['IMG']->template =
 			'<span><xsl:choose>' .
-				/* Check if the image comes from external and the display should be changed */
+				// Check if the image comes from external and the display should be changed
 				'<xsl:when test="($S_IMCGER_LINKS_IMG_TO_TEXT or $S_IMCGER_LINKS_IMG_CAPTION or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)) and not(' . $query_domain_src . ')">' .
-					/* Add the link to the image as a caption */
+					// Add the link to the image as a caption
 					'<xsl:if test="$S_IMCGER_LINKS_IMG_CAPTION and not($S_IMCGER_LINKS_IMG_TO_TEXT) and not(starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE)">' .
 						'<div class="imcger-img-wrap">' .
-						/* Check if fancybox is aktive */
+						// Check if fancybox is aktive
 						'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
 							$fancybox_start_link . $default_img_template_ext . $fancybox_end_link .
 						'</xsl:if>' .
-						/* Check if fancybox is not aktive */
+						// Check if fancybox is not aktive
 						'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 							$default_img_template_ext .
 						'</xsl:if>' .
 						'<span class="imcger-ext-image" title="{@src}"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
-					/* Show the image as link */
+					// Show the image as link
 					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
-						/* Simple link */
+						// Simple link
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Mark link */
+						// Mark link
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Open link in new tab/window */
+						// Open link in new tab/window
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Open link in new tab/window and mark it */
+						// Open link in new tab/window and mark it
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
 							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
-						/* Simple link */
+						// Simple link
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Mark link */
+						// Mark link
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Open link in new tab/window */
+						// Open link in new tab/window
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
-						/* Open link in new tab/window and mark it */
+						// Open link in new tab/window and mark it
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
 							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .
-				/* For internal image standard display */
+				// For internal image standard display
 				'<xsl:otherwise>' .
 					'<xsl:choose>' .
-						/* Check if fancybox is aktive */
+						// Check if fancybox is aktive
 						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE">' .
 							$fancybox_start_link . $default_img_template . $fancybox_end_link .
 						'</xsl:when>' .
@@ -487,39 +488,39 @@ class main_listener implements EventSubscriberInterface
 				'</xsl:otherwise>' .
 			'</xsl:choose></span>';
 
-		/* "imcger/fancybox aktive set attribute in template */
+		// "imcger/fancybox aktive set attribute in template
 		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@url}"';
 		$fancybox_start_link = '<a href="{@url}"' . $fancybox_attribute . '>';
 
-		/* Select the appropriate template based on the parameters and the URL */
+		// Select the appropriate template based on the parameters and the URL
 		$configurator->tags['URL']->template =
 			'<span><xsl:choose>' .
-				/* Show links to images as embedded image */
+				// Show links to images as embedded image
 				'<xsl:when test="$S_IMCGER_LINKS_TEXT_TO_IMG and not(starts-with(@url, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE) and (' . $check_if_img . ')">' .
 					'<xsl:choose>' .
-						/* Add the link to the image as a caption */
+						// Add the link to the image as a caption
 						'<xsl:when test="$S_IMCGER_LINKS_IMG_CAPTION">' .
 							'<div class="imcger-img-wrap">' .
 							'<xsl:choose>' .
-								/* Check if URL is external */
+								// Check if URL is external
 								'<xsl:when test="not(' . $query_domain_url . ')">' .
-									/* Check if fancybox is aktive */
+									// Check if fancybox is aktive
 									'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
 										$fancybox_start_link . $url_img_template_ext . $fancybox_end_link .
 									'</xsl:if>' .
-									/* Check if fancybox is not aktive */
+									// Check if fancybox is not aktive
 									'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 										$url_img_template_ext .
 									'</xsl:if>' .
 									'<span class="imcger-ext-image" title="{@url}"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_url . '</span>' .
 								'</xsl:when>' .
-								/* URL is internal */
+								// URL is internal
 								'<xsl:otherwise>' .
-									/* Check if fancybox is aktive */
+									// Check if fancybox is aktive
 									'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE">' .
 										$fancybox_start_link . $url_img_template . $fancybox_end_link .
 									'</xsl:if>' .
-									/* Check if fancybox is not aktive */
+									// Check if fancybox is not aktive
 									'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE)">' .
 										$url_img_template .
 									'</xsl:if>' .
@@ -527,10 +528,10 @@ class main_listener implements EventSubscriberInterface
 							'</xsl:choose>' .
 							'</div>' .
 						'</xsl:when>' .
-						/* Image standard display */
+						// Image standard display
 						'<xsl:otherwise>' .
 							'<xsl:choose>' .
-								/* Check if fancybox is aktive */
+								// Check if fancybox is aktive
 								'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE">' .
 									$fancybox_start_link . $url_img_template_ext . $fancybox_end_link .
 								'</xsl:when>' .
@@ -543,47 +544,47 @@ class main_listener implements EventSubscriberInterface
 				'</xsl:when>' .
 				'<xsl:otherwise>' .
 					'<xsl:choose>' .
-						/* Check if it an image */
+						// Check if it an image
 						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and (' . $check_if_img . ')">' .
 							'<xsl:choose>' .
-								/* Check if URL domain from external */
+								// Check if URL domain from external
 								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
-									/* Open the link in new tab/window */
+									// Open the link in new tab/window
 									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$fancy_url_template_new_window .
 									'</xsl:if>' .
-									/* Mark the link with icon */
+									// Mark the link with icon
 									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
 										$fancy_url_template_mark .
 									'</xsl:if>' .
-									/* Open the link in new tab/window and mark it with icon */
+									// Open the link in new tab/window and mark it with icon
 									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$fancy_url_template_new_window_mark .
 									'</xsl:if>' .
 								'</xsl:when>' .
-								/* For internal link standard display */
+								// For internal link standard display
 								'<xsl:otherwise>' . $fancy_default_url_template . '</xsl:otherwise>' .
 							'</xsl:choose>' .
 						'</xsl:when>' .
-						/* Link standard display */
+						// Link standard display
 						'<xsl:otherwise>' .
 							'<xsl:choose>' .
-								/* Check if URL domain from external */
+								// Check if URL domain from external
 								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
-									/* Open the link in new tab/window */
+									// Open the link in new tab/window
 									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$url_template_new_window .
 									'</xsl:if>' .
-									/* Mark the link with icon */
+									// Mark the link with icon
 									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
 										$url_template_mark .
 									'</xsl:if>' .
-									/* Open the link in new tab/window and mark it with icon */
+									// Open the link in new tab/window and mark it with icon
 									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$url_template_new_window_mark .
 									'</xsl:if>' .
 								'</xsl:when>' .
-								/* For internal link standard display */
+								// For internal link standard display
 								'<xsl:otherwise>' . $default_url_template . '</xsl:otherwise>' .
 							'</xsl:choose>' .
 						'</xsl:otherwise>' .
@@ -605,7 +606,7 @@ class main_listener implements EventSubscriberInterface
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
 
-		/* Set Domain Level for template */
+		// Set Domain Level for template
 		$domain_level = [false, false, false, false, false, false];
 		$domain_level[$this->config['imcger_ext_link_domain_level']] = true;
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_2', (bool) $domain_level[2]);
@@ -613,25 +614,25 @@ class main_listener implements EventSubscriberInterface
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_4', (bool) $domain_level[4]);
 		$renderer->setParameter('S_IMCGER_DOMAIN_LEVEL_5', (bool) $domain_level[5]);
 
-		/* Don`t display insecurely transferred images (http://) */
+		// Don`t display insecurely transferred images (http://)
 		$renderer->setParameter('S_IMCGER_LINKS_NONE_SECURE', (bool) $this->user->data['user_extlink_none_secure']);
 
-		/* Convert an external image, into a link */
+		// Convert an external image, into a link
 		$renderer->setParameter('S_IMCGER_LINKS_IMG_TO_TEXT', (bool) $this->user->data['user_extlink_text']);
 
-		/* Convert a link to an image, into an image */
+		// Convert a link to an image, into an image
 		$renderer->setParameter('S_IMCGER_LINKS_TEXT_TO_IMG', (bool) $this->user->data['user_extlink_image'] && (bool) $this->user->optionget('viewimg'));
 
-		/* Add a caption to an external image */
+		// Add a caption to an external image
 		$renderer->setParameter('S_IMCGER_LINKS_IMG_CAPTION', (bool) $this->config['imcger_ext_link_links_img'] && (bool) $this->user->optionget('viewimg'));
 
-		/* Open an external link in a new tab/window */
+		// Open an external link in a new tab/window
 		$renderer->setParameter('S_IMCGER_LINKS_OPEN_NEWWIN', (bool) $this->user->data['user_extlink_newwin']);
 
-		/* Mark external link */
+		// Mark external link
 		$renderer->setParameter('S_IMCGER_LINKS_TEXT_MARK', (bool) $this->config['imcger_ext_link_links_text']);
 
-		/* Fancybox aktive */
+		// Fancybox aktive
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $this->is_fancybox);
 	}
 
@@ -645,26 +646,26 @@ class main_listener implements EventSubscriberInterface
 	 */
 	public function posting_modify_message_text($event)
 	{
-		/* Initialize variable */
+		// Initialize variable
 		$match = [];
 		$error = [];
 		$offset = 0;
 		$i = 0;
 
-		/* Regular expression to search for image */
+		// Regular expression to search for image
 		$regex = '#(\[img\])(.*?)(\[\/img\])#i';
 
-		/* Get max image dimension */
+		// Get max image dimension
 		$max_width = $this->config['imcger_ext_img_show_link_width'];
 		$max_heigth = $this->config['imcger_ext_img_show_link_height'];
 
-		/* Get message text */
+		// Get message text
 		$message_parser = $event['message_parser'];
 		$message = $message_parser->message;
 
 		if ($max_width || $max_heigth)
 		{
-			/* Find image in post message */
+			// Find image in post message
 			while (preg_match($regex, $message, $match, PREG_OFFSET_CAPTURE, $offset))
 			{
 				if ($i > 0)
@@ -672,10 +673,10 @@ class main_listener implements EventSubscriberInterface
 					$error += [$i++ => "\n", ];
 				}
 
-				/* Get image dimension */
+				// Get image dimension
 				$image_data = $this->imagesize->getImageSize(trim($match[2][0]));
 
-				/* If no image data tranform to link */
+				// If no image data tranform to link
 				if (empty($image_data) || $image_data['width'] <= 0 || $image_data['height'] <= 0)
 				{
 					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_NO_IMAGEDATA'),
@@ -684,7 +685,7 @@ class main_listener implements EventSubscriberInterface
 					$message = str_replace($match[0][0], '[url]' . $match[2][0] . '[/url]', $message);
 				}
 
-				/* If image to large tranform to link */
+				// If image to large tranform to link
 				if (!empty($image_data) && ($image_data['width'] > $max_width || $image_data['height'] > $max_heigth))
 				{
 					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_IMAGE_TOLARGE', $max_width, $max_heigth),
@@ -710,23 +711,23 @@ class main_listener implements EventSubscriberInterface
 	 */
 	private function is_external_link($link)
 	{
-		/* Get intern domain name */
+		// Get intern domain name
 		$hostname = parse_url(generate_board_url(true));
 		$host = explode('.', $hostname['host']);
 
-		/* Get domain level */
+		// Get domain level
 		$domain_level = $this->config['imcger_ext_link_domain_level'];
 
-		/* Set domain with increase domain level */
+		// Set domain with increase domain level
 		$internal_domain = $host[count($host)-1];
 
-		/* Domainname for compare */
+		// Domainname for compare
 		for ($i = 2; $i <= $domain_level; $i++)
 		{
 			$internal_domain = $host[count($host) - $i] . '.' . $internal_domain;
 		}
 
-		/* URL select */
+		// URL select
 		if ($this->str_contains($link, 'href="'))
 		{
 			$start_pos	= stripos($link, 'href="') + 6;
@@ -744,7 +745,7 @@ class main_listener implements EventSubscriberInterface
 			$link_url	= $link;
 		}
 
-		/* Check if url internal */
+		// Check if url internal
 		if ($this->str_starts_with($link_url, './') || $this->str_starts_with($link_url, '/') || $this->str_contains($link_url, $internal_domain))
 		{
 			return false;
