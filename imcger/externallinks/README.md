@@ -57,6 +57,13 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.5.1 (21-12-2022)
+- Fixed typo
+- Changed to TWIG syntax
+- Changed PHP max to v8.2
+- Update language variable
+- Update check system requirement
+
 ### v1.5.0 (16-11-2022)
 - Added ACP panel for affect user settings
 - Change requirements
