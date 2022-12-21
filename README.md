@@ -46,6 +46,13 @@ For more data security, he can convert insecurely transmitted images (http: conn
 Copy the extension to `phpBB3/ext/imcger/externallinks`.
 Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
+## Update
+- Navigate in the ACP to `Customise -> Manage extensions`.
+- Click the `Disable` link for "External Links".
+- Delete the `externallinks` folder from `phpBB3/ext/imcger/`.
+- Copy the extension to `phpBB3/ext/imcger/externallinks`.
+- Go to "ACP" > "Customise" > "Extensions Manager" and enable the "External Links" extension.
+
 ## Settings
 Go to "ACP" > "Extensions" > "External Links settings" and customize "External Links".
 
