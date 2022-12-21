@@ -27,6 +27,6 @@ $lang = array_merge($lang, array(
 	'ACP_EXT_LINK_SETTING_SAVED' => 'Die Einstellungen wurden erfolgreich gespeichert.',
 	'ACP_EXT_LINK_USER_SETTING_SAVED' => 'Die Benuzereinstellungen wurden erfolgreich gespeichert.',
 
-	'IMCGER_REQUIRE_PHPBB' => 'Diese Erweiterung benötigt eine phpBB Version gleich oder grösser 3.2.0 und kleiner 4.0.0',
-	'IMCGER_REQUIRE_PHP' => 'Diese Erweiterung benötigt eine php Version gleich oder grösser 5.4.7 und kleiner 8.2.',
+	'IMCGER_REQUIRE_PHPBB' => 'Diese Erweiterung benötigt eine phpBB Version gleich oder grösser %1$s und kleiner %2$s. Deine Version ist %3$s.',
+	'IMCGER_REQUIRE_PHP'   => 'Diese Erweiterung benötigt eine php Version gleich oder grösser %1$s und kleiner %2$s. Deine Version ist %3$s.',
 ));
