@@ -28,7 +28,7 @@ class ext extends \phpbb\extension\base
 	/** @var min PHP version */
 	protected $php_min_version = '5.4.7';
 
-	/** @var nax PHP version (>= query) */
+	/** @var max PHP version (>= query) */
 	protected $php_max_version = '8.3.0';
 
 	/**
