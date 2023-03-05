@@ -6,6 +6,7 @@ services:
             - '@template'
             - '@language'
             - '@request'
+            - '@ext.manager'
 
     imcger.externallinks.admin.controller.userset:
         class: 'imcger\externallinks\controller\admin_controller_userset'
@@ -16,17 +17,17 @@ services:
             - '@request'
             - '@user'
             - '@dbal.conn'
+            - '@ext.manager'
 
     imcger.externallinks.listener:
         class: 'imcger\externallinks\event\main_listener'
         arguments:
-            - '%core.table_prefix%'
             - '@config'
             - '@user'
             - '@language'
-            - '@dbal.conn'
             - '@auth'
             - '@upload_imagesize'
+            - '@ext.manager'
         tags:
             - { name: event.listener }
 

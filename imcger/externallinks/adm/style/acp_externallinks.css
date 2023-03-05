@@ -1,0 +1,44 @@
+/*
+	ACP External Links
+---------------------------- */
+
+.errorbox h1 {
+	color: #FFFFFF !important;
+}
+
+button.button1, button.button2 {
+	padding: 2px 3px;
+	border: 1px solid #666666;
+	border-radius: unset;
+	background: #EFEFEF url("./../../../../../../adm/images/bg_button.gif") repeat-x top;
+}
+
+button.button1:hover, button.button2:hover {
+	border: 1px solid #BC2A4D;
+	background: #EFEFEF url("./../../../../../../adm/images/bg_button.gif") repeat bottom;
+	color: #BC2A4D;
+}
+
+button.button1 {
+	font-weight: bold;
+}
+
+.imcger-domain {
+	font-size: 1.1em;
+	line-height: 1.1em;
+	display: grid;
+	grid-template-columns: 1.1em auto;
+	gap: 0.4em;
+	margin: 0.1em;
+}
+
+.imcger-copyright {
+	margin-top: 1em;
+	text-align: center;
+	font-size: .75em;
+}
+
+.imcger-userset-time {
+	text-align: center;
+	margin: 0;
+}

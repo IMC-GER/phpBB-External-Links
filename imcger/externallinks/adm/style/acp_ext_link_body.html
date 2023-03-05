@@ -11,88 +11,84 @@
 		<dl>
 			<dt><label for="imcger_ext_link_domain2">{{ lang('EXT_LINK_DOMAIN_TEXT') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_DOMAIN_DESC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_ext_link_domain2" name="imcger_ext_link_domain_level" value="2" {% if S_IMCGER_EXT_LINK_DOMAIN == 2 %} checked="checked"{% endif %}> <span class="imcger-domain"></span></label><br>
-				<label><input type="radio" class="radio" id="imcger_ext_link_domain3" name="imcger_ext_link_domain_level" value="3" {% if S_IMCGER_EXT_LINK_DOMAIN == 3 %} checked="checked"{% endif %}> <span class="imcger-domain"></span></label><br>
-				<label><input type="radio" class="radio" id="imcger_ext_link_domain4" name="imcger_ext_link_domain_level" value="4" {% if S_IMCGER_EXT_LINK_DOMAIN == 4 %} checked="checked"{% endif %}> <span class="imcger-domain"></span></label><br>
-				<label><input type="radio" class="radio" id="imcger_ext_link_domain5" name="imcger_ext_link_domain_level" value="5" {% if S_IMCGER_EXT_LINK_DOMAIN == 5 %} checked="checked"{% endif %}> <span class="imcger-domain"></span></label>
+				{% if DOMIAN_LEVEL_2 %}<label class="imcger-domain"><input type="radio" class="radio" id="imcger_ext_link_domain2" name="imcger_ext_link_domain_level" value="2" {{ S_IMCGER_EXT_LINK_DOMAIN == 2 ? ' checked' }}> <span class="imcger-domain">{{ DOMIAN_LEVEL_2 }}</span></label>{% endif %}
+				{% if DOMIAN_LEVEL_3 %}<label class="imcger-domain"><input type="radio" class="radio" id="imcger_ext_link_domain3" name="imcger_ext_link_domain_level" value="3" {{ S_IMCGER_EXT_LINK_DOMAIN == 3 ? ' checked' }}> <span class="imcger-domain">{{ DOMIAN_LEVEL_3 }}</span></label>{% endif %}
+				{% if DOMIAN_LEVEL_4 %}<label class="imcger-domain"><input type="radio" class="radio" id="imcger_ext_link_domain4" name="imcger_ext_link_domain_level" value="4" {{ S_IMCGER_EXT_LINK_DOMAIN == 4 ? ' checked' }}> <span class="imcger-domain">{{ DOMIAN_LEVEL_4 }}</span></label>{% endif %}
+				{% if DOMIAN_LEVEL_5 %}<label class="imcger-domain"><input type="radio" class="radio" id="imcger_ext_link_domain5" name="imcger_ext_link_domain_level" value="5" {{ S_IMCGER_EXT_LINK_DOMAIN == 5 ? ' checked' }}> <span class="imcger-domain">{{ DOMIAN_LEVEL_5 }}</span></label>{% endif %}
 			</dd>
 		</dl>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_LINKS') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_link_links_text">{{ lang('EXT_LINK_LINKS_TEXT') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_TEXT_DESC') }}</span></dt>
+			<dt><label for="imcger_ext_link_links_text">{{ lang('EXT_LINK_LINKS_TEXT') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_TEXT_DESC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_ext_link_links_text" name="imcger_ext_link_links_text" value='1'{% if S_IMCGER_LINKS_TEXT %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_ext_link_links_text" value='0'{% if not S_IMCGER_LINKS_TEXT %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_ext_link_links_text', S_IMCGER_LINKS_TEXT) }}
 			</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="imcger_ext_link_links_img">{{ lang('EXT_LINK_LINKS_IMG') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_IMG_DESC') }}</span></dt>
+			<dt><label for="imcger_ext_link_links_img">{{ lang('EXT_LINK_LINKS_IMG') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_IMG_DESC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_ext_link_links_img" name="imcger_ext_link_links_img" value='1'{% if S_IMCGER_LINKS_IMG %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_ext_link_links_img" value='0'{% if not S_IMCGER_LINKS_IMG %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_ext_link_links_img', S_IMCGER_LINKS_IMG) }}
 			</dd>
 		</dl>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_SHOW') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_link_show_link">{{ lang('EXT_LINK_SHOW_LINK') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_SHOW_LINK_DESC') }}</span></dt>
+			<dt><label for="imcger_ext_link_show_link">{{ lang('EXT_LINK_SHOW_LINK') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_SHOW_LINK_DESC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_ext_link_show_link" name="imcger_ext_link_show_link" value='1'{% if S_IMCGER_SHOW_LINK %} checked="checked"{% endif %}> {{ lang('EXT_LINK_EXT') }}</label>
-				<label><input type="radio" class="radio" name="imcger_ext_link_show_link" value='0'{% if not S_IMCGER_SHOW_LINK %} checked="checked"{% endif %}> {{ lang('EXT_LINK_ALL') }}</label>
+				{{ _self.switch('imcger_ext_link_show_link', S_IMCGER_SHOW_LINK) }}
 			</dd>
 		</dl>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_FIND') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_find_img">{{ lang('EXT_LINK_FIND_IMG') }} {{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_FIND_IMG_DESC') }}</span></dt>
+			<dt><label for="imcger_ext_find_img">{{ lang('EXT_LINK_FIND_IMG') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_FIND_IMG_DESC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_ext_find_img" name="imcger_ext_find_img" value='1'{% if S_IMCGER_FIND_IMG %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_ext_find_img" value='0'{% if not S_IMCGER_FIND_IMG %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_ext_find_img', S_IMCGER_FIND_IMG) }}
 			</dd>
 		</dl>
 	</fieldset>
-	
+
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_IMAGE') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') }}</label><br><span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span></dt>
+			<dt><label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span></dt>
 			<dd>
 				<input id="imcger_ext_img_show_link" type="number" min="0" max="9999" name="imcger_ext_img_show_link_width" value="{{ IMCGER_IMG_LINK_WIDTH }}"> x <input type="number" min="0" max="9999" name="imcger_ext_img_show_link_height" value="{{ IMCGER_IMG_LINK_HEIGHT }}"> px
 			</dd>
 		</dl>
 	</fieldset>
-	
-	<fieldset class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}">
-		{S_FORM_TOKEN}
+
+	<fieldset>
+		<legend>{{ lang('ACP_SUBMIT_CHANGES') }}</legend>
+		<p class="submit-buttons">
+			<input class="button1" type="submit" name="submit" value="{{ lang('SUBMIT') }}">&nbsp;
+			<input class="button2" type="reset"  name="reset"  value="{{ lang('RESET') }}" >
+		</p>
 	</fieldset>
 
+	{{ S_FORM_TOKEN }}
 </form>
 
-<script>
-	var domain = window.location.hostname;
-	var domainLevel = domain.split('.').length;
-	var domainParts = domain.split('.');
-	var domainName 	= domainParts[domainLevel-1];
-	var buttonText  = document.querySelectorAll(".imcger-domain");
-	
-	for (i = 2; i <= buttonText.length; i++) {	
-		if (i <= domainLevel) {
-			domainName = domainParts[domainLevel-i]  + '.' + domainName;
-			buttonText[i-2].innerHTML = domainName;
-		}
-		if (i >= domainLevel) {
-			buttonText[i-1].parentElement.style.display = "none";
-		}		
-	}	
-</script>
+<p class="imcger-copyright">
+	{{ EXT_LINK_TITLE }} v{{ EXT_LINK_EXT_VER }} &copy; IMC-Ger<br>
+	{{ lang('ACP_IMCGER_LANG_DESC') }} v{{ lang('ACP_IMCGER_LANG_EXT_VER') }} &bull; {{ lang('ACP_IMCGER_LANG_AUTHOR') }}
+</p>
 
 {% include 'overall_footer.html' %}
+
+{% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
+{% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}
+
+{% macro switch(name, checked = false) %}
+{% apply spaceless %}
+	<input type="checkbox" class="toggle" id="{{ name }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+{% endapply  %}
+{% endmacro %}

@@ -4,7 +4,7 @@
  * External Links
  * An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2022, Thorsten Ahlers
+ * @copyright (c) 2021, Thorsten Ahlers
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -27,9 +27,6 @@ class main_listener implements EventSubscriberInterface
 	/** @var bool is_fancybox */
 	protected $is_fancybox;
 
-	/** @var string table_prefix */
-	protected $table_prefix;
-
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -39,53 +36,46 @@ class main_listener implements EventSubscriberInterface
 	/** @var \phpbb\language\language */
 	protected $language;
 
-	/** @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
 	/** @var \FastImageSize\FastImageSize */
 	protected $imagesize;
 
+	/** @var \phpbb\extension\manager */
+	protected $ext_manager;
+
 	/**
 	 * Constructor
 	 *
-	 * @param string							$table_prefix	Tabel prefix
 	 * @param \phpbb\config\config				$config			Config object
 	 * @param \phpbb\user						$user			User object
 	 * @param \phpbb\language\language			$language		language object
-	 * @param \phpbb\db\driver\driver_interface	$db				Driver interface object
 	 * @param \phpbb\auth\auth					$auth			Auth object
 	 * @param \FastImageSize\FastImageSize		$imagesize		FastImageSize object
+	 * @param \phpbb\extension\manager			$ext_manager
 	 *
 	 * @return null
 	 */
 	public function __construct
 	(
-		$table_prefix,
 		\phpbb\config\config $config,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		\phpbb\db\driver\driver_interface $db,
 		\phpbb\auth\auth $auth,
-		\FastImageSize\FastImageSize $imagesize
+		\FastImageSize\FastImageSize $imagesize,
+		\phpbb\extension\manager $ext_manager
 	)
 	{
-		$this->table_prefix	= $table_prefix;
 		$this->config		= $config;
 		$this->user			= $user;
 		$this->language		= $language;
-		$this->db			= $db;
 		$this->auth			= $auth;
 		$this->imagesize	= $imagesize;
+		$this->ext_manager	= $ext_manager;
 
 		// Check if extension "imcger/fancybox" aktive
-		$sql = 'SELECT ext_active FROM ' . EXT_TABLE . ' WHERE ext_name = "imcger/fancybox"';
-		$result = $this->db->sql_query($sql);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
-		$this->is_fancybox = empty($row['ext_active']) ? false : $row['ext_active'];
+		$this->is_fancybox = $this->ext_manager->is_enabled('imcger/fancybox');
 	}
 
 	/**
@@ -259,7 +249,7 @@ class main_listener implements EventSubscriberInterface
 							$title = $is_external ? $ext_text : $int_text;
 
 							$fancybox_url_template = $fancybox_start_link . $link[2][0] . $fancybox_end_link;
-							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="postlink imcger-ext-link" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . $fancybox_end_link;
+							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '&nbsp;<i class="imcger-ext-link"></i></a>';
 
 							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '"/>' . $fancybox_end_link;
 							$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
@@ -381,13 +371,13 @@ class main_listener implements EventSubscriberInterface
 			$default_url_template_ext
 		);
 		$url_template_new_window_mark = str_replace(
-			'postlink',
-			'postlink imcger-ext-link',
+			'</a>',
+			'&nbsp;<i class="imcger-ext-link"></i></a>',
 			$url_template_new_window
 		);
 		$url_template_mark = str_replace(
-			'postlink',
-			'postlink imcger-ext-link',
+			'</a>',
+			'&nbsp;<i class="imcger-ext-link"></i></a>',
 			$default_url_template_ext
 		);
 
@@ -402,13 +392,13 @@ class main_listener implements EventSubscriberInterface
 			$fancy_default_url_template
 		);
 		$fancy_url_template_new_window_mark = str_replace(
-			'postlink',
-			'postlink imcger-ext-link',
+			'</a>',
+			'&nbsp;<i class="imcger-ext-link"></i></a>',
 			$fancy_url_template_new_window
 		);
 		$fancy_url_template_mark = str_replace(
-			'postlink',
-			'postlink imcger-ext-link',
+			'</a>',
+			'&nbsp;<i class="imcger-ext-link"></i></a>',
 			$fancy_default_url_template
 		);
 
@@ -416,6 +406,13 @@ class main_listener implements EventSubscriberInterface
 		$fancybox_attribute  = ' data-fancybox="image" data-caption="{@src}"';
 		$fancybox_start_link = '<a href="{@src}"' . $fancybox_attribute . '>';
 		$fancybox_end_link	 = '</a>';
+
+
+		/**
+		 * Supported xPath Elements and Function in s9eTextformater
+		 * https://github.com/s9e/TextFormatter/blob/master/src/Configurator/TemplateChecks/DisallowUnsupportedXSL.php
+		 *
+		 */
 
 		// Select the appropriate template based on the parameters and the URL
 		$configurator->tags['IMG']->template =
@@ -444,7 +441,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:if>' .
 						// Mark link
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
 						'</xsl:if>' .
 						// Open link in new tab/window
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
@@ -452,7 +449,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:if>' .
 						// Open link in new tab/window and mark it
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
@@ -462,7 +459,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:if>' .
 						// Mark link
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
 						'</xsl:if>' .
 						// Open link in new tab/window
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
@@ -470,7 +467,7 @@ class main_listener implements EventSubscriberInterface
 						'</xsl:if>' .
 						// Open link in new tab/window and mark it
 						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink imcger-ext-link" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
+							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .

@@ -1,0 +1,26 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('EXT_LINK_TITLE') }}</h1>
+
+<p>{{ lang('EXT_LINK_TITLE_EXPLAIN') }}</p>
+
+	<div class="errorbox">
+		<h1>{{ MESSAGE_TITLE }}</h1>
+		<p>{{ MESSAGE_TEXT }}</p>
+	</div>
+
+<form id="confirm" method="post" action="{{ S_CONFIRM_ACTION }}">
+
+	{{ S_HIDDEN_FIELDS }}
+	{{ S_FORM_TOKEN }}
+
+	<p class="submit-buttons">
+		<button class="button2" type="submit" name="confirm" value="{{ YES_VALUE }}">{{ lang('EXT_LINK_SAVE') }}</button>&nbsp;
+		<button class="button2" type="submit" name="cancel"  value="cancel">{{ lang('CANCEL') }}</button>
+	</p>
+
+</form>
+
+{% include 'overall_footer.html' %}
+
+{% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}

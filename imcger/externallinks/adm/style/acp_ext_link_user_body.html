@@ -4,101 +4,77 @@
 
 <p>{{ lang('EXT_LINK_TITLE_EXPLAIN') }}</p>
 
-<form id="acp_board" name="imcger_form" method="post" action="{U_ACTION}">
+<form id="acp_extensions" name="action" method="post" action="{{ U_ACTION }}">
 
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_LINKS_USERSET') }}</legend>
 		<dl>
-			<dt><label for="imcger_extlink_user_newwin">{{ lang('UCP_EXT_LINK_LINKS_NEWWIN') }}{{ lang('COLON') }}</label><br><span></span></dt>
+			<dt><label for="imcger_extlink_user_newwin">{{ lang('UCP_EXT_LINK_LINKS_NEWWIN') ~ lang('COLON') }}</label><br><span></span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_extlink_user_newwin" name="imcger_extlink_user_newwin" value='1'{% if S_IMCGER_USER_NEWWIN %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_extlink_user_newwin" value='0'{% if not S_IMCGER_USER_NEWWIN %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_extlink_user_newwin', S_IMCGER_USER_NEWWIN) }}
 			</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="imcger_extlink_user_text">{{ lang('UCP_EXT_LINK_LINK2_TEXT') }}{{ lang('COLON') }}</label><br><span></span></dt>
+			<dt><label for="imcger_extlink_user_text">{{ lang('UCP_EXT_LINK_LINK2_TEXT') ~ lang('COLON') }}</label><br><span></span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_extlink_user_text" name="imcger_extlink_user_text" value='1'{% if S_IMCGER_USER_TEXT %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_extlink_user_text" value='0'{% if not S_IMCGER_USER_TEXT %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_extlink_user_text', S_IMCGER_USER_TEXT) }}
 			</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="imcger_extlink_user_image">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
+			<dt><label for="imcger_extlink_user_image">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') ~ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_extlink_user_image" name="imcger_extlink_user_image" value='1'{% if S_IMCGER_USER_IMAGE %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_extlink_user_image" value='0'{% if not S_IMCGER_USER_IMAGE %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_extlink_user_image', S_IMCGER_USER_IMAGE) }}
 			</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="imcger_extlink_user_none_secure">{{ lang('UCP_EXT_LINK_NONE_SECURE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_NONE_SECURE_DEC') }}</span></dt>
+			<dt><label for="imcger_extlink_user_none_secure">{{ lang('UCP_EXT_LINK_NONE_SECURE') ~ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_NONE_SECURE_DEC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_extlink_user_none_secure" name="imcger_extlink_user_none_secure" value='1'{% if S_IMCGER_USER_NONE_SECURE %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_extlink_user_none_secure" value='0'{% if not S_IMCGER_USER_NONE_SECURE %} checked="checked"{% endif %}> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_extlink_user_none_secure', S_IMCGER_USER_NONE_SECURE) }}
 			</dd>
 		</dl>
 		<hr>
 		<dl>
-			<dt><label for="imcger_extlink_overwrite_userset">{{ lang('EXT_LINK_OVERWRITE_USERSET') }}{{ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_OVERWRITE_USERSET_DEC') }}</span></dt>
+			<dt><label for="imcger_extlink_overwrite_userset">{{ lang('EXT_LINK_OVERWRITE_USERSET') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_OVERWRITE_USERSET_DEC') }}</span></dt>
 			<dd>
-				<label><input type="radio" class="radio" id="imcger_extlink_overwrite_userset" name="imcger_extlink_overwrite_userset" value='1'{% if S_IMCGER_USER_NONE_SECURE %} checked="checked"{% endif %}> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="imcger_extlink_overwrite_userset" value='0' checked="checked"> {{ lang('NO') }}</label>
+				{{ _self.switch('imcger_extlink_overwrite_userset', S_IMCGER_OVERWRITE_USERSET) }}
 			</dd>
 		</dl>
 	</fieldset>
-	
-	{% if S_IMCGER_USERSET_TIME %}
+
+	{% if S_IMCGER_USERSET_TIME -%}
 	<fieldset>
-		<dl style="text-align: center; margin: 0;">
+		<dl class="imcger-userset-time">
 			{{ IMCGER_USERSET_TIME|e('html') }}
 		</dl>
 	</fieldset>
 	{% endif %}
 
-	<fieldset class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" hidden >
-		<input class="button1" type="reset"  id="reset" name="reset" value="{L_RESET}" hidden >
-		<input class="button1" type="button" id="ask_for_write" onclick="askForWrite()" value="{L_SUBMIT}">
-		{S_FORM_TOKEN}
+	<fieldset>
+		<legend>{{ lang('ACP_SUBMIT_CHANGES') }}</legend>
+		<p class="submit-buttons">
+			<button class="button1" type="submit" name="action" value="write_data">{{ lang('SUBMIT') }}</button>&nbsp;
+			<button class="button2" type="{{ S_IMCGER_RESET_BUTTON ? 'reset' : 'submit' }}"  name="action" value="default">{{ lang('RESET') }}</button>
+		</p>
 	</fieldset>
-	
+
+{{ S_FORM_TOKEN }}
 </form>
 
-<div id="ask_before_submit" style="display: none;">
-	<div class="errorbox">
-		<p>{{ lang('EXT_LINK_ERROR') }}<br><br>{{ lang('EXT_LINK_ERROR_DEC') }}</p>
-	</div>
-
-	<fieldset class="submit-buttons">
-		<input class="button1" type="button" name="write_data" onclick="writeData()" value="{{ lang('EXT_LINK_SAVE') }}">
-		<input class="button2" type="button" name="cancel" onclick="abortWrite()" value="{{ lang('CANCEL') }}">
-	</fieldset>
-</div>
-
-<script>
-	abortWrite();
-	
-	function askForWrite() {
-		if (document.getElementById('imcger_extlink_overwrite_userset').checked == true) {
-			document.getElementById('ask_before_submit').style.display = 'block';
-			document.getElementById('acp_board').style.display = 'none';
-		}
-		else {
-			document.getElementById('submit').click();
-		}
-	}
-	
-	function abortWrite() {
-		document.getElementById('ask_before_submit').style.display = 'none';
-		document.getElementById('reset').click();
-		document.getElementById('acp_board').style.display = 'block';
-	}
-	
-	function writeData() {
-		document.getElementById('submit').click();
-	}
-</script>
+<p class="imcger-copyright">
+	{{ EXT_LINK_TITLE }} v{{ EXT_LINK_EXT_VER }} &copy; IMC-Ger<br>
+	{{ lang('ACP_IMCGER_LANG_DESC') }} v{{ lang('ACP_IMCGER_LANG_EXT_VER') }} &bull; {{ lang('ACP_IMCGER_LANG_AUTHOR') }}
+</p>
 
 {% include 'overall_footer.html' %}
+
+{% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
+{% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}
+
+{% macro switch(name, checked = false) %}
+{% apply spaceless %}
+	<input type="checkbox" class="toggle" id="{{ name }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+{% endapply  %}
+{% endmacro %}

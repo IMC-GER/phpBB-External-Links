@@ -4,7 +4,7 @@
  * External Links
  * An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2022, Thorsten Ahlers
+ * @copyright (c) 2021, Thorsten Ahlers
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -16,9 +16,9 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'ACL_F_IMCGER_LINK' => 'Can see links in posts.',
-));
+]);

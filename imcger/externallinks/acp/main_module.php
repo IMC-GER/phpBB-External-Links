@@ -16,19 +16,25 @@ namespace imcger\externallinks\acp;
  */
 class main_module
 {
+	/** @var page_title */
 	public $page_title;
+	
+	/** @var tpl_name */
 	public $tpl_name;
+	
+	/** @var u_action */
 	public $u_action;
 
 	public function main($id, $mode)
 	{
 		global $phpbb_container;
 
-		// Add ACP lang file
+		/** @var \phpbb\language\language $language */
 		$language = $phpbb_container->get('language');
 
 		switch ($mode)
 		{
+			// General settings
 			case 'settings':
 				// Get an instance of the admin controller
 				$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller');
@@ -46,6 +52,7 @@ class main_module
 				$admin_controller->display_options();
 			break;
 
+			// User settings
 			case 'user_settings':
 				// Get an instance of the admin controller
 				$admin_controller = $phpbb_container->get('imcger.externallinks.admin.controller.userset');

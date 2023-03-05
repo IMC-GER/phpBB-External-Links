@@ -64,6 +64,8 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.5.2 (21-01-2023)
+
 ### v1.5.1 (21-12-2022)
 - Fixed typo
 - Changed to TWIG syntax
