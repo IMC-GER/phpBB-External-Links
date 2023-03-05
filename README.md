@@ -64,7 +64,13 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
-### v1.5.2 (21-01-2023)
+### v1.5.2 (05-03-2023)
+- Revised ACP templates
+  - Removed JS in template
+  - Added `confirm_box()` for confirm user settings
+  - Changed from radio button to toggle
+- Changed ext. link sign from `Font Awesome` to svg graphic
+- Changed in php code to short array syntax
 
 ### v1.5.1 (21-12-2022)
 - Fixed typo
