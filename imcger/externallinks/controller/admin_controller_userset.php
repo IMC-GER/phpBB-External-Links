@@ -93,7 +93,7 @@ class admin_controller_userset
 			$action = $this->request->variable('action', 'default');
 			$overwrite_userset = $this->request->variable('imcger_extlink_overwrite_userset', 0);
 
-			switch($action)
+			switch ($action)
 			{
 				case 'write_data':
 					if (!$overwrite_userset)

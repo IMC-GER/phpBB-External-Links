@@ -18,10 +18,10 @@ class main_module
 {
 	/** @var page_title */
 	public $page_title;
-	
+
 	/** @var tpl_name */
 	public $tpl_name;
-	
+
 	/** @var u_action */
 	public $u_action;
 

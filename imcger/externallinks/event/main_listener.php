@@ -407,12 +407,8 @@ class main_listener implements EventSubscriberInterface
 		$fancybox_start_link = '<a href="{@src}"' . $fancybox_attribute . '>';
 		$fancybox_end_link	 = '</a>';
 
-
-		/**
-		 * Supported xPath Elements and Function in s9eTextformater
-		 * https://github.com/s9e/TextFormatter/blob/master/src/Configurator/TemplateChecks/DisallowUnsupportedXSL.php
-		 *
-		 */
+		// Supported xPath Elements and Function in s9eTextformater
+		// https://github.com/s9e/TextFormatter/blob/master/src/Configurator/TemplateChecks/DisallowUnsupportedXSL.php
 
 		// Select the appropriate template based on the parameters and the URL
 		$configurator->tags['IMG']->template =
