@@ -598,6 +598,11 @@ class main_listener implements EventSubscriberInterface
 	{
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
+		
+		// BBCode and Images status
+		$bbcode_status	= ($this->config['allow_bbcode'] && $this->auth->acl_get('f_bbcode', $this->forum_id)) ? true : false;
+		$img_status		= ($bbcode_status && $this->auth->acl_get('f_img', $this->forum_id)) ? true : false;
+
 
 		// Set Domain Level for template
 		$domain_level = [false, false, false, false, false, false];
@@ -614,7 +619,7 @@ class main_listener implements EventSubscriberInterface
 		$renderer->setParameter('S_IMCGER_LINKS_IMG_TO_TEXT', (bool) $this->user->data['user_extlink_text']);
 
 		// Convert a link to an image, into an image
-		$renderer->setParameter('S_IMCGER_LINKS_TEXT_TO_IMG', (bool) $this->user->data['user_extlink_image'] && (bool) $this->user->optionget('viewimg'));
+		$renderer->setParameter('S_IMCGER_LINKS_TEXT_TO_IMG', (bool) $this->user->data['user_extlink_image'] && (bool) $this->user->optionget('viewimg') && $img_status);
 
 		// Add a caption to an external image
 		$renderer->setParameter('S_IMCGER_LINKS_IMG_CAPTION', (bool) $this->config['imcger_ext_link_links_img'] && (bool) $this->user->optionget('viewimg'));
@@ -652,12 +657,12 @@ class main_listener implements EventSubscriberInterface
 		$max_width = $this->config['imcger_ext_img_show_link_width'];
 		$max_heigth = $this->config['imcger_ext_img_show_link_height'];
 
-		// Get message text
-		$message_parser = $event['message_parser'];
-		$message = $message_parser->message;
-
 		if ($max_width || $max_heigth)
 		{
+			// Get message text
+			$message_parser = $event['message_parser'];
+			$message = $message_parser->message;
+
 			// Find image in post message
 			while (preg_match($regex, $message, $match, PREG_OFFSET_CAPTURE, $offset))
 			{
@@ -666,25 +671,33 @@ class main_listener implements EventSubscriberInterface
 					$error += [$i++ => "\n", ];
 				}
 
+				$img_url = trim($match[2][0]);
+
+				// Is the url internal?
+				if (!$this->is_external_link($img_url))
+				{
+					break;
+				}
+
 				// Get image dimension
-				$image_data = $this->imagesize->getImageSize(trim($match[2][0]));
+				$image_data = $this->imagesize->getImageSize($img_url);
 
 				// If no image data tranform to link
 				if (empty($image_data) || $image_data['width'] <= 0 || $image_data['height'] <= 0)
 				{
 					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_NO_IMAGEDATA'),
-							   $i++ => $match[2][0], ];
+							   $i++ => $img_url, ];
 
-					$message = str_replace($match[0][0], '[url]' . $match[2][0] . '[/url]', $message);
+					$message = str_replace($match[0][0], '[url]' . $img_url . '[/url]', $message);
 				}
 
 				// If image to large tranform to link
 				if (!empty($image_data) && ($image_data['width'] > $max_width || $image_data['height'] > $max_heigth))
 				{
 					$error += [$i++ => $this->language->lang('IMCGER_EXT_LINK_IMAGE_TOLARGE', $max_width, $max_heigth),
-							   $i++ => $match[2][0], ];
+							   $i++ => $img_url, ];
 
-					$message = str_replace($match[0][0], '[url]' . $match[2][0] . '[/url]', $message);
+					$message = str_replace($match[0][0], '[url]' . $img_url . '[/url]', $message);
 				}
 
 				$offset = $match[3][1];
