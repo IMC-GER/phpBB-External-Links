@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 
 	// Language pack author
 	'ACP_IMCGER_LANG_DESC'	  => 'Deutsch (Sie)',
-	'ACP_IMCGER_LANG_EXT_VER' => '1.5.2',
+	'ACP_IMCGER_LANG_EXT_VER' => '1.5.3',
 	'ACP_IMCGER_LANG_AUTHOR'  => 'IMC-Ger',
 
 	// Message text

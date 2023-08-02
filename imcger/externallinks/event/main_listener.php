@@ -88,7 +88,7 @@ class main_listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return [
-			'core.phpbb_content_visibility_get_visibility_sql_before' => 'module_auth',
+			'core.viewtopic_modify_forum_id'			=> 'viewtopic_modify_forum_id',
 			'core.user_setup_after'						=> 'user_setup_after',
 			'core.permissions'							=> 'permissions',
 			'core.modify_text_for_display_after'		=> 'modify_text_for_display_after',
@@ -132,7 +132,7 @@ class main_listener implements EventSubscriberInterface
 	 * @return	null
 	 * @access	public
 	 */
-	public function module_auth($event)
+	public function viewtopic_modify_forum_id($event)
 	{
 		$this->forum_id = $event['forum_id'];
 	}
@@ -429,8 +429,8 @@ class main_listener implements EventSubscriberInterface
 						'<span class="imcger-ext-image" title="{@src}"><span><xsl:value-of select="string($L_IMCGER_EXT_LINK_BILD_SOURCE)"/></span>: ' . $img_caption_src . '</span>' .
 						'</div>' .
 					'</xsl:if>' .
-					// Show the image as link
-					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
+					// Show the image as link and add Fancybox attribute
+					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						// Simple link
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
@@ -448,7 +448,8 @@ class main_listener implements EventSubscriberInterface
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
-					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
+					// Show the image as link without Fancybox
+					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						// Simple link
 						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
@@ -537,8 +538,8 @@ class main_listener implements EventSubscriberInterface
 				'</xsl:when>' .
 				'<xsl:otherwise>' .
 					'<xsl:choose>' .
-						// Check if it an image
-						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and (' . $check_if_img . ')">' .
+						// Check if it an image and add Fancybox attribute
+						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK and (' . $check_if_img . ')">' .
 							'<xsl:choose>' .
 								// Check if URL domain from external
 								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
@@ -598,11 +599,13 @@ class main_listener implements EventSubscriberInterface
 	{
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
-		
+
 		// BBCode and Images status
 		$bbcode_status	= ($this->config['allow_bbcode'] && $this->auth->acl_get('f_bbcode', $this->forum_id)) ? true : false;
 		$img_status		= ($bbcode_status && $this->auth->acl_get('f_img', $this->forum_id)) ? true : false;
 
+		// Check if Fancybox aktive for Links, default true for Fancybox ext lower v1.3.1
+		$imcger_fancybox_show_with_link = isset($this->config['imcger_fancybox_show_with_link']) ? $this->config['imcger_fancybox_show_with_link'] : true;
 
 		// Set Domain Level for template
 		$domain_level = [false, false, false, false, false, false];
@@ -632,6 +635,9 @@ class main_listener implements EventSubscriberInterface
 
 		// Fancybox aktive
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $this->is_fancybox);
+
+		// Fancybox not aktive for URL
+		$renderer->setParameter('S_IMCGER_FANCYBOX_SHOW_WITH_LINK', (bool) $imcger_fancybox_show_with_link);
 	}
 
 	/**

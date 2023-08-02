@@ -64,6 +64,10 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.5.3 (02-08-2023)
+- Revised `imcger/fancybox` support
+- Conside BBCode Settings
+
 ### v1.5.2 (05-03-2023)
 - Revised ACP templates
   - Removed JS in template
