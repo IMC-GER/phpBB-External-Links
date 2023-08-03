@@ -21,6 +21,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
+	# phpcs:disable PHPCompatibility.FunctionUse.NewFunctions.str_starts_withFound
+	# phpcs:disable PHPCompatibility.FunctionUse.NewFunctions.str_containsFound
+
 	/** @var int forum_id */
 	protected $forum_id;
 
