@@ -64,6 +64,9 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.5.4 (10-08-2023)
+- Fixed svg graphic not displayed in Edge & Chrome
+
 ### v1.5.3 (02-08-2023)
 - Revised `imcger/fancybox` support
 - Conside BBCode Settings
