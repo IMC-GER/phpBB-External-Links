@@ -82,7 +82,7 @@ class ucp_listener implements EventSubscriberInterface
 			'core.ucp_display_module_before'	=> 'ucp_display_module_before',
 			'core.ucp_prefs_view_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_view_update_data'	=> 'ucp_prefs_set_data',
-			'core.ucp_register_welcome_email_before' => 'ucp_register_set_data',
+			'core.ucp_register_register_after'	=> 'ucp_register_set_data',
 		];
 	}
 

@@ -1,4 +1,15 @@
+{#
+ * External Links
+ * An extension for the phpBB Forum Software package.
+ *
+ * @copyright (c) 2021, Thorsten Ahlers
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ #}
+
 {% include 'overall_header.html' %}
+{% import '@imcger_externallinks/twig_macros.html' as common %}
+{% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
 
 <h1>{{ lang('EXT_LINK_TITLE') }}</h1>
 
@@ -11,35 +22,35 @@
 		<dl>
 			<dt><label for="imcger_extlink_user_newwin">{{ lang('UCP_EXT_LINK_LINKS_NEWWIN') ~ lang('COLON') }}</label><br><span></span></dt>
 			<dd>
-				{{ _self.switch('imcger_extlink_user_newwin', S_IMCGER_USER_NEWWIN) }}
+				{{ common.switch('imcger_extlink_user_newwin', S_IMCGER_USER_NEWWIN, switch_type) }}
 			</dd>
 		</dl>
 
 		<dl>
 			<dt><label for="imcger_extlink_user_text">{{ lang('UCP_EXT_LINK_LINK2_TEXT') ~ lang('COLON') }}</label><br><span></span></dt>
 			<dd>
-				{{ _self.switch('imcger_extlink_user_text', S_IMCGER_USER_TEXT) }}
+				{{ common.switch('imcger_extlink_user_text', S_IMCGER_USER_TEXT, switch_type) }}
 			</dd>
 		</dl>
 
 		<dl>
 			<dt><label for="imcger_extlink_user_image">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') ~ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
 			<dd>
-				{{ _self.switch('imcger_extlink_user_image', S_IMCGER_USER_IMAGE) }}
+				{{ common.switch('imcger_extlink_user_image', S_IMCGER_USER_IMAGE, switch_type) }}
 			</dd>
 		</dl>
 
 		<dl>
 			<dt><label for="imcger_extlink_user_none_secure">{{ lang('UCP_EXT_LINK_NONE_SECURE') ~ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_NONE_SECURE_DEC') }}</span></dt>
 			<dd>
-				{{ _self.switch('imcger_extlink_user_none_secure', S_IMCGER_USER_NONE_SECURE) }}
+				{{ common.switch('imcger_extlink_user_none_secure', S_IMCGER_USER_NONE_SECURE, switch_type) }}
 			</dd>
 		</dl>
 		<hr>
 		<dl>
 			<dt><label for="imcger_extlink_overwrite_userset">{{ lang('EXT_LINK_OVERWRITE_USERSET') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_OVERWRITE_USERSET_DEC') }}</span></dt>
 			<dd>
-				{{ _self.switch('imcger_extlink_overwrite_userset', S_IMCGER_OVERWRITE_USERSET) }}
+				{{ common.switch('imcger_extlink_overwrite_userset', S_IMCGER_OVERWRITE_USERSET, switch_type) }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -73,8 +84,12 @@
 {% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
 {% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}
 
-{% macro switch(name, checked = false) %}
-{% apply spaceless %}
-	<input type="checkbox" class="toggle" id="{{ name }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
-{% endapply  %}
-{% endmacro %}
+{% macro switch(name, checked = false, type = 'toggle') -%}
+	{% if type == 'toggle' || type == 'checkbox' -%}
+		<input type="checkbox"{{ type == 'toggle' ? ' class="toggle"' }} name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+	{%- elseif type == 'radio' -%}
+		<label><input type="radio" class="radio" name="{{ name }}" value="1"{{ checked ? ' checked' }}> {{ lang('YES') }}</label>
+		<label><input type="radio" class="radio" name="{{ name }}" value="0"{{ !checked ? ' checked' }}> {{ lang('NO') }}</label>
+	{%- endif %}
+{%- endmacro %}
+

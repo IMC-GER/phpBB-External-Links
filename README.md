@@ -31,7 +31,7 @@ For more data security, he can convert insecurely transmitted images (http: conn
 - Added forum permission: "Can see links in posts."
 
 ## Screenshots
-- [ACP](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/acp.jpg)
+- [ACP](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/acp.png)
 - [UCP - Edit display options](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/ucp.jpg)
 - [Forum Based Permissions](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/permission.jpg)
 - [Marked links](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_image.jpg)
@@ -39,14 +39,14 @@ For more data security, he can convert insecurely transmitted images (http: conn
 - [Post - No Permissions](https://raw.githubusercontent.com/IMC-GER/images/main/screenshots/externallinks/de/post_permission.jpg)
 
 ## Requirements
-- php 5.4.7 or higher
-- phpBB 3.2.4 or higher
+- php 8.0.0 or higher
+- phpBB 3.3.3 or higher
 
 ## Installation
 Copy the extension to `phpBB3/ext/imcger/externallinks`.
 Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
-## Update
+# Update
 - Navigate in the ACP to `Customise -> Manage extensions`.
 - Click the `Disable` link for "External Links".
 - Delete the `externallinks` folder from `phpBB3/ext/imcger/`.
@@ -63,6 +63,16 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 - Go to "ACP" > "Customise" > "Manage extensions" and enable the "External Links" extension.
 
 ## Changelog
+
+### v1.6.0 (04-10-2024)
+- Fixed No storage of user data during registration if the board e-mail is deactivated
+- Added Free selection of the Font Awesome icon for marking external links
+- Added Position of the icon before or after the text link possible
+- Added Support for Toggle Control `lukewcs/togglectrl`
+- Changed System requirement PHP min 8.0.0 / max 8.3.0 and phpBB min 3.3.3
+- Revised ACP & UCP template use Twig macros
+- Revised Dependencies of the radio buttons in the UCP adjusted
+- Revised Language variables
 
 ### v1.5.4 (10-08-2023)
 - Fixed svg graphic not displayed in Edge & Chrome

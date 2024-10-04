@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 
 	// language pack author
 	'ACP_IMCGER_LANG_DESC'			=> 'British English',
-	'ACP_IMCGER_LANG_EXT_VER' 		=> '1.5.3',
+	'ACP_IMCGER_LANG_EXT_VER' 		=> '1.6.0',
 	'ACP_IMCGER_LANG_AUTHOR' 		=> 'IMC-Ger',
 
 	// Message text
@@ -42,28 +42,30 @@ $lang = array_merge($lang, [
 
 	// General settings
 	'EXT_LINK_DOMAIN'			=> 'Domain',
-	'EXT_LINK_DOMAIN_TEXT'		=> 'Select domain:',
+	'EXT_LINK_DOMAIN_TEXT'		=> 'Select domain',
 	'EXT_LINK_DOMAIN_DESC'		=> 'Select domain to be recognized as own domain. Subdomains below the selected one are included.',
 
 	'EXT_LINK_LINKS'			=> 'Mark links',
-	'EXT_LINK_LINKS_TEXT'		=> 'Text form:',
-	'EXT_LINK_LINKS_TEXT_DESC'	=> 'The symbol <i class="fa fa-external-link" aria-hidden="true"></i> is added to the text of links that lead to external websites.',
-	'EXT_LINK_LINKS_IMG'		=> 'External image:',
+	'EXT_LINK_LINKS_SYMBOL'		=> 'Symbol',
+	'EXT_LINK_LINKS_SYMBOL_DESC' => 'Enter the Unicode of the Font Awesome Icon with which the external link is to be marked. For example "f08e" for <i class="fa fa-external-link" aria-hidden="true"></i> or "f14c" für <i class="fa fa-external-link-square" aria-hidden="true"></i>. Leave the field empty if you do not want to mark any links.',
+	'EXT_LINK_LINKS_POS'		=> 'Symbol position',
+	'EXT_LINK_LINKS_POS_DESC'	=> 'If you select this option, the symbol is inserted to the left of the link text. Otherwise, the symbol will be added to the right.',
+	'EXT_LINK_LINKS_IMG'		=> 'External image',
 	'EXT_LINK_LINKS_IMG_DESC'	=> 'Images from other websites, the source will be added to the image as a caption.',
 
 	'EXT_LINK_SHOW'				=> 'Hide links',
-	'EXT_LINK_SHOW_LINK'		=> 'External links:',
-	'EXT_LINK_SHOW_LINK_DESC'	=> 'With the forum permissions links and images can be hidden. By selecting "external" only external links and images will be hidden. With "No" all will be hidden.',
+	'EXT_LINK_SHOW_LINK'		=> 'External links',
+	'EXT_LINK_SHOW_LINK_DESC'	=> 'With the forum permissions links and images can be hidden. If this option is selected, only external links and images are hidden. If it is not selected, all links are hidden.',
 	'EXT_LINK_EXT'				=> 'external',
 	'EXT_LINK_ALL'				=> 'all',
 
 	'EXT_LINK_FIND'				=> 'Recognize images',
-	'EXT_LINK_FIND_IMG'			=> 'Improved recognition of links to images:',
+	'EXT_LINK_FIND_IMG'			=> 'Improved recognition of links to images',
 	'EXT_LINK_FIND_IMG_DESC'	=> 'Links to images are also recognized if they do not contain a file name extension for images.<br><strong>Attention:</strong> If there are dead links in posts, the loading time of the forum page will increase.',
 
 	// User settings
 	'EXT_LINK_IMAGE'			=> 'Only external image',
-	'EXT_LINK_IMAGE_LINK'		=> 'Image link dimensions:',
+	'EXT_LINK_IMAGE_LINK'		=> 'Image link dimensions',
 	'EXT_LINK_IMAGE_LINK_DESC'	=> 'Display image as an inline text link if image is larger than this. To disable this behaviour, set the values to 0px by 0px.',
 
 	'EXT_LINK_LINKS_USERSET'	=> 'User settings',

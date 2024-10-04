@@ -21,9 +21,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
-	# phpcs:disable PHPCompatibility.FunctionUse.NewFunctions.str_starts_withFound
-	# phpcs:disable PHPCompatibility.FunctionUse.NewFunctions.str_containsFound
-
 	/** @var int forum_id */
 	protected $forum_id;
 
@@ -48,6 +45,9 @@ class main_listener implements EventSubscriberInterface
 	/** @var \phpbb\extension\manager */
 	protected $ext_manager;
 
+	/** @var template */
+	protected $template;
+
 	/**
 	 * Constructor
 	 *
@@ -57,6 +57,7 @@ class main_listener implements EventSubscriberInterface
 	 * @param \phpbb\auth\auth					$auth			Auth object
 	 * @param \FastImageSize\FastImageSize		$imagesize		FastImageSize object
 	 * @param \phpbb\extension\manager			$ext_manager
+	 * @param \phpbb\template\template			$template
 	 *
 	 * @return null
 	 */
@@ -67,7 +68,8 @@ class main_listener implements EventSubscriberInterface
 		\phpbb\language\language $language,
 		\phpbb\auth\auth $auth,
 		\FastImageSize\FastImageSize $imagesize,
-		\phpbb\extension\manager $ext_manager
+		\phpbb\extension\manager $ext_manager,
+		\phpbb\template\template $template
 	)
 	{
 		$this->config		= $config;
@@ -76,6 +78,7 @@ class main_listener implements EventSubscriberInterface
 		$this->auth			= $auth;
 		$this->imagesize	= $imagesize;
 		$this->ext_manager	= $ext_manager;
+		$this->template		= $template;
 
 		// Check if extension "imcger/fancybox" aktive
 		$this->is_fancybox = $this->ext_manager->is_enabled('imcger/fancybox');
@@ -91,6 +94,7 @@ class main_listener implements EventSubscriberInterface
 	public static function getSubscribedEvents()
 	{
 		return [
+			'core.page_header'							=> 'set_template_vars',
 			'core.viewtopic_modify_forum_id'			=> 'viewtopic_modify_forum_id',
 			'core.user_setup_after'						=> 'user_setup_after',
 			'core.permissions'							=> 'permissions',
@@ -99,6 +103,23 @@ class main_listener implements EventSubscriberInterface
 			'core.text_formatter_s9e_renderer_setup'	=> 'set_textformatter_parameters',
 			'core.posting_modify_message_text'			=> 'posting_modify_message_text',
 		];
+	}
+
+	/**
+	 * Set template vars
+	 *
+	 * @return null
+	 * @access public
+	 */
+	public function set_template_vars()
+	{
+		$this->template->assign_vars([
+			// For CSS
+			'EXTLINK_SYMBOL'		=> $this->config['imcger_ext_link_symbol'],
+			'S_EXTLINK_SYMBOL_POS'	=> $this->config['imcger_ext_link_symbol_pos'],
+		]);
+
+		$this->language->add_lang('recenttopics', 'paybas/recenttopics');
 	}
 
 	/**
@@ -168,7 +189,7 @@ class main_listener implements EventSubscriberInterface
 				$only_external = $this->config['imcger_ext_link_show_link'];
 
 				// Check if link in text
-				if ($this->str_contains($text, '<a') || $this->str_contains($text, '<img'))
+				if (str_contains($text, '<a') || str_contains($text, '<img'))
 				{
 					// Change only external links
 					if ($only_external)
@@ -224,7 +245,7 @@ class main_listener implements EventSubscriberInterface
 					while (preg_match('#(<a\s[^>]+?>)(.*?)(</a>)#i', $text, $link, PREG_OFFSET_CAPTURE, $offset))
 					{
 						// Do nothing when fancybox attribute add in texformater
-						if ($this->str_contains($link[1][0], "data-fancybox"))
+						if (str_contains($link[1][0], "data-fancybox"))
 						{
 							$offset = $link[3][1];
 							continue;
@@ -252,7 +273,7 @@ class main_listener implements EventSubscriberInterface
 							$title = $is_external ? $ext_text : $int_text;
 
 							$fancybox_url_template = $fancybox_start_link . $link[2][0] . $fancybox_end_link;
-							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '&nbsp;<i class="imcger-ext-link"></i></a>';
+							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="imcger-ext-link postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '</a>';
 
 							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '"/>' . $fancybox_end_link;
 							$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
@@ -374,13 +395,13 @@ class main_listener implements EventSubscriberInterface
 			$default_url_template_ext
 		);
 		$url_template_new_window_mark = str_replace(
-			'</a>',
-			'&nbsp;<i class="imcger-ext-link"></i></a>',
+			'class="',
+			'class="imcger-ext-link ',
 			$url_template_new_window
 		);
 		$url_template_mark = str_replace(
-			'</a>',
-			'&nbsp;<i class="imcger-ext-link"></i></a>',
+			'class="',
+			'class="imcger-ext-link ',
 			$default_url_template_ext
 		);
 
@@ -395,13 +416,13 @@ class main_listener implements EventSubscriberInterface
 			$fancy_default_url_template
 		);
 		$fancy_url_template_new_window_mark = str_replace(
-			'</a>',
-			'&nbsp;<i class="imcger-ext-link"></i></a>',
+			'class="',
+			'class="imcger-ext-link ',
 			$fancy_url_template_new_window
 		);
 		$fancy_url_template_mark = str_replace(
-			'</a>',
-			'&nbsp;<i class="imcger-ext-link"></i></a>',
+			'class="',
+			'class="imcger-ext-link ',
 			$fancy_default_url_template
 		);
 
@@ -435,39 +456,23 @@ class main_listener implements EventSubscriberInterface
 					// Show the image as link and add Fancybox attribute
 					'<xsl:if test="$S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						// Simple link
-						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
-						'</xsl:if>' .
-						// Mark link
-						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
+						'<xsl:if test="not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="imcger-ext-link postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						// Open link in new tab/window
-						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
-						'</xsl:if>' .
-						// Open link in new tab/window and mark it
-						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
+						'<xsl:if test="$S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="imcger-ext-link postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer"' . $fancybox_attribute . '>' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 					// Show the image as link without Fancybox
 					'<xsl:if test="not($S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK) and ($S_IMCGER_LINKS_IMG_TO_TEXT or (starts-with(@src, \'http://\') and $S_IMCGER_LINKS_NONE_SECURE))">' .
 						// Simple link
-						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
-						'</xsl:if>' .
-						// Mark link
-						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
+						'<xsl:if test="not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+							'<a href="{@src}" class="imcger-ext-link postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 						// Open link in new tab/window
-						'<xsl:if test="not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
-						'</xsl:if>' .
-						// Open link in new tab/window and mark it
-						'<xsl:if test="$S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN">' .
-							'<a href="{@src}" class="postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '&nbsp;<i class="imcger-ext-link"></i></a>' .
+						'<xsl:if test="$S_IMCGER_LINKS_OPEN_NEWWIN">' .
+							'<a href="{@src}" class="imcger-ext-link postlink" title="{$L_IMCGER_EXT_LINK_EXT_LINK}" target="_blank" rel="noopener noreferrer">' . $img_caption_src . '</a>' .
 						'</xsl:if>' .
 					'</xsl:if>' .
 				'</xsl:when>' .
@@ -545,18 +550,14 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:when test="$S_IMCGER_FANCYBOX_AKTIVE and $S_IMCGER_FANCYBOX_SHOW_WITH_LINK and (' . $check_if_img . ')">' .
 							'<xsl:choose>' .
 								// Check if URL domain from external
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
+								'<xsl:when test="not(' . $query_domain_url . ')">' .
 									// Open the link in new tab/window
-									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-										$fancy_url_template_new_window .
+									'<xsl:if test="$S_IMCGER_LINKS_OPEN_NEWWIN">' .
+										$fancy_url_template_new_window_mark .
 									'</xsl:if>' .
 									// Mark the link with icon
-									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
+									'<xsl:if test="not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$fancy_url_template_mark .
-									'</xsl:if>' .
-									// Open the link in new tab/window and mark it with icon
-									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-										$fancy_url_template_new_window_mark .
 									'</xsl:if>' .
 								'</xsl:when>' .
 								// For internal link standard display
@@ -567,17 +568,13 @@ class main_listener implements EventSubscriberInterface
 						'<xsl:otherwise>' .
 							'<xsl:choose>' .
 								// Check if URL domain from external
-								'<xsl:when test="($S_IMCGER_LINKS_TEXT_MARK or $S_IMCGER_LINKS_OPEN_NEWWIN) and not(' . $query_domain_url . ')">' .
-									// Open the link in new tab/window
-									'<xsl:if test="(not($S_IMCGER_LINKS_TEXT_MARK) and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
-										$url_template_new_window .
-									'</xsl:if>' .
+								'<xsl:when test="not(' . $query_domain_url . ')">' .
 									// Mark the link with icon
-									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and not($S_IMCGER_LINKS_OPEN_NEWWIN))">' .
+									'<xsl:if test="not($S_IMCGER_LINKS_OPEN_NEWWIN)">' .
 										$url_template_mark .
 									'</xsl:if>' .
 									// Open the link in new tab/window and mark it with icon
-									'<xsl:if test="($S_IMCGER_LINKS_TEXT_MARK and $S_IMCGER_LINKS_OPEN_NEWWIN)">' .
+									'<xsl:if test="$S_IMCGER_LINKS_OPEN_NEWWIN">' .
 										$url_template_new_window_mark .
 									'</xsl:if>' .
 								'</xsl:when>' .
@@ -632,9 +629,6 @@ class main_listener implements EventSubscriberInterface
 
 		// Open an external link in a new tab/window
 		$renderer->setParameter('S_IMCGER_LINKS_OPEN_NEWWIN', (bool) $this->user->data['user_extlink_newwin']);
-
-		// Mark external link
-		$renderer->setParameter('S_IMCGER_LINKS_TEXT_MARK', (bool) $this->config['imcger_ext_link_links_text']);
 
 		// Fancybox aktive
 		$renderer->setParameter('S_IMCGER_FANCYBOX_AKTIVE', (bool) $this->is_fancybox);
@@ -743,13 +737,13 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		// URL select
-		if ($this->str_contains($link, 'href="'))
+		if (str_contains($link, 'href="'))
 		{
 			$start_pos	= stripos($link, 'href="') + 6;
 			$end_pos	= stripos($link, '"', $start_pos);
 			$link_url	= substr($link, $start_pos, $end_pos - $start_pos);
 		}
-		else if ($this->str_contains($link, 'src="'))
+		else if (str_contains($link, 'src="'))
 		{
 			$start_pos	= stripos($link, 'src="') + 5;
 			$end_pos	= stripos($link, '"', $start_pos);
@@ -761,55 +755,13 @@ class main_listener implements EventSubscriberInterface
 		}
 
 		// Check if url internal
-		if ($this->str_starts_with($link_url, './') || $this->str_starts_with($link_url, '/') || $this->str_contains($link_url, $internal_domain))
+		if (str_starts_with($link_url, './') || str_starts_with($link_url, '/') || str_contains($link_url, $internal_domain))
 		{
 			return false;
 		}
 		else
 		{
 			return true;
-		}
-	}
-
-	/**
-	 * Checks if a string starts with a given substring
-	 * Function is available in php core from php 8
-	 *
-	 * @param	string		$haystack	The string to search in.
-	 * @param	string		$needle		The substring to search for in the haystack.
-	 * @return	bool
-	 * @access	private
-	 */
-	private function str_starts_with($haystack, $needle)
-	{
-		if (function_exists('str_starts_with'))
-		{
-			return str_starts_with($haystack, $needle);
-		}
-		else
-		{
-			return ($needle == substr($haystack, 0, strlen($needle))) ? true : false;
-		}
-	}
-
-	/**
-	 * Determine if a string contains a given substring
-	 * Function is available in php core from php 8
-	 *
-	 * @param	string		$haystack	The string to search in.
-	 * @param	string		$needle		The substring to search for in the haystack.
-	 * @return	bool
-	 * @access	private
-	 */
-	private function str_contains($haystack, $needle)
-	{
-		if (function_exists('str_contains'))
-		{
-			return str_contains($haystack, $needle);
-		}
-		else
-		{
-			return strpos($haystack, $needle) ? true : false;
 		}
 	}
 }

@@ -20,9 +20,9 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'ACP_EXT_LINK_TITLE' => 'External links',
-	'ACP_EXT_LINK_USER_TITLE' => 'External Links',
-	'ACP_EXT_LINK_SETTINGS' => 'Settings',
+	'ACP_EXT_LINK_TITLE' 		 => 'External links',
+	'ACP_EXT_LINK_USER_TITLE' 	 => 'External Links',
+	'ACP_EXT_LINK_SETTINGS' 	 => 'Settings',
 	'ACP_EXT_LINK_USER_SETTINGS' => 'User settings',
 
 	'IMCGER_REQUIRE_PHPBB' => 'This extension requires a phpBB version greater or equal than %1$s and less than %2$s. Your version is %3$s.',

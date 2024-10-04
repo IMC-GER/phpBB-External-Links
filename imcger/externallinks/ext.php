@@ -20,16 +20,16 @@ class ext extends \phpbb\extension\base
 	protected $ext_name = 'externallinks';
 
 	/** @var min phpBB version */
-	protected $phpbb_min_version = '3.2.4';
+	protected $phpbb_min_version = '3.3.3';
 
 	/** @var max phpBB version (>= query) */
 	protected $phpbb_max_version = '4.0.0';
 
 	/** @var min PHP version */
-	protected $php_min_version = '5.4.7';
+	protected $php_min_version = '8.0.0';
 
 	/** @var max PHP version (>= query) */
-	protected $php_max_version = '8.3.0';
+	protected $php_max_version = '8.4.0';
 
 	/**
 	 * Check the minimum and maximum requirements.

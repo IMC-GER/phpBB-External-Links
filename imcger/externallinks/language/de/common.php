@@ -23,7 +23,7 @@ $lang = array_merge($lang, [
 
 	// Language pack author
 	'ACP_IMCGER_LANG_DESC'	  => 'Deutsch (Du)',
-	'ACP_IMCGER_LANG_EXT_VER' => '1.5.3',
+	'ACP_IMCGER_LANG_EXT_VER' => '1.6.0',
 	'ACP_IMCGER_LANG_AUTHOR'  => 'IMC-Ger',
 
 	// Message text
@@ -42,28 +42,30 @@ $lang = array_merge($lang, [
 
 	// General settings
 	'EXT_LINK_DOMAIN'			=> 'Domain',
-	'EXT_LINK_DOMAIN_TEXT'		=> 'Domain auswählen:',
+	'EXT_LINK_DOMAIN_TEXT'		=> 'Domain auswählen',
 	'EXT_LINK_DOMAIN_DESC'		=> 'Domain auswählen, die als eigene Domain erkannt werden soll. Subdomains unterhalb der ausgewählten sind eingeschlossen.',
 
 	'EXT_LINK_LINKS'			=> 'Links markieren',
-	'EXT_LINK_LINKS_TEXT'		=> 'Textform:',
-	'EXT_LINK_LINKS_TEXT_DESC'	=> 'Dem Text von Links, die auf externe Websites führen, wird das Symbol <i class="fa fa-external-link" aria-hidden="true"></i> im Anschluss hinzugefügt.',
-	'EXT_LINK_LINKS_IMG'		=> 'Externes Bild:',
-	'EXT_LINK_LINKS_IMG_DESC'	=> 'Bildern von anderen Websites, werden die Quelle des Bildes als Bildunterschrift hinzugefügt.',
+	'EXT_LINK_LINKS_SYMBOL'		=> 'Symbol',
+	'EXT_LINK_LINKS_SYMBOL_DESC' => 'Gebe hier den Unicode des Font Awesome Icon ein mit dem der externe Link markiert werden soll. Zum Beispiel "f08e" für <i class="fa fa-external-link" aria-hidden="true"></i> oder "f14c" für <i class="fa fa-external-link-square" aria-hidden="true"></i>. Lasse das Feld leer, wenn du keine Links markieren möchten.',
+	'EXT_LINK_LINKS_POS'		=> 'Symbol Position',
+	'EXT_LINK_LINKS_POS_DESC'	=> 'Wenn du diese Option auswählen, wird das Symbol links vom Linktext eingefügt. Andernfalls wird das Symbol rechts angefügt. ',
+	'EXT_LINK_LINKS_IMG'		=> 'Externes Bild',
+	'EXT_LINK_LINKS_IMG_DESC'	=> 'Bei Bildern von externen Webseiten wird die Quelle des Bildes als Bildunterschrift hinzugefügt.',
 
 	'EXT_LINK_SHOW'				=> 'Links verdecken',
-	'EXT_LINK_SHOW_LINK'		=> 'Nur externe Links:',
-	'EXT_LINK_SHOW_LINK_DESC'	=> 'Mit den Forenrechten können Links und Bilder verdeckt werden. Mit der Auswahl von "externe" werden nur externe Links und Bilder verdeckt. Mit "alle" werden alle verdeckt.',
+	'EXT_LINK_SHOW_LINK'		=> 'Nur externe Links',
+	'EXT_LINK_SHOW_LINK_DESC'	=> 'Mit den Forenrechten können Links und Bilder verdeckt werden. Mit der Auswahl dieser Option werden nur externe Links und Bilder verdeckt. Ist sie nicht ausgewählt werden alle Links verdeckt.',
 	'EXT_LINK_EXT'				=> 'externe',
 	'EXT_LINK_ALL'				=> 'alle',
 
 	'EXT_LINK_FIND'				=> 'Bilder erkennen',
-	'EXT_LINK_FIND_IMG'			=> 'Verbessertes erkennen von Links zu Bilder:',
+	'EXT_LINK_FIND_IMG'			=> 'Verbessertes erkennen von Links zu Bilder',
 	'EXT_LINK_FIND_IMG_DESC'	=> 'Es werden auch Links zu Bilder erkannt wenn diese keine Dateinamenserweiterung für Bilder beinhalten.<br><strong>Achtung:</strong> Wenn sich in Beiträgen Tote Links befinden verlängert sich die Ladezeit der Forenseite.',
 
 	// User settings
 	'EXT_LINK_IMAGE'			=> 'Externes Bild',
-	'EXT_LINK_IMAGE_LINK'		=> 'Abmessungen, ab denen externe Bilder verlinkt werden:',
+	'EXT_LINK_IMAGE_LINK'		=> 'Abmessungen, ab denen externe Bilder verlinkt werden',
 	'EXT_LINK_IMAGE_LINK_DESC'	=> 'Externe Bilder werden als Link dargestellt, wenn deren Größe diese Werte überschreitet. Bei der Verwendung von 0px &times; 0px wird dieses Verhalten abgeschaltet.',
 
 	'EXT_LINK_LINKS_USERSET'	=> 'Benutzereinstellungen',

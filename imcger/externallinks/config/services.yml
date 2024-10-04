@@ -28,6 +28,7 @@ services:
             - '@auth'
             - '@upload_imagesize'
             - '@ext.manager'
+            - '@template'
         tags:
             - { name: event.listener }
 

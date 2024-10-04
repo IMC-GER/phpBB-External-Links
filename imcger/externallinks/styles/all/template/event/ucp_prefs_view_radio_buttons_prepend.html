@@ -1,30 +1,46 @@
+{#
+ * External Links
+ * An extension for the phpBB Forum Software package.
+ *
+ * @copyright (c) 2021, Thorsten Ahlers
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ #}
+
+{% import '@imcger_externallinks/twig_macros.html' as common %}
+{% set switch_type = 'radio' %}
 		<dl>
 			<dt><label for="imcger_newwin1">{{ lang('UCP_EXT_LINK_LINKS_NEWWIN') }}{{ lang('COLON') }}</label></dt>
 			<dd>
-				<label for="imcger_newwin1"><input type="radio" id="imcger_newwin1" name="imcger_ucp_ext_link_links_newwin" value="1"{% if S_UCP_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label for="imcger_newwin0"><input type="radio" id="imcger_newwin0" name="imcger_ucp_ext_link_links_newwin" value="0"{% if not S_UCP_LINKS_NEWWIN %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+				{{ common.switch('imcger_ucp_ext_link_links_newwin', S_UCP_LINKS_NEWWIN, switch_type) }}
 			</dd>
 		</dl>
 		<hr>
 		<dl>
 			<dt><label for="imcger_ext_text1">{{ lang('UCP_EXT_LINK_LINK2_TEXT') }}{{ lang('COLON') }}</label></dt>
 			<dd>
-				<label for="imcger_ext_text1"><input type="radio" id="imcger_ext_text1" name="imcger_ucp_ext_link_link2_text" value="1"{% if S_UCP_LINKS_2TEXT %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label for="imcger_ext_text0"><input type="radio" id="imcger_ext_text0" name="imcger_ucp_ext_link_link2_text" value="0"{% if not S_UCP_LINKS_2TEXT %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+				{{ common.switch('imcger_ucp_ext_link_link2_text', S_UCP_LINKS_2TEXT, switch_type) }}
 			</dd>
 		</dl>
 		<dl>
 			<dt><label for="imcger_ext_image1">{{ lang('UCP_EXT_LINK_LINK2_IMAGE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_LINK2_IMAGE_DEC') }}</span></dt>
 			<dd>
-				<label for="imcger_ext_image1"><input type="radio" id="imcger_ext_image1" name="imcger_ucp_ext_link_link2_image" value="1"{% if S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label for="imcger_ext_image0"><input type="radio" id="imcger_ext_image0" name="imcger_ucp_ext_link_link2_image" value="0"{% if not S_UCP_LINKS_2IMAGE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+				{{ common.switch('imcger_ucp_ext_link_link2_image', S_UCP_LINKS_2IMAGE, switch_type) }}
 			</dd>
-		</dl> 
+		</dl>
 		<dl>
 			<dt><label for="imcger_none_secure1">{{ lang('UCP_EXT_LINK_NONE_SECURE') }}{{ lang('COLON') }}</label><br><span>{{ lang('UCP_EXT_LINK_NONE_SECURE_DEC') }}</span></dt>
 			<dd>
-				<label for="imcger_none_secure1"><input type="radio" id="imcger_none_secure1" name="imcger_ucp_ext_link_none_secure" value="1"{% if S_UCP_LINKS_NONE_SECURE %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
-				<label for="imcger_none_secure0"><input type="radio" id="imcger_none_secure0" name="imcger_ucp_ext_link_none_secure" value="0"{% if not S_UCP_LINKS_NONE_SECURE %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>
+				{{ common.switch('imcger_ucp_ext_link_none_secure', S_UCP_LINKS_NONE_SECURE, switch_type) }}
 			</dd>
 		</dl>
 		<hr>
+
+{% macro switch(name, checked = false, type = 'toggle') -%}
+	{% if type == 'toggle' || type == 'checkbox' -%}
+		<input type="checkbox"{{ type == 'toggle' ? ' class="toggle"' }} name="{{ name }}" value="1"{{ checked ? ' checked' }}>
+	{%- elseif type == 'radio' -%}
+		<label><input type="radio" class="radio" name="{{ name }}" value="1"{{ checked ? ' checked' }}> {{ lang('YES') }}</label>
+		<label><input type="radio" class="radio" name="{{ name }}" value="0"{{ !checked ? ' checked' }}> {{ lang('NO') }}</label>
+	{%- endif %}
+{%- endmacro %}

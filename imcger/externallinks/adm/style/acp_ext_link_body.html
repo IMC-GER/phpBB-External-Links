@@ -1,4 +1,15 @@
+{#
+ * External Links
+ * An extension for the phpBB Forum Software package.
+ *
+ * @copyright (c) 2021, Thorsten Ahlers
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ #}
+
 {% include 'overall_header.html' %}
+{% import '@imcger_externallinks/twig_macros.html' as common %}
+{% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
 
 <h1>{{ lang('EXT_LINK_TITLE') }}</h1>
 
@@ -21,17 +32,34 @@
 
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_LINKS') }}</legend>
+
 		<dl>
-			<dt><label for="imcger_ext_link_links_text">{{ lang('EXT_LINK_LINKS_TEXT') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_TEXT_DESC') }}</span></dt>
+			<dt>
+				<label for="imcger_ext_link_symbol">{{ lang('EXT_LINK_LINKS_SYMBOL') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_LINKS_SYMBOL_DESC') }}</span>
+			</dt>
 			<dd>
-				{{ _self.switch('imcger_ext_link_links_text', S_IMCGER_LINKS_TEXT) }}
+				{{ common.text('imcger_ext_link_symbol', IMCGER_LINKS_SYMBOL, 4, '', '^[a-z0-9]\{4\}$') }}
 			</dd>
 		</dl>
 
 		<dl>
-			<dt><label for="imcger_ext_link_links_img">{{ lang('EXT_LINK_LINKS_IMG') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_LINKS_IMG_DESC') }}</span></dt>
+			<dt>
+				<label for="imcger_ext_link_symbol_pos">{{ lang('EXT_LINK_LINKS_POS') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_LINKS_POS_DESC') }}</span>
+			</dt>
 			<dd>
-				{{ _self.switch('imcger_ext_link_links_img', S_IMCGER_LINKS_IMG) }}
+				{{ common.switch('imcger_ext_link_symbol_pos', S_IMCGER_LINKS_SYMBOL_POS, switch_type) }}
+			</dd>
+		</dl>
+		<hr>
+		<dl>
+			<dt>
+				<label for="imcger_ext_link_links_img">{{ lang('EXT_LINK_LINKS_IMG') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_LINKS_IMG_DESC') }}</span>
+			</dt>
+			<dd>
+				{{ common.switch('imcger_ext_link_links_img', S_IMCGER_LINKS_IMG, switch_type) }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -39,9 +67,12 @@
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_SHOW') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_link_show_link">{{ lang('EXT_LINK_SHOW_LINK') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_SHOW_LINK_DESC') }}</span></dt>
+			<dt>
+				<label for="imcger_ext_link_show_link">{{ lang('EXT_LINK_SHOW_LINK') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_SHOW_LINK_DESC') }}</span>
+			</dt>
 			<dd>
-				{{ _self.switch('imcger_ext_link_show_link', S_IMCGER_SHOW_LINK) }}
+				{{ common.switch('imcger_ext_link_show_link', S_IMCGER_SHOW_LINK, switch_type) }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -49,9 +80,12 @@
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_FIND') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_find_img">{{ lang('EXT_LINK_FIND_IMG') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_FIND_IMG_DESC') }}</span></dt>
+			<dt>
+				<label for="imcger_ext_find_img">{{ lang('EXT_LINK_FIND_IMG') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_FIND_IMG_DESC') }}</span>
+			</dt>
 			<dd>
-				{{ _self.switch('imcger_ext_find_img', S_IMCGER_FIND_IMG) }}
+				{{ common.switch('imcger_ext_find_img', S_IMCGER_FIND_IMG, switch_type) }}
 			</dd>
 		</dl>
 	</fieldset>
@@ -59,9 +93,12 @@
 	<fieldset>
 		<legend>{{ lang('EXT_LINK_IMAGE') }}</legend>
 		<dl>
-			<dt><label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') ~ lang('COLON') }}</label><br><span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span></dt>
+			<dt>
+				<label for="imcger_ext_img_show_link">{{ lang('EXT_LINK_IMAGE_LINK') ~ lang('COLON') }}</label><br>
+				<span>{{ lang('EXT_LINK_IMAGE_LINK_DESC') }}</span>
+			</dt>
 			<dd>
-				<input id="imcger_ext_img_show_link" type="number" min="0" max="9999" name="imcger_ext_img_show_link_width" value="{{ IMCGER_IMG_LINK_WIDTH }}"> x <input type="number" min="0" max="9999" name="imcger_ext_img_show_link_height" value="{{ IMCGER_IMG_LINK_HEIGHT }}"> px
+				{{ common.number('imcger_ext_img_show_link_width', IMCGER_IMG_LINK_WIDTH, 0, 9999) }} x {{ common.number('imcger_ext_img_show_link_height', IMCGER_IMG_LINK_HEIGHT, 0, 9999) }} px
 			</dd>
 		</dl>
 	</fieldset>
@@ -86,9 +123,3 @@
 
 {% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
 {% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}
-
-{% macro switch(name, checked = false) %}
-{% apply spaceless %}
-	<input type="checkbox" class="toggle" id="{{ name }}" name="{{ name }}" value="1"{{ checked ? ' checked' }}>
-{% endapply  %}
-{% endmacro %}

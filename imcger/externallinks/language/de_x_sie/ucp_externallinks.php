@@ -20,10 +20,10 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'UCP_EXT_LINK_LINKS_NEWWIN' => 'Externen Link in neuen Tab öffnen',
-	'UCP_EXT_LINK_LINK2_TEXT'	=> 'Alle externe Bilder als Textlink anzeigen',
-	'UCP_EXT_LINK_LINK2_IMAGE'	=> 'Alle Links zu Bildern als Bild anzeigen',
+	'UCP_EXT_LINK_LINKS_NEWWIN' 	=> 'Externen Link in neuen Tab öffnen.',
+	'UCP_EXT_LINK_LINK2_TEXT'		=> 'Alle externe Bilder als Textlink anzeigen.',
+	'UCP_EXT_LINK_LINK2_IMAGE'		=> 'Alle Links zu Bildern als Bild anzeigen.',
 	'UCP_EXT_LINK_LINK2_IMAGE_DEC'	=> 'Nur "jpg, jpeg, png, gif, webp, svg"',
-	'UCP_EXT_LINK_NONE_SECURE'		=> 'Unsicher übertragene Bilder nicht anzeigen',
+	'UCP_EXT_LINK_NONE_SECURE'		=> 'Unsicher übertragene Bilder nicht anzeigen.',
 	'UCP_EXT_LINK_NONE_SECURE_DEC'	=> 'Bilder von http:// Seiten als Textlink anzeigen.',
 ]);
