@@ -275,7 +275,7 @@ class main_listener implements EventSubscriberInterface
 							$fancybox_url_template = $fancybox_start_link . $link[2][0] . $fancybox_end_link;
 							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="imcger-ext-link postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '</a>';
 
-							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '"/>' . $fancybox_end_link;
+							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '">' . $fancybox_end_link;
 							$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
 
 							// Change URL to IMG template
@@ -324,7 +324,7 @@ class main_listener implements EventSubscriberInterface
 		$default_url_template = $configurator->tags['URL']->template;
 
 		// The default IMG tag template is this:
-		// <img src="{@src}" class="postimage" alt="{$L_IMAGE}"/>
+		// <img src="{@src}" class="postimage" alt="{$L_IMAGE}">
 		$default_img_template = $configurator->tags['IMG']->template;
 
 		// Get intern domain name
