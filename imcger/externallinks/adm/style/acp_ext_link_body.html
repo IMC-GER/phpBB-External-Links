@@ -7,6 +7,8 @@
  *
  #}
 
+{% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
+{% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}
 {% include 'overall_header.html' %}
 {% import '@imcger_externallinks/twig_macros.html' as common %}
 {% set switch_type = TOGGLECTRL_TYPE ?? 'toggle' %}
@@ -120,6 +122,3 @@
 </p>
 
 {% include 'overall_footer.html' %}
-
-{% INCLUDECSS '@imcger_externallinks/acp_toggle.css' %}
-{% INCLUDECSS '@imcger_externallinks/acp_externallinks.css' %}

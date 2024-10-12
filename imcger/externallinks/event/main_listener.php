@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * External Links
  * An extension for the phpBB Forum Software package.
  *
@@ -118,8 +117,6 @@ class main_listener implements EventSubscriberInterface
 			'EXTLINK_SYMBOL'		=> $this->config['imcger_ext_link_symbol'],
 			'S_EXTLINK_SYMBOL_POS'	=> $this->config['imcger_ext_link_symbol_pos'],
 		]);
-
-		$this->language->add_lang('recenttopics', 'paybas/recenttopics');
 	}
 
 	/**

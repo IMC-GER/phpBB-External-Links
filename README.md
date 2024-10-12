@@ -64,6 +64,11 @@ Go to "ACP" > "Extensions" > "External Links settings" and customize "External L
 
 ## Changelog
 
+### v1.6.1 (12-10-2024)
+- Fixed Wrong language file loaded
+- Changed Move CSS file to theme folder
+- Changed Delete Twig macro in html template
+
 ### v1.6.0 (04-10-2024)
 - Fixed No storage of user data during registration if the board e-mail is deactivated
 - Added Free selection of the Font Awesome icon for marking external links
