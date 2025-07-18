@@ -20,45 +20,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class main_listener implements EventSubscriberInterface
 {
-	/** @var int forum_id */
-	protected $forum_id;
-
-	/** @var bool is_fancybox */
-	protected $is_fancybox;
-
-	/** @var \phpbb\config\config */
-	protected $config;
-
-	/** @var \phpbb\user */
-	protected $user;
-
-	/** @var \phpbb\language\language */
-	protected $language;
-
-	/** @var \phpbb\auth\auth */
-	protected $auth;
-
-	/** @var \FastImageSize\FastImageSize */
-	protected $imagesize;
-
-	/** @var \phpbb\extension\manager */
-	protected $ext_manager;
-
-	/** @var template */
-	protected $template;
+	protected int|null $forum_id = null;
+	protected bool $is_fancybox;
+	protected object $config;
+	protected object $user;
+	protected object $language;
+	protected object $auth;
+	protected object $imagesize;
+	protected object $ext_manager;
+	protected object $template;
 
 	/**
 	 * Constructor
-	 *
-	 * @param \phpbb\config\config				$config			Config object
-	 * @param \phpbb\user						$user			User object
-	 * @param \phpbb\language\language			$language		language object
-	 * @param \phpbb\auth\auth					$auth			Auth object
-	 * @param \FastImageSize\FastImageSize		$imagesize		FastImageSize object
-	 * @param \phpbb\extension\manager			$ext_manager
-	 * @param \phpbb\template\template			$template
-	 *
-	 * @return null
 	 */
 	public function __construct
 	(
@@ -85,12 +58,8 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	 * Assign functions defined in this class to event listeners in the core
-	 *
-	 * @return array
-	 * @static
-	 * @access public
 	 */
-	public static function getSubscribedEvents()
+	public static function getSubscribedEvents(): array
 	{
 		return [
 			'core.page_header'							=> 'set_template_vars',
@@ -106,11 +75,8 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	 * Set template vars
-	 *
-	 * @return null
-	 * @access public
 	 */
-	public function set_template_vars()
+	public function set_template_vars(): void
 	{
 		$this->template->assign_vars([
 			// For CSS
@@ -121,12 +87,8 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	 * Add External Links language file
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function user_setup_after()
+	public function user_setup_after(): void
 	{
 		// Add language file in textformatter
 		$this->language->add_lang('externallinks_lang', 'imcger/externallinks');
@@ -134,12 +96,8 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	 * Add permissions
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function permissions($event)
+	public function permissions(object $event): void
 	{
 		$permissions = $event['permissions'];
 		$permissions += ['f_imcger_show_link' => ['lang' => 'ACL_F_IMCGER_LINK', 'cat' => 'actions']];
@@ -150,155 +108,151 @@ class main_listener implements EventSubscriberInterface
 	 * Get forum id
 	 *
 	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function viewtopic_modify_forum_id($event)
+	public function viewtopic_modify_forum_id(object $event): void
 	{
 		$this->forum_id = $event['forum_id'];
 	}
 
 	/**
 	 * Check permissions and hide or show links
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function modify_text_for_display_after($event)
+	public function modify_text_for_display_after(object $event): void
 	{
-		if (!empty($this->forum_id))
+		if (is_null($this->forum_id))
 		{
-			$acl_get = $this->auth->acl_get('f_imcger_show_link', $this->forum_id);
+			return;
+		}
 
-			if (!$acl_get)
+		$acl_get = $this->auth->acl_get('f_imcger_show_link', $this->forum_id);
+
+		if (!$acl_get)
+		{
+			// Set Variable
+			$text = $event['text'];
+			$offset = 0;
+			$find_regex = ['#(<div class="imcger-img-wrap">)(.*?)(</div>)#i', // Image with caption
+						   '#(<img\s)(.*?)(>)#i', // Image
+						   '#(<a\s[^>]+?>)(.*?)(</a>)#i', ]; // Link
+
+			$new_text = $this->language->lang('IMCGER_EXT_LINK_NO_LINK');
+			$new_link = '<div class="rules">' . $new_text . '</div>';
+
+			$only_external = $this->config['imcger_ext_link_show_link'];
+
+			// Check if link in text
+			if (str_contains($text, '<a') || str_contains($text, '<img'))
 			{
-				// Set Variable
-				$text = $event['text'];
-				$offset = 0;
-				$find_regex = ['#(<div class="imcger-img-wrap">)(.*?)(</div>)#i', // Image with caption
-							   '#(<img\s)(.*?)(>)#i', // Image
-							   '#(<a\s[^>]+?>)(.*?)(</a>)#i', ]; // Link
-
-				$new_text = $this->language->lang('IMCGER_EXT_LINK_NO_LINK');
-				$new_link = '<div class="rules">' . $new_text . '</div>';
-
-				$only_external = $this->config['imcger_ext_link_show_link'];
-
-				// Check if link in text
-				if (str_contains($text, '<a') || str_contains($text, '<img'))
+				// Change only external links
+				if ($only_external)
 				{
-					// Change only external links
-					if ($only_external)
+					foreach ($find_regex as $regex)
 					{
-						foreach ($find_regex as $regex)
+						$offset = 0;
+
+						// Find links in post
+						while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $offset))
 						{
-							$offset = 0;
-
-							// Find links in post
-							while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $offset))
+							// Check if external
+							if ($this->is_external_link($match[0][0]))
 							{
-								// Check if external
-								if ($this->is_external_link($match[0][0]))
-								{
-									// replace link with alternate text
-									$text = str_replace($match[0][0], $new_link, $text);
-									$offset = $match[0][1];
-								}
-								else
-								{
-									$offset = $match[3][1];
-								}
-							}
-						}
-
-						$event['text'] = $text;
-					}
-					else
-					{
-						// Change internal und external links
-						$event['text'] = preg_replace($find_regex, $new_link, $text);
-					}
-				}
-			}
-			else if ($this->config['imcger_ext_find_img'])
-			{
-				// Convert a link to an image, into an image
-				if (($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg')) || $this->is_fancybox)
-				{
-					// Set Variable
-					$text = $event['text'];
-					$offset = 0;
-
-					// Titletext des Bildes
-					$ext_text = $this->language->lang('IMCGER_EXT_LINK_EXT_IMG');
-					$int_text = $this->language->lang('IMAGE');
-					$src_text = $this->language->lang('IMCGER_EXT_LINK_BILD_SOURCE');
-
-					$fancybox_start_link = '';
-					$fancybox_end_link	 = '';
-
-					// Find links in post
-					while (preg_match('#(<a\s[^>]+?>)(.*?)(</a>)#i', $text, $link, PREG_OFFSET_CAPTURE, $offset))
-					{
-						// Do nothing when fancybox attribute add in texformater
-						if (str_contains($link[1][0], "data-fancybox"))
-						{
-							$offset = $link[3][1];
-							continue;
-						}
-
-						// Find url in link
-						preg_match('#(href\=\")(.*?)(\")#i', $link[1][0], $url);
-						$link_url	= $url[2];
-
-						// Get image dimension
-						$image_data = $this->imagesize->getImageSize(trim($link_url));
-
-						// If no image data tranform to link
-						if ($image_data !== false && $image_data['width'] > 0 && $image_data['height'] > 0)
-						{
-							// If "imcger/fancybox" aktive set attribute in template
-							if ($this->is_fancybox)
-							{
-								$fancybox_start_link = '<a href="' . $link_url . '" class="postlink" data-fancybox="image" data-caption="' . $link_url . '">';
-								$fancybox_end_link	 = '</a>';
-							}
-
-							// Set title and alt attribute
-							$is_external = $this->is_external_link($link_url);
-							$title = $is_external ? $ext_text : $int_text;
-
-							$fancybox_url_template = $fancybox_start_link . $link[2][0] . $fancybox_end_link;
-							$fancybox_url_ext_template = '<a href="' . $link_url . '" class="imcger-ext-link postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '</a>';
-
-							$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '">' . $fancybox_end_link;
-							$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
-
-							// Change URL to IMG template
-							if ($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg'))
-							{
-								// When external und caption selected set caption_img_template
-								$img_template = $this->config['imcger_ext_link_links_img'] && $is_external ? $caption_img_template :  $default_img_template;
+								// replace link with alternate text
+								$text = str_replace($match[0][0], $new_link, $text);
+								$offset = $match[0][1];
 							}
 							else
 							{
-								// Add Fancybox attribute to URL template
-								$img_template = $this->config['imcger_ext_link_links_text'] && $is_external ? $fancybox_url_ext_template : $fancybox_url_template;
+								$offset = $match[3][1];
 							}
-
-							$text = str_replace($link[0][0], $img_template, $text);
-
-							$offset = $link[0][1] + strlen($img_template);
-						}
-						else
-						{
-							$offset = $link[3][1];
 						}
 					}
 
 					$event['text'] = $text;
 				}
+				else
+				{
+					// Change internal und external links
+					$event['text'] = preg_replace($find_regex, $new_link, $text);
+				}
+			}
+		}
+		else if ($this->config['imcger_ext_find_img'])
+		{
+			// Convert a link to an image, into an image
+			if (($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg')) || $this->is_fancybox)
+			{
+				// Set Variable
+				$text = $event['text'];
+				$offset = 0;
+
+				// Titletext des Bildes
+				$ext_text = $this->language->lang('IMCGER_EXT_LINK_EXT_IMG');
+				$int_text = $this->language->lang('IMAGE');
+				$src_text = $this->language->lang('IMCGER_EXT_LINK_BILD_SOURCE');
+
+				$fancybox_start_link = '';
+				$fancybox_end_link	 = '';
+
+				// Find links in post
+				while (preg_match('#(<a\s[^>]+?>)(.*?)(</a>)#i', $text, $link, PREG_OFFSET_CAPTURE, $offset))
+				{
+					// Do nothing when fancybox attribute add in texformater
+					if (str_contains($link[1][0], "data-fancybox"))
+					{
+						$offset = $link[3][1];
+						continue;
+					}
+
+					// Find url in link
+					preg_match('#(href\=\")(.*?)(\")#i', $link[1][0], $url);
+					$link_url	= $url[2];
+
+					// Get image dimension
+					$image_data = $this->imagesize->getImageSize(trim($link_url));
+
+					// If no image data tranform to link
+					if ($image_data !== false && $image_data['width'] > 0 && $image_data['height'] > 0)
+					{
+						// If "imcger/fancybox" aktive set attribute in template
+						if ($this->is_fancybox)
+						{
+							$fancybox_start_link = '<a href="' . $link_url . '" class="postlink" data-fancybox="image" data-caption="' . $link_url . '">';
+							$fancybox_end_link	 = '</a>';
+						}
+
+						// Set title and alt attribute
+						$is_external = $this->is_external_link($link_url);
+						$title = $is_external ? $ext_text : $int_text;
+
+						$fancybox_url_template = $fancybox_start_link . $link[2][0] . $fancybox_end_link;
+						$fancybox_url_ext_template = '<a href="' . $link_url . '" class="imcger-ext-link postlink" data-fancybox="image" data-caption="' . $link_url . '">' . $link[2][0] . '</a>';
+
+						$default_img_template = $fancybox_start_link . '<img src="' . $link_url . '" class="postimage" alt="' . $title . '" title="' . $title . '">' . $fancybox_end_link;
+						$caption_img_template = '<div class="imcger-img-wrap">' . $default_img_template . '<span class="imcger-ext-image"><span>' . $src_text . '</span>: ' . $link[2][0] . '</span></div>';
+
+						// Change URL to IMG template
+						if ($this->user->data['user_extlink_image'] && $this->user->optionget('viewimg'))
+						{
+							// When external und caption selected set caption_img_template
+							$img_template = $this->config['imcger_ext_link_links_img'] && $is_external ? $caption_img_template :  $default_img_template;
+						}
+						else
+						{
+							// Add Fancybox attribute to URL template
+							$img_template = $this->config['imcger_ext_link_links_text'] && $is_external ? $fancybox_url_ext_template : $fancybox_url_template;
+						}
+
+						$text = str_replace($link[0][0], $img_template, $text);
+
+						$offset = $link[0][1] + strlen($img_template);
+					}
+					else
+					{
+						$offset = $link[3][1];
+					}
+				}
+
+				$event['text'] = $text;
 			}
 		}
 	}
@@ -306,12 +260,8 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Extends the s9e TextFormatter template for the URL and IMG tag to include more
 	 * templates.
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function configure_textformatter($event)
+	public function configure_textformatter(object $event): void
 	{
 		/** @var \s9e\TextFormatter\Configurator $configurator */
 		$configurator = $event['configurator'];
@@ -587,13 +537,14 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Sets parameters for the s9e TextFormatter, which will be used to select
 	 * the appropriate template for the URL and IMG tag.
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function set_textformatter_parameters($event)
+	public function set_textformatter_parameters(object $event): void
 	{
+		if (is_null($this->forum_id))
+		{
+			return;
+		}
+
 		/** @var \s9e\TextFormatter\Renderer $renderer */
 		$renderer = $event['renderer']->get_renderer();
 
@@ -637,12 +588,8 @@ class main_listener implements EventSubscriberInterface
 	/**
 	 * Find image in post message and check the image dimension.
 	 * If image to large transform it into a link and display an error message.
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function posting_modify_message_text($event)
+	public function posting_modify_message_text(object $event): void
 	{
 		// Initialize variable
 		$match = [];
@@ -710,12 +657,8 @@ class main_listener implements EventSubscriberInterface
 
 	/**
 	 * Check if url is external
-	 *
-	 * @param	string		$link	URL
-	 * @return	bool
-	 * @access	public
 	 */
-	private function is_external_link($link)
+	private function is_external_link(string $link): bool
 	{
 		// Get intern domain name
 		$hostname = parse_url(generate_board_url(true));

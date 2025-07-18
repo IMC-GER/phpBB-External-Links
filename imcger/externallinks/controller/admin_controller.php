@@ -12,33 +12,15 @@ namespace imcger\externallinks\controller;
 
 class admin_controller
 {
-	/** @var config */
-	protected $config;
-
-	/** @var template */
-	protected $template;
-
-	/** @var language */
-	protected $language;
-
-	/** @var request */
-	protected $request;
-
-	/** @var \phpbb\extension\manager */
-	protected $ext_manager;
-
-	/** @var string Custom form action */
-	protected $u_action;
+	protected object $config;
+	protected object $template;
+	protected object $language;
+	protected object $request;
+	protected object $ext_manager;
+	protected string $u_action;
 
 	/**
 	 * Constructor
-	 *
-	 * @param config	$config
-	 * @param template	$template
-	 * @param language	$language
-	 * @param request	$request
-	 * @param \phpbb\extension\manager	$ext_manager
-	 *
 	 */
 	public function __construct(
 		\phpbb\config\config $config,
@@ -57,11 +39,8 @@ class admin_controller
 
 	/**
 	 * Display the options a user can configure for this extension
-	 *
-	 * @return null
-	 * @access public
 	 */
-	public function display_options()
+	public function display_options(): void
 	{
 		// Add ACP lang file
 		$this->language->add_lang('common', 'imcger/externallinks');
@@ -87,11 +66,8 @@ class admin_controller
 
 	/**
 	 * Set the template variable
-	 *
-	 * @return null
-	 * @access protected
 	 */
-	protected function set_template_vars()
+	protected function set_template_vars(): void
 	{
 		// Get intern domain name
 		$hostname = parse_url(generate_board_url(true),  PHP_URL_HOST);
@@ -129,11 +105,8 @@ class admin_controller
 
 	/**
 	 * Store the variable to the db
-	 *
-	 * @return null
-	 * @access protected
 	 */
-	protected function set_vars_config()
+	protected function set_vars_config(): void
 	{
 		$this->config->set('imcger_ext_link_domain_level', $this->request->variable('imcger_ext_link_domain_level', 0));
 		$this->config->set('imcger_ext_link_symbol', $this->request->variable('imcger_ext_link_symbol', ''));
@@ -147,12 +120,8 @@ class admin_controller
 
 	/**
 	 * Set page url
-	 *
-	 * @param string $u_action Custom form action
-	 * @return null
-	 * @access public
 	 */
-	public function set_page_url($u_action)
+	public function set_page_url(string $u_action): void
 	{
 		$this->u_action = $u_action;
 	}

@@ -20,35 +20,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ucp_listener implements EventSubscriberInterface
 {
-	/** @var config */
-	protected $config;
-
-	/** @var \phpbb\template\template */
-	protected $template;
-
-	/** @var \phpbb\user */
-	protected $user;
-
-	/** @var \phpbb\language\language */
-	protected $language;
-
-	/** @var \phpbb\request\request */
-	protected $request;
-
-	/** @var \phpbb\db\driver\driver_interface */
-	protected $db;
+	protected object $config;
+	protected object $template;
+	protected object $user;
+	protected object $language;
+	protected object $request;
+	protected object $db;
 
 	/**
 	 * Constructor
-	 *
-	 * @param \phpbb\config\config				$config
-	 * @param \phpbb\template\template			$template		Template object
-	 * @param \phpbb\user						$user			User object
-	 * @param \phpbb\language\language			$language		language object
-	 * @param \phpbb\request\request			$request		Request objectt
-	 * @param \phpbb\db\driver\driver_interface $db
-	 *
-	 * @return null
 	 */
 	public function __construct
 	(
@@ -70,12 +50,8 @@ class ucp_listener implements EventSubscriberInterface
 
 	/**
 	 * Assign functions defined in this class to event listeners in the core
-	 *
-	 * @return array
-	 * @static
-	 * @access public
 	 */
-	public static function getSubscribedEvents()
+	public static function getSubscribedEvents(): array
 	{
 		return [
 			'core.ucp_display_module_before'	=> 'ucp_display_module_before',
@@ -87,12 +63,8 @@ class ucp_listener implements EventSubscriberInterface
 
 	/**
 	 * Add External Links language file
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function ucp_display_module_before()
+	public function ucp_display_module_before(): void
 	{
 		// Add language file in UCP
 		$this->language->add_lang('ucp_externallinks', 'imcger/externallinks');
@@ -100,12 +72,8 @@ class ucp_listener implements EventSubscriberInterface
 
 	/**
 	 * Add UCP edit display options data before they are assigned to the template or submitted
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function ucp_prefs_get_data($event)
+	public function ucp_prefs_get_data(object $event): void
 	{
 		$event['data'] = array_merge($event['data'], [
 			'user_extlink_newwin'		=> $this->request->variable('imcger_ucp_ext_link_links_newwin', $this->user->data['user_extlink_newwin']),
@@ -127,12 +95,8 @@ class ucp_listener implements EventSubscriberInterface
 
 	/**
 	 * Update UCP edit display options data on form submit
-	 *
-	 * @param	object		$event	The event object
-	 * @return	null
-	 * @access	public
 	 */
-	public function ucp_prefs_set_data($event)
+	public function ucp_prefs_set_data(object $event): void
 	{
 		$event['sql_ary'] = array_merge($event['sql_ary'], [
 			'user_extlink_newwin'		=> $event['data']['user_extlink_newwin'],
@@ -143,13 +107,9 @@ class ucp_listener implements EventSubscriberInterface
 	}
 
 	/**
-	 * After new user registration, set user parameters to default;
-	 *
-	 * @param	$event
-	 * @return	null
-	 * @access	public
+	 * After new user registration, set user parameters to default
 	 */
-	public function ucp_register_set_data($event)
+	public function ucp_register_set_data(object $event): void
 	{
 		$sql_ary = [
 			'user_extlink_newwin'		=> (bool) $this->config['imcger_extlink_user_newwin'],

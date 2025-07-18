@@ -15,7 +15,7 @@ namespace imcger\externallinks\acp;
  */
 class main_info
 {
-	public function module()
+	public function module(): array
 	{
 		return [
 			'filename'	=> '\imcger\externallinks\acp\main_module',

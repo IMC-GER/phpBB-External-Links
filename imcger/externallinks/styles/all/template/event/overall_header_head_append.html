@@ -16,5 +16,12 @@
 		content: '\{{ EXTLINK_SYMBOL }}';
 		padding: 0 3px 0 3px;
 	}
+
+	.imcger-broken-link::{{ S_EXTLINK_SYMBOL_POS ? 'before' : 'after' }} {
+		font-family: 'FontAwesome';
+		font-size: 1em;
+		content: '\f127';
+		padding: 0 3px 0 3px;
+	}
 </style>
 {% endif %}

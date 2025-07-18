@@ -24,7 +24,7 @@ class main_module
 	/** @var u_action */
 	public $u_action;
 
-	public function main($id, $mode)
+	public function main(string $id, string $mode): void
 	{
 		global $phpbb_container;
 

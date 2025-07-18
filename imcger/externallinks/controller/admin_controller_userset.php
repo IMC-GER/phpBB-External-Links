@@ -12,41 +12,17 @@ namespace imcger\externallinks\controller;
 
 class admin_controller_userset
 {
-	/** @var config */
-	protected $config;
-
-	/** @var template */
-	protected $template;
-
-	/** @var language */
-	protected $language;
-
-	/** @var request */
-	protected $request;
-
-	/** @var \phpbb\user */
-	protected $user;
-
-	/** @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
-	/** @var \phpbb\extension\manager */
-	protected $ext_manager;
-
-	/** @var string Custom form action */
-	protected $u_action;
+	protected object $config;
+	protected object $template;
+	protected object $language;
+	protected object $request;
+	protected object $user;
+	protected object $db;
+	protected object $ext_manager;
+	protected string $u_action;
 
 	/**
 	 * Constructor
-	 *
-	 * @param \phpbb\config\config				$config
-	 * @param \phpbb\template\template			$template
-	 * @param \phpbb\language\language			$language
-	 * @param \phpbb\request\request			$request
-	 * @param \phpbb\user						$user
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\extension\manager			$ext_manager
-	 *
 	 */
 	public function __construct
 	(
@@ -69,12 +45,9 @@ class admin_controller_userset
 	}
 
 	/**
-	 * Display the options a user can configure for this extension
-	 *
-	 * @return null
-	 * @access public
+	 * Display the options a user can configure for this
 	 */
-	public function display_options()
+	public function display_options(): void
 	{
 		// Add ACP lang file
 		$this->language->add_lang(['common', 'ucp_externallinks', ], 'imcger/externallinks');
@@ -146,13 +119,8 @@ class admin_controller_userset
 
 	/**
 	 * Set template variables
-	 *
-	 * @param string	$get_data			Data to set in template
-	 * @param bool		$overwrite_userset	Display message box
-	 * @return null
-	 * @access protected
 	 */
-	protected function set_template_vars($get_data = 'config', $overwrite_userset = false)
+	protected function set_template_vars(string $get_data = 'config', bool $overwrite_userset = false): void
 	{
 		$metadata_manager = $this->ext_manager->create_extension_metadata_manager('imcger/externallinks');
 
@@ -190,11 +158,8 @@ class admin_controller_userset
 
 	/**
 	 * Store the variable to config
-	 *
-	 * @return null
-	 * @access protected
 	 */
-	protected function set_vars_config()
+	protected function set_vars_config(): void
 	{
 		$this->config->set('imcger_extlink_user_newwin', $this->request->variable('imcger_extlink_user_newwin', 0));
 		$this->config->set('imcger_extlink_user_text', $this->request->variable('imcger_extlink_user_text', 0));
@@ -204,11 +169,8 @@ class admin_controller_userset
 
 	/**
 	 * Overwrite settings for all user
-	 *
-	 * @return null
-	 * @access protected
 	 */
-	protected function set_vars_userset()
+	protected function set_vars_userset(): void
 	{
 		$this->config->set('imcger_extlink_user_setting_time', time());
 
@@ -228,12 +190,8 @@ class admin_controller_userset
 
 	/**
 	 * Set page url
-	 *
-	 * @param string $u_action Custom form action
-	 * @return null
-	 * @access public
 	 */
-	public function set_page_url($u_action)
+	public function set_page_url(string $u_action): void
 	{
 		$this->u_action = $u_action;
 	}
